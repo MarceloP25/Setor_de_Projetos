@@ -1,0 +1,27 @@
+.action-button {
+  width: 350px;
+  height: 70px;
+  border-radius: 12px;
+  border: none;
+  font-weight: bold;
+  font-size: 18px;
+  cursor: pointer;
+  transition: 0.3s;
+  color: white;
+}
+
+.action-button.dark {
+  background-color: #003300;
+}
+
+.action-button.medium {
+  background-color: #006600;
+}
+
+.action-button.light {
+  background-color: #009900;
+}
+
+.action-button:hover {
+  filter: brightness(1.1);
+}
