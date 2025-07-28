@@ -12,7 +12,7 @@ function App() {
     <>
       {/*<FormCadProjeto/>*/}
       <h1>Testes</h1>
-      <Input />
+      <Input/>
     </>
   )
 }

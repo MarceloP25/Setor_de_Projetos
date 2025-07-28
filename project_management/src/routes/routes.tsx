@@ -1,9 +1,9 @@
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 //import Sidebar from '../components/Sidebar';
-// import VisaoGeral from './pages/VisaoGeral';
+//import VisaoGeral from './pages/VisaoGeral';
 import ProjetosCad from '../screens/CadastroProjeto';
 import ProjectList from '../screens/HomeProjeto';
-// import Orcamentos from './pages/Orcamentos';
+//import Orcamentos from './pages/Orcamentos';
 //import Editais from '../screens/Edital';
 //import ProjectEdit from '../screens/EdicaoProjeto';
 //import ProjectDetails from '../screens/DetalhesProjeto';

@@ -229,6 +229,7 @@ const ProjectRegistration: React.FC = () => {
                 onChange={handleChange}
                 placeholder="Nome do Projeto"
               />
+              <Input/>
             </div>
             <div className="form-row">
               <div className="form-col">
