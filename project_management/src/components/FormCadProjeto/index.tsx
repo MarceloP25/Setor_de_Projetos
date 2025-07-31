@@ -6,7 +6,11 @@ import './styles.css';
 //import 'firebase/compat/firestore';
 //import Sidebar from '../../components/Sidebar';
 //import Header from '../../components/Header';
+import InputText from '../InputText';
+import InputNumber from '../InputNumber';
+import SelectInput from '../SelectInput';
 import type {Projeto} from '../../interfaces/Projeto'
+import type { Edital } from '../../interfaces/Edital';
 
 const formatMoney = (value: string): string => {
   const cleanValue = value.replace(/[^0-9]/g, '');
@@ -24,7 +28,8 @@ const sanitizeName = (name: string): string => {
     .replace(/\\s+/g, '-');
 };
 
-const ProjectRegistration: React.FC = () => {
+function FormCadProjeto()  {
+  const [editaisList, setEditaisList] = useState<Edital[]>([]);
   const [formData, setFormData] = useState<Projeto>({
     id: '',
     edital: '',
@@ -46,10 +51,14 @@ const ProjectRegistration: React.FC = () => {
     municipio: '',
     bairro: '',
     espaco: '',
+
     valorSolicitado: 'R$ 0,00',
+
     tipoBolsa: [] as string[],
+    valorBolsa: [] as string[],
     quantidade: 0,
-    numeroTotalBolsas: 0,
+    valorTotalBolsas: 0,
+
     areaTematica: [] as string[],
     linhaExtensao: [] as string[],
     detalhesAcao: '',
@@ -58,47 +67,136 @@ const ProjectRegistration: React.FC = () => {
     notasAvaliadores: [0] as number[],
     notaEtapa2: 0,
     alunosParticipantes: [] as string[],
+    relatorioProjeto: [] as string[],
     criadoEm: '',
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    if (name === 'financiamento') {
-      const formattedValue = formatMoney(value);
-      setFormData(prev => ({ ...prev, financiamento: formattedValue }));
-    } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
-    }
+
+  const areaTematicaList = [
+    'Comunicação', "Cultura", "Direitos Humanos e Justiça", 
+    "Educação", "Meio Ambiente", "Saúde", 
+    "Tecnologia e Produção", "Trabalho"
+  ];
+
+  const linhaExtensaoList = [
+    "Alfabetizacao", "Comunicacao", "Desenvolvimento Rural",
+    "Direitos", "Emprego e Renda", "Esporte e Lazer",
+    "Formação de Professores", "Gestão Institucional",
+    "Infância", "Jovens e Adultos", "Midia e Artes",
+    "Organizações da Sociedade e Movimentos Sociais e Populares", "Propriedade Intelectual e Patente",
+    "Resíduos Sólidos", "Saúde e Proteção no Trabalho", "Segurança Pública e Defesa Social",
+    "Terceira Idade", "Desenvolvimento De Produtos", "Desenvolvimento Tecnológico",
+    "Educacao Profissional", "Endemias e Epidemias", "Estilismo",
+    "Gestão do Trabalho", "Gestão Pública", "Inovação Tecnológica",
+    "Línguas Estrangeiras", "Mídias", "Patrimônio Cultural, Histórico e Natural",
+    "Questões Ambientais", "Saúde Animal", "Saúde Humana", 
+    "Tecnologia da Informação", "Uso de Drogas e Dependência Química", "Desenvolvimento Regional",
+    "Desenvolvimento Urbano", "Empreendedorismo", "Divulgação Científica e Tecnológica",
+    "Fármacos e Medicamentos", "Gestão Informacional", "Grupos Sociais Vulneráveis",
+    "Jornalismo", "Metodologias e Estratégias de Ensino/Aprendizagem", "Música",
+    "Pessoa com Deficiências, Incapacidades e Necessidades Especiais", "Recursos Hídricos", "Saúde da Família",
+    "Segurança Alimentar e Nutricional", "Turismo<", "Desenvolvimento Humano"
+  ];
+
+  const handleChange = (e: React.FormEvent<HTMLFormElement | HTMLSelectElement | HTMLInputElement>) => {
+    // inserir codigos
   };
 
-  const handleBolsaChange = (tipo: string, quantidade: string) => {
-    setFormData(prev => {
-      const bolsasAtualizadas = prev.bolsas.map(bolsa =>
-        bolsa.tipo === tipo ? { ...bolsa, quantidade: parseInt(quantidade) || 0 } : bolsa
-      );
-      const bolsasFiltradas = bolsasAtualizadas.filter(bolsa => bolsa.quantidade > 0);
-      return {
-        ...prev,
-        bolsas: bolsasFiltradas
-      };
-    });
+  const handleEditalChange = (value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      edital: value
+    }));
   };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement | HTMLSelectElement>) => {
+    e.preventDefault();
+  }
+
+  const bolsasList = [
+    { tipo: 'SUP I (20h)', valor: 'R$ 700,00'},
+    { tipo: 'SUP II (10h)', valor: 'SR$ 350,00'},
+    { tipo: 'BEXMED (10h)', valor: 'R$ 350,00'},
+    { tipo: 'BEXCOL (até 15h)', valor: 'R$ 900,00'}
+  ];
 
   const toggleBolsaTipo = (tipo: string) => {
     setFormData(prev => {
-      const jaPossui = prev.bolsas.some(bolsa => bolsa.tipo === tipo);
+      const jaPossui = prev.tipoBolsa.includes(tipo);
+
       if (jaPossui) {
+        const tipoIndex = prev.tipoBolsa.indexOf(tipo);
+        const novaTipoBolsa = prev.tipoBolsa.filter(b => b !== tipo);
+        const novaValorBolsa = prev.valorBolsa.filter((_, i) => i !== tipoIndex);
+
+        const novaQuantidadeTotal = novaValorBolsa.reduce((acc, item) => {
+          const matchQtd = item.match(/Qtd: (\d+)/);
+          return acc + (matchQtd ? parseInt(matchQtd[1]) : 0);
+        }, 0);
+
         return {
           ...prev,
-          bolsas: prev.bolsas.filter(bolsa => bolsa.tipo !== tipo)
+          tipoBolsa: novaTipoBolsa,
+          valorBolsa: novaValorBolsa,
+          valorTotalBolsas: calcularTotal(novaValorBolsa),
+          quantidade: novaQuantidadeTotal,
         };
       }
+
       return {
         ...prev,
-        bolsas: [...prev.bolsas, { tipo, quantidade: 0 }]
+        tipoBolsa: [...prev.tipoBolsa, tipo],
+        valorBolsa: [...prev.valorBolsa, `${tipo}: R$ 0,00 (Qtd: 0)`],
+        quantidade: prev.quantidade, // não muda ainda
       };
     });
   };
+
+  const handleBolsaChange = (tipo: string, quantidadeStr: string) => {
+    const bolsaInfo = bolsasList.find(b => b.tipo === tipo);
+    if (!bolsaInfo) return;
+
+    const valorUnitario = parseFloat(bolsaInfo.valor.replace(/[^\d,]/g, '').replace(',', '.'));
+    const quantidade = parseInt(quantidadeStr) || 0;
+    const valorTotalTipo = quantidade * valorUnitario;
+
+    setFormData(prev => {
+      const novaValorBolsa = prev.valorBolsa.map(item =>
+        item.startsWith(tipo)
+          ? `${tipo}: R$ ${valorTotalTipo.toFixed(2).replace('.', ',')} (Qtd: ${quantidade})`
+          : item
+      );
+
+      // Atualiza a quantidade total somando todas as quantidades registradas
+      const novaQuantidadeTotal = novaValorBolsa.reduce((acc, item) => {
+        const matchQtd = item.match(/Qtd: (\d+)/);
+        return acc + (matchQtd ? parseInt(matchQtd[1]) : 0);
+      }, 0);
+
+      return {
+        ...prev,
+        valorBolsa: novaValorBolsa,
+        valorTotalBolsas: calcularTotal(novaValorBolsa),
+        quantidade: novaQuantidadeTotal,
+      };
+    });
+  };
+
+
+  const calcularTotal = (valores: string[]) => {
+    return valores.reduce((acc, item) => {
+      const match = item.match(/R\$ ([\d,.]+)/);
+      if (match) {
+        const valor = parseFloat(match[1].replace('.', '').replace(',', '.'));
+        return acc + valor;
+      }
+      return acc;
+    }, 0);
+  };
+
+
+
+  /*
 
   const validateForm = (): boolean => {
     const requiredFields = [
@@ -180,6 +278,8 @@ const ProjectRegistration: React.FC = () => {
     }
   };
 
+  
+  
   const fetchEditais = async () => {
     try {
       const editaisRef = collection(db, "editais");
@@ -188,10 +288,7 @@ const ProjectRegistration: React.FC = () => {
         id: doc.id,
         nome: doc.data().nome
       }));
-      setFormData(prev => ({
-        ...prev,
-        editaisList: editais
-      }));
+      setEditaisList(editais);
     } catch (error) {
       console.error("Erro ao buscar editais:", error);
     }
@@ -200,89 +297,78 @@ const ProjectRegistration: React.FC = () => {
   useEffect(() => {
     fetchEditais();
   }, []);
-
+  */
   return (
         <div className="form-container">
           <div className="form-title">Cadastro de Projeto</div>
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label className="form-label">Selecione o Edital</label>
-              <select
-                className="form-control"
+              <SelectInput
+                label="Selecione o Edital"
                 name="edital"
                 value={formData.edital}
                 onChange={handleChange}
-              >
-                <option value="">Selecione o Edital</option>
-                {formData.editaisList?.map(edital => (
-                  <option key={edital.id} value={edital.nome}>{edital.nome}</option>
-                ))}
-              </select>
+                options={editaisList.map(edital => edital.nomeEdital)}
+              />
             </div>
             <div className="form-group">
-              <label className="form-label">Nome do Projeto</label>
-              <input
-                type="text"
-                className="form-control"
-                name="nomeProjeto"
-                value={formData.nomeProjeto}
-                onChange={handleChange}
-                placeholder="Nome do Projeto"
-              />
-              <Input/>
+                <InputText
+                  label="Nome do Projeto"
+                  type="text"
+                  name="nomeProjeto"
+                  value={formData.nomeProjeto}
+                  onChange={handleChange}
+                  placeholder="Nome do Projeto"
+                />
             </div>
             <div className="form-row">
               <div className="form-col">
-                <label className="form-label">Ano</label>
-                <input
+                <InputNumber
+                  label="Ano de Vigência"
                   type="text"
-                  className="form-control"
                   name="ano"
                   value={formData.ano}
-                  onChange={handleChange}
+                  onChange={handleChange} 
                   placeholder="Ano"
                 />
               </div>
             </div>
             <div className="form-row">
               <div className="form-col">
-                <label className="form-label">Período de Realização</label>
                 <div className="period-container">
-                  <input
-                    type="date"
-                    className="form-control"
-                    name="periodoInicio"
-                    value={formData.periodoInicio}
-                    onChange={handleChange}
-                  />
-                  <span className="period-separator">a</span>
-                  <input
-                    type="date"
-                    className="form-control"
-                    name="periodoFim"
-                    value={formData.periodoFim}
-                    onChange={handleChange}
-                  />
+                
+                <InputText
+                  label="Período de realização"
+                  type="date"
+                  name="periodoInicio"
+                  value={formData.periodoInicio}
+                  onChange={handleChange}
+                  placeholder="Início"
+                />
+                <span className="period-separator"></span>
+                <InputText
+                  type="date"
+                  name="periodoFim"
+                  value={formData.periodoFim}
+                  onChange={handleChange}
+                  placeholder="Fim"
+                />
                 </div>
               </div>
             </div>
             <div className="form-row">
               <div className="form-col">
-                <label className="form-label">Nome do Coordenador</label>
-                <input
+                <InputText
+                  label="Nome do Coordenador"
                   type="text"
-                  className="form-control"
                   name="nomeCoordenador"
                   value={formData.nomeCoordenador}
                   onChange={handleChange}
                   placeholder="Nome do Coordenador"
                 />
-              </div>
-              <div className="form-col">
-                <label className="form-label">Email do Coordenador</label>
-                <input
-                  type="email"
-                  className="form-control"
+                <InputText
+                  label="Email do Coordenador"
+                  type="text"
                   name="emailCoordenador"
                   value={formData.emailCoordenador}
                   onChange={handleChange}
@@ -292,163 +378,102 @@ const ProjectRegistration: React.FC = () => {
             </div>
             <div className="form-row">
               <div className="form-col">
-                <label className="form-label">Nome do Co-coordenador</label>
-                <input
+                <InputText
+                  label="Nome do CoCoordenador"
                   type="text"
-                  className="form-control"
                   name="nomeCoCoordenador"
                   value={formData.nomeCoCoordenador}
                   onChange={handleChange}
-                  placeholder="Nome do Co-coordenador"
+                  placeholder="Nome do CoCoordenador"
                 />
-              </div>
-              <div className="form-col">
-                <label className="form-label">Email do Co-coordenador</label>
-                <input
-                  type="email"
-                  className="form-control"
+                <InputText
+                  label="Email do CoCoordenador"
+                  type="text"
                   name="emailCoCoordenador"
                   value={formData.emailCoCoordenador}
                   onChange={handleChange}
-                  placeholder="Email do Co-coordenador"
+                  placeholder="Email do CoCoordenador"
                 />
               </div>
             </div>
             <div className="form-row">
               <div className="form-col">
-                <label className="form-label">Valor solicitado para financiamento do Projeto</label>
-                <input
+                <InputNumber
+                  label='Valor para Financiamento do Projeto'
                   type="text"
-                  className="form-control"
                   name="financiamento"
-                  value={formData.financiamento}
+                  value={formData.valorSolicitado}
                   onChange={handleChange}
-                  placeholder="Financiamento"
                 />
               </div>
             </div>
-            <div className="form-row">
+
+             <div className="form-row">
               <div className="form-col">
+                
                 <label className="form-label">Tipos de bolsas solicitadas</label>
                 <div className="checkbox-group">
-                  {[
-                    { id: 'supi', value: 'SUP I (20h) - R$ 700,00', label: 'SUP I (20h) - R$ 700,00' },
-                    { id: 'supii', value: 'SUP II (10h) - R$ 350,00', label: 'SUP II (10h) - R$ 350,00' },
-                    { id: 'bexmed10', value: 'BEXMED (10h) - R$ 350,00', label: 'BEXMED (10h) - R$ 350,00' },
-                    { id: 'bexcol', value: 'BEXCOL (até 15h) - R$ 900,00', label: 'BEXCOL (até 15h) - R$ 900,00' }
-                  ].map((bolsa) => {
-                    const selectedBolsa = formData.bolsas.find(b => b.tipo === bolsa.value);
+                  {bolsasList.map((bolsa) => {
+                    const isSelected = formData.tipoBolsa.includes(bolsa.tipo);
+                    const valorRegistrado = formData.valorBolsa.find(item => item.startsWith(bolsa.tipo));
+                    const quantidade = valorRegistrado ? parseInt(valorRegistrado.match(/\d+/)?.[0] || '0') : 0;
+
                     return (
-                      <div key={bolsa.id} className="checkbox-option">
-                        <div className="flex items-center justify-between py-2">
-                          <div className="flex items-center gap-2">
-                            <input
-                              type="checkbox"
-                              id={`tipo-${bolsa.id}`}
-                              checked={!!selectedBolsa}
-                              onChange={() => toggleBolsaTipo(bolsa.value)}
-                              className="w-5 h-5"
-                            />
-                            <label htmlFor={`tipo-${bolsa.id}`} className="font-normal">
-                              {bolsa.label}
-                            </label>
-                          </div>
-                          {selectedBolsa && (
-                            <input
-                              type="number"
-                              id={`quantidade-${bolsa.id}`}
-                              value={selectedBolsa.quantidade}
-                              onChange={(e) => handleBolsaChange(bolsa.value, e.target.value)}
-                              min="0"
-                              max="10"
-                              className="w-[80px] px-2 py-1 border rounded"
-                            />
-                          )}
-                        </div>
+                      <div key={bolsa.tipo} className="flex items-center space-x-2 mb-2">
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() => toggleBolsaTipo(bolsa.tipo)}
+                        />
+                        <label>{bolsa.tipo} ({bolsa.valor})</label>
+
+                        {isSelected && (
+                          <input
+                            type="number"
+                            min="0"
+                            className="ml-4 w-24 border px-2 py-1 rounded"
+                            placeholder="Qtd."
+                            onChange={(e) => handleBolsaChange(bolsa.tipo, e.target.value)}
+                          />
+                        )}
                       </div>
                     );
                   })}
+
+                  <div className="mt-4">
+                    <p><strong>Tipos selecionados:</strong> {formData.tipoBolsa.join(', ') || 'Nenhum'}</p>
+                    <p><strong>Valores por tipo:</strong></p>
+                    <ul className="list-disc ml-6">
+                      {formData.valorBolsa.map((item, idx) => (
+                        <li key={idx}>{item}</li>
+                      ))}
+                    </ul>
+                    <p className="mt-2"><strong>Total de bolsas:</strong> {formData.quantidade}</p>
+                    <p><strong>Total geral:</strong> R$ {formData.valorTotalBolsas.toFixed(2).replace('.', ',')}</p>
+                  </div>
+                </div>
+                
+
+                <div className="form-section">
+                    <SelectInput
+                      label='Área Temática'
+                      value={formData.areaTematica}
+                      name='areaTematica'
+                      onChange={handleChange}
+                      options={areaTematicaList}
+                    />
+                </div>
+
+                <div className="form-group">
+                    <SelectInput
+                      label='Linha de Extensão'
+                      value={formData.linhaExtensao}
+                      name='linhaExtensao'
+                      onChange={handleChange}
+                      options={linhaExtensaoList}
+                    />
                 </div>
               </div>
-            </div>
-            <div className="form-section">
-              <div className="form-section-title">Área Temática</div>
-              <select
-                className="form-control"
-                name="areaTematica"
-                value={formData.areaTematica}
-                onChange={handleChange}
-              >
-                <option value="">Selecione a Área Temática</option>
-                <option value="Comunicação">Comunicação</option>
-                <option value="Cultura">Cultura</option>
-                <option value="Direitos Humanos e Justiça">Direitos Humanos e Justiça</option>
-                <option value="Educação">Educação</option>
-                <option value="Meio Ambiente">Meio Ambiente</option>
-                <option value="Saúde">Saúde</option>
-                <option value="Tecnologia e Produção">Tecnologia e Produção</option>
-                <option value="Trabalho">Trabalho</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label">Linha de Extensão</label>
-              <select
-                className="form-control"
-                name="linhaExtensao"
-                value={formData.linhaExtensao}
-                onChange={handleChange}
-              >
-                <option value="">Selecione a Linha de Extensão</option>
-                <option value="Alfabetizacao">Alfabetização, Leitura e Escrita</option>
-                <option value="Comunicacao">Comunicação Estratégica</option>
-                <option value="DesenvolvimentoRural">Desenvolvimento Rural e Questão Agrária</option>
-                <option value="Direitos">Direitos Individuais e Coletivos</option>
-                <option value="Emprego">Emprego e Renda</option>
-                <option value="Esporte">Esporte e Lazer</option>
-                <option value="FormacaoProfessores">Formação de Professores</option>
-                <option value="GestaoInstitucional">Gestão Institucional</option>
-                <option value="Infancia">Infância e Adolescência</option>
-                <option value="JovensAdultos">Jovens e Adultos</option>
-                <option value="Midiaartes">Mídiaartes</option>
-                <option value="Organizacoes">Organizações da Sociedade e Movimentos Sociais e Populares</option>
-                <option value="PropriedadeIntelectual">Propriedade Intelectual e Patente</option>
-                <option value="ResiduosSolidos">Resíduos Sólidos</option>
-                <option value="SaudeTrabalho">Saúde e Proteção no Trabalho</option>
-                <option value="SegurancaPublica">Segurança Pública e Defesa Social</option>
-                <option value="TerceiraIdade">Terceira Idade</option>
-                <option value="DesenvolvimentoProdutos">Desenvolvimento de Produtos</option>
-                <option value="DesenvolvimentoTecnologico">Desenvolvimento Tecnológico</option>
-                <option value="EducacaoProfissional">Educação Profissional</option>
-                <option value="EndemiasEpidemias">Endemias e Epidemias</option>
-                <option value="Estilismo">Estilismo</option>
-                <option value="GestaoTrabalho">Gestão do Trabalho</option>
-                <option value="GestaoPublica">Gestão Pública</option>
-                <option value="InovacaoTecnologica">Inovação Tecnológica</option>
-                <option value="LinguasEstrangeiras">Línguas Estrangeiras</option>
-                <option value="Midias">Mídias</option>
-                <option value="Patrimonio">Patrimônio Cultural, Histórico e Natural</option>
-                <option value="QuestoesAmbientais">Questões Ambientais</option>
-                <option value="SaudeAnimal">Saúde Animal</option>
-                <option value="SaudeHumana">Saúde Humana</option>
-                <option value="TecnologiaInformacao">Tecnologia da Informação</option>
-                <option value="UsoDrogas">Uso de Drogas e Dependência Química</option>
-                <option value="DesenvolvimentoRegional">Desenvolvimento Regional</option>
-                <option value="DesenvolvimentoUrbano">Desenvolvimento Urbano</option>
-                <option value="Empreendedorismo">Empreendedorismo</option>
-                <option value="DivulgacaoCientifica">Divulgação Científica e Tecnológica</option>
-                <option value="Farmacos">Fármacos e Medicamentos</option>
-                <option value="GestaoInformacional">Gestão Informacional</option>
-                <option value="GruposVulneraveis">Grupos Sociais Vulneráveis</option>
-                <option value="Jornalismo">Jornalismo</option>
-                <option value="Metodologias">Metodologias e Estratégias de Ensino/Aprendizagem</option>
-                <option value="Musica">Música</option>
-                <option value="PessoaDeficiencia">Pessoa com Deficiências, Incapacidades e Necessidades Especiais</option>
-                <option value="RecursosHidricos">Recursos Hídricos</option>
-                <option value="SaudeFamilia">Saúde da Família</option>
-                <option value="SegurancaAlimentar">Segurança Alimentar e Nutricional</option>
-                <option value="Turismo">Turismo</option>
-                <option value="DesenvolvimentoHumano">Desenvolvimento Humano</option>
-              </select>
             </div>
             <div className="form-note">
               Antes de finalizar a operação, revise todo o documento.
@@ -459,4 +484,4 @@ const ProjectRegistration: React.FC = () => {
   );
 };
 
-export default ProjectRegistration;
+export default FormCadProjeto;

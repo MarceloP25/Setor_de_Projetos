@@ -5,18 +5,18 @@ interface SelectInputProps {
   options: string[];
   value: string;
   name: string;
-  onChange: (value: string) => void;
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   label?: string;
 }
 
 const SelectInput: React.FC<SelectInputProps> = ({ name, options, value, onChange, label }) => {
   return (
     <div className="select-container">
-      {label && <label>{label}</label>}
+      {label && <h3>{label}</h3>}
       <select
         value={value}
         name={name}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={onChange}
         className="select-input"
       >
         <option value="">Selecione</option>

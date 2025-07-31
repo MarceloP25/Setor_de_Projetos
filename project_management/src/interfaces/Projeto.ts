@@ -25,8 +25,9 @@ export interface Projeto {
 
     valorSolicitado: string;
     tipoBolsa: string[];
+    valorBolsa: string[];
     quantidade: number;
-    numeroTotalBolsas: number;
+    valorTotalBolsas: number;
 
     areaTematica: string[];
     linhaExtensao: string[];
@@ -49,6 +50,8 @@ export interface Projeto {
      * Cada aluno será cadastrado individualmente e vinculado pelo sistema.
      */
     alunosParticipantes?: string[];
+
+    relatorioProjeto?: string[];
 
     criadoEm: string;
 }

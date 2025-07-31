@@ -5,27 +5,26 @@ interface InputTextProps {
   type: string;
   value: string;
   name: string;
-  onChange: (value: string) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   label?: string;
 }
 
-
 const InputText: React.FC<InputTextProps> = ({ type, value, name, onChange, placeholder, label }) => {
   return (
     <div className="input-container">
-      {label && <label>{label}</label>}
-      <h3>Teste</h3>
+      {label && <h3>{label}</h3>}
       <input
         type={type}
         value={value}
         name={name}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={onChange} 
         placeholder={placeholder}
         className="input-text"
       />
     </div>
   );
 };
+
 
 export default InputText;
