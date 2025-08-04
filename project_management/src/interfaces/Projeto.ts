@@ -2,11 +2,13 @@ export interface Projeto {
     id: string;
     edital: string;
     nomeProjeto: string;
+    nomeDaAcao: string;
+    codigoProjeto: string;
+
     ano: number;
     periodoInicio: string;
     periodoFim: string;
     abrangencia: string;
-    nomeAcao: string;
 
     nomeCoordenador: string;
     emailCoordenador: string;
@@ -24,6 +26,7 @@ export interface Projeto {
     espaco?: string;
 
     valorSolicitado: string;
+    valorDisponibilizado: string;
     tipoBolsa: string[];
     valorBolsa: string[];
     quantidade: number;

@@ -34,26 +34,31 @@ function FormCadProjeto()  {
     id: '',
     edital: '',
     nomeProjeto: '',
+    nomeDaAcao: '',
+    codigoProjeto: '',
+
     ano: 0,
     periodoInicio: '',
     periodoFim: '',
     abrangencia: '',
-    nomeAcao: '',
+
     nomeCoordenador: '',
     emailCoordenador: '',
     nomeCoCoordenador: '',
     emailCoCoordenador: '',
+
     publicoInternoDescricao: '',
     publicoInternoQuantidade: 0,
     publicoExternoDescricao: '',
     publicoExternoQuantidade: 0,
+
     estado: '',
     municipio: '',
     bairro: '',
     espaco: '',
 
     valorSolicitado: 'R$ 0,00',
-
+    valorDisponibilizado: 'R$0,00',
     tipoBolsa: [] as string[],
     valorBolsa: [] as string[],
     quantidade: 0,
@@ -61,13 +66,17 @@ function FormCadProjeto()  {
 
     areaTematica: [] as string[],
     linhaExtensao: [] as string[],
+
     detalhesAcao: '',
     documentosAnexados: [] as string[],
+
     statusEtapa1: '',
     notasAvaliadores: [0] as number[],
     notaEtapa2: 0,
+
     alunosParticipantes: [] as string[],
     relatorioProjeto: [] as string[],
+
     criadoEm: '',
   });
 
@@ -319,6 +328,16 @@ function FormCadProjeto()  {
                   value={formData.nomeProjeto}
                   onChange={handleChange}
                   placeholder="Nome do Projeto"
+                />
+            </div>
+            <div className="form-group">
+                <InputText
+                  label="Nome da Ação"
+                  type="text"
+                  name="nomeDaAcao"
+                  value={formData.nomeDaAcao}
+                  onChange={handleChange}
+                  placeholder="Nome da Ação"
                 />
             </div>
             <div className="form-row">

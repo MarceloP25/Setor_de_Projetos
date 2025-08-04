@@ -1,5 +1,6 @@
 import './App.css'
-import FormCadProjeto from './components/FormCadProjeto'
+import FormDetalhesProjeto from './components/FormDetalhesProjeto'
+
 
 
 function App() {
@@ -7,8 +8,7 @@ function App() {
 
   return (
     <>
-      {/*<FormCadProjeto/>*/}
-      <FormCadProjeto/>
+      <FormDetalhesProjeto/>
     </>
   )
 }
