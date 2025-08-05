@@ -69,6 +69,7 @@ function FormCadProjeto()  {
 
     detalhesAcao: '',
     documentosAnexados: [] as string[],
+    classificacaoDetalhe: '',
 
     statusEtapa1: '',
     notasAvaliadores: [0] as number[],
@@ -78,6 +79,7 @@ function FormCadProjeto()  {
     relatorioProjeto: [] as string[],
 
     criadoEm: '',
+    alteradoEm: '',
   });
 
 
@@ -238,44 +240,57 @@ function FormCadProjeto()  {
         const projetoId = sanitizeName(formData.nomeProjeto);
         await setDoc(doc(db, "projetos", projetoId), {
           ...formData,
-          financiamento: rawFinanciamento,
-          createdAt: new Date()
         });
         alert('Projeto cadastrado com sucesso!');
         setFormData({
-            id: '',
-            edital: '',
-            nomeProjeto: '',
-            ano: 0,
-            periodoInicio: '',
-            periodoFim: '',
-            abrangencia: '',
-            nomeAcao: '',
-            nomeCoordenador: '',
-            emailCoordenador: '',
-            nomeCoCoordenador: '',
-            emailCoCoordenador: '',
-            publicoInternoDescricao: '',
-            publicoInternoQuantidade: 0,
-            publicoExternoDescricao: '',
-            publicoExternoQuantidade: 0,
-            estado: '',
-            municipio: '',
-            bairro: '',
-            espaco: '',
-            valorSolicitado: 'R$ 0,00',
-            tipoBolsa: [] as string[],
-            quantidade: 0,
-            numeroTotalBolsas: 0,
-            areaTematica: [] as string[],
-            linhaExtensao: [] as string[],
-            detalhesAcao: '',
-            documentosAnexados: [] as string[],
-            statusEtapa1: '',
-            notasAvaliadores: [0] as number[],
-            notaEtapa2: 0,
-            alunosParticipantes: [] as string[],
-            criadoEm: '',
+              id: '',
+              edital: '',
+              nomeProjeto: '',
+              nomeDaAcao: '',
+              codigoProjeto: '',
+
+              ano: 0,
+              periodoInicio: '',
+              periodoFim: '',
+              abrangencia: '',
+
+              nomeCoordenador: '',
+              emailCoordenador: '',
+              nomeCoCoordenador: '',
+              emailCoCoordenador: '',
+
+              publicoInternoDescricao: '',
+              publicoInternoQuantidade: 0,
+              publicoExternoDescricao: '',
+              publicoExternoQuantidade: 0,
+
+              estado: '',
+              municipio: '',
+              bairro: '',
+              espaco: '',
+
+              valorSolicitado: 'R$ 0,00',
+              valorDisponibilizado: 'R$0,00',
+              tipoBolsa: [] as string[],
+              valorBolsa: [] as string[],
+              quantidade: 0,
+              valorTotalBolsas: 0,
+
+              areaTematica: [] as string[],
+              linhaExtensao: [] as string[],
+
+              detalhesAcao: '',
+              documentosAnexados: [] as string[],
+
+              statusEtapa1: '',
+              notasAvaliadores: [0] as number[],
+              notaEtapa2: 0,
+
+              alunosParticipantes: [] as string[],
+              relatorioProjeto: [] as string[],
+
+              criadoEm: '',
+              alteradoEm: '',
         });
       } catch (error) {
         if ((error as firebase.FirebaseError).code === 'already-exists') {

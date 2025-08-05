@@ -34,10 +34,11 @@ export interface Projeto {
 
     areaTematica: string[];
     linhaExtensao: string[];
-    detalhesAcao: string;
+    detalhesAcao?: string;
 
     documentosAnexados?: string[];
     statusEtapa1?: string;
+    classificacaoDetalhe: string;
 
     /**
      * Notas atribuídas por até 3 avaliadores (0 a 10).
@@ -57,4 +58,5 @@ export interface Projeto {
     relatorioProjeto?: string[];
 
     criadoEm: string;
+    alteradoEm: string;
 }

@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+//import React, { useState, useEffect } from 'react';
 //import { db } from '../../firebase/firebaseUtil';
 //import { doc, setDoc, collection, getDocs } from 'firebase/firestore';
+import Button from '../Button';
 import './styles.css';
 //import type {Projeto} from '../../interfaces/Projeto'
 
@@ -31,9 +32,19 @@ function FormDetalhesProjeto() {
                     <h4>Nome da Ação</h4>
                     <p>nome da acao</p>
                 </div>
+
+                <div className='info'>
+                    <h4>Cadastrado em</h4>
+                    <p>data</p>
+                </div>
+
+                <div className='info'>
+                    <h4>Última edição</h4>
+                    <p>data</p>
+                </div>
                 
                 <div className='info'>
-                    <h4>Nome do Coornedaor</h4>
+                    <h4>Nome do Coordenador</h4>
                     <p>nome coordenador</p>
                 </div>
 
@@ -152,9 +163,45 @@ function FormDetalhesProjeto() {
 
                 <div className='info'>
                     <h4>Detalhes da Ação</h4>
-                    <p>detalhametno</p>
+                    <p>detalhamento</p>
                 </div>
             </div>
+
+            <div className='infoBloco'>
+                <div className='info'>
+                    <h4>Classificação do Projeto</h4>
+                    <p>statusEtapa1</p>
+                    {/* Colocar renderizacao condicional caso o projeto seja desclassificado, para mostra o texto de justificativa
+                        if(statusEtapa1 === 'Desclassificado')
+                    */}
+                    {/*<Button text='EDITAR' variant='medium' onClick={}/>*/}
+                </div>
+
+                <div className='info'>
+                    <h4>Documentos Anexados</h4>
+                    <p>documentosAnexados</p>
+                    {/*<Button text='EDITAR' variant='medium' onClick={}/>*/}
+                </div>
+
+                <div className='info'>
+                    <h4>Notas Avaliadores</h4>
+                    <p>notasAvaliadores</p>
+                    {/*<Button text='EDITAR' variant='medium' onClick={}/>*/}
+                </div>
+
+                <div className='info'>
+                    <h4>Nota de Classificação</h4>
+                    <p>notaEtapa2</p>
+                </div>
+
+                <div className='info'>
+                    <h4>Alunos Vinculados</h4>
+                    <p>alunosParticipantes.nome</p>
+                    {/*<Button text='LISTA' variant='medium' onClick={}/>*/}
+                </div>
+            </div>
+            {/* Botao para edicao dos dados */}
+            {/*<Button text='EDITAR' variant='medium' onClick={}/>*/}
         </div>
     );
 }

@@ -1,5 +1,5 @@
 import './App.css'
-import FormDetalhesProjeto from './components/FormDetalhesProjeto'
+import FormDocumentosProjeto from './components/FormDocumentosProjeto'
 
 
 
@@ -8,7 +8,7 @@ function App() {
 
   return (
     <>
-      <FormDetalhesProjeto/>
+      <FormDocumentosProjeto/>
     </>
   )
 }
