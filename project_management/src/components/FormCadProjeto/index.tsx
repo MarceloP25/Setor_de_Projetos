@@ -79,7 +79,9 @@ function FormCadProjeto()  {
     relatorioProjeto: [] as string[],
 
     criadoEm: '',
+    criadoPor: '',
     alteradoEm: '',
+    alteradoPor: ''
   });
 
 

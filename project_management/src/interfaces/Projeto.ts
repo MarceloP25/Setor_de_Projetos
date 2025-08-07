@@ -38,7 +38,7 @@ export interface Projeto {
 
     documentosAnexados?: string[];
     statusEtapa1?: string;
-    classificacaoDetalhe: string;
+    classificacaoDetalhe?: string;
 
     /**
      * Notas atribuídas por até 3 avaliadores (0 a 10).
@@ -58,5 +58,7 @@ export interface Projeto {
     relatorioProjeto?: string[];
 
     criadoEm: string;
-    alteradoEm: string;
+    criadoPor?: string;
+    alteradoEm?: string;
+    alteradoPor?: string;
 }
