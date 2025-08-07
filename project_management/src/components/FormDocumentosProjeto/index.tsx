@@ -2,9 +2,11 @@ import { useState } from 'react';
 import './styles.css'
 import RadioInput from '../RadioInput';
 import TextAreaInput from '../TextAreaInput';
+import ActionButton from '../Button';
+import type {Projeto} from '../../interfaces/Projeto'
 
 function FormDocumentosProjeto() {
-    const [Classificacao, setClassificacao] = useState([ 'Classificado', 'Desclassificado' ]);
+    const [classificacao, setClassificacao] = useState('');
 
     const [documentos, setDocumentos] = useState([
         { text: 'Plano de trabalho do(s) bolsista(s)', valor: 'N/A' },
@@ -27,39 +29,48 @@ function FormDocumentosProjeto() {
         
     };
 
+    const handleSummit = () => {
+
+    }
+
     return (
         <div className="container">
             <div className="title">Documentos Anexados ao Projeto</div>
-            <div className="checklist">
-                {/* variavel na interface chama documentosAnexados */}
-                {documentos.map((doc, index) => (
-                <RadioInput
-                    key={index}
-                    label={doc.text}
-                    options={options}
-                    defaultValue={doc.valor}
-                    onChange={(val) => handleDocsListUpdate(index, val)}
-                />
-                ))}
-                <div>
-                    <h4>Classifique o Projeto</h4>
-                    {/* variavel na interface chama statusEtapa1 */}
-                    {Classificacao.map((doc, index) => (
+            <div className='list'>
+                <div className="checklist">
+                    {/* variavel na interface chama documentosAnexados */}
+                    {documentos.map((doc, index) => (
                     <RadioInput
                         key={index}
-                        label={doc}
+                        label={doc.text}
                         options={options}
-                        defaultValue={doc}
-                        onChange={() => handleClassificaoUpdate()}
+                        defaultValue={doc.valor}
+                        onChange={(val) => handleDocsListUpdate(index, val)}
                     />
                     ))}
+                    <div className='checklist'>
+                        <h4>Classifique o Projeto</h4>
+                        {/* variavel na interface chama statusEtapa1 */}
+                        
+                        <RadioInput
+                            label={'Classificação do Projeto'}
+                            options={status}
+                            defaultValue={''}
+                            onChange={() => handleClassificaoUpdate()}
+                        />
+                        
+                    </div>
+                    {/* Campo condicional caso seja selecionado a opcao de Desclassificacao do projeto */}
+                    {/* variavel na interface chama classificacaoDetalhe */}
+                    {/* if(classificacao === 'Desclassificado'){
+                        return(
+                    <div className='checklist'>
+                        <h4>Caso não esteja classificado, justifique</h4>
+                        <TextAreaInput/>
+                    </div>)}
+                    */}
                 </div>
-                {/* Campo condicional caso seja selecionado a opcao de Desclassificacao do projeto */}
-                {/* variavel na interface chama classificacaoDetalhe */}
-                {/*<div>
-                    <h4>Caso não esteja classificado, justifique</h4>
-                    <TextAreaInput/>
-                </div>*/}
+                <ActionButton text='CONFIRMAR' variant='medium' onClick={handleSummit}/>
             </div>
         </div>
     );

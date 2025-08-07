@@ -1,8 +1,7 @@
 .radio-group-container {
   display: flex;
   align-items: center;
-  border: 2px solid purple;
-  border-radius: 6px;
+
   padding: 8px 12px;
   gap: 16px;
   width: 100%;
