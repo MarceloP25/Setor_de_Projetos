@@ -1,0 +1,50 @@
+.container {
+    background-color: #FBFBFB;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+    min-width: 700px;
+    width: 800px;
+}
+
+.container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background-color: #006400;
+  transform: scaleX(0);
+  transition: transform 0.3s;
+}
+
+.container:hover::before {
+  transform: scaleX(1);
+}
+
+.title {
+  text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 30px;
+  color: #006400;
+  font-weight: 600;
+  position: relative;
+}
+
+.title::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 2px;
+  background-color: #006400;
+}
+
+.infoBloco{
+    margin-left: 40px;
+}
