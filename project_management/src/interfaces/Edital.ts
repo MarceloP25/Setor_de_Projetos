@@ -1,6 +1,10 @@
 export interface Edital {
     id: string;
     nomeEdital: string;
+    valorDisponivel: string;
+    status: boolean;
+
+    projetosVinculados?: string[];
 
     anoVigente: number;
     dataInicio: string;
