@@ -4,8 +4,9 @@ import { doc, setDoc, collection, getDocs } from 'firebase/firestore';
 import InputText from '../InputText';
 import InputNumber from '../InputNumber';
 import SelectInput from '../SelectInput';
-import type {Projeto} from '../../interfaces/Projeto'
 import type { Edital } from '../../interfaces/Edital';
+import type { Projeto } from '../../interfaces/Projeto';
+
 
 import './styles.css';
 
@@ -15,15 +16,17 @@ const formatMoney = (value: string): string => {
     return 'R$ 0,00';
   }
   const number = parseFloat(cleanValue) / 100;
-  return `R$ ${number.toFixed(2).replace('.', ',')}`;
+  return `R$ ${number.toFixed(2).replace('.', ',')}`; // isso nao fica aqui, criar um arquivo para functions chamado utils
 };
+
 
 const sanitizeName = (name: string): string => {
   return name
     .toLowerCase()
     .replace(/[^a-z0-9\\s]/g, '')
-    .replace(/\\s+/g, '-');
+    .replace(/\\s+/g, '-'); // dentro de utils tambem
 };
+
 
 function FormCadProjeto()  {
   const [editaisList, setEditaisList] = useState<Edital[]>([]);
@@ -34,46 +37,56 @@ function FormCadProjeto()  {
     nomeDaAcao: '',
     codigoProjeto: '',
 
+
     ano: 0,
     periodoInicio: '',
     periodoFim: '',
     abrangencia: '',
+
 
     nomeCoordenador: '',
     emailCoordenador: '',
     nomeCoCoordenador: '',
     emailCoCoordenador: '',
 
+
     publicoInternoDescricao: '',
     publicoInternoQuantidade: 0,
     publicoExternoDescricao: '',
     publicoExternoQuantidade: 0,
+
 
     estado: '',
     municipio: '',
     bairro: '',
     espaco: '',
 
-    valorSolicitado: 'R$ 0,00',
-    valorDisponibilizado: 'R$ 0,00',
+
+    valorSolicitado: 0,
+    valorDisponibilizado: 0,
     tipoBolsa: [] as string[],
     valorBolsa: [] as string[],
     quantidade: 0,
     valorTotalBolsas: 0,
 
-    areaTematica: [] as string[],
-    linhaExtensao: [] as string[],
+
+    areaTematica: '',
+    linhaExtensao: '',
+
 
     detalhesAcao: '',
     documentosAnexados: [] as string[],
     classificacaoDetalhe: '',
 
+
     statusEtapa1: '',
     notasAvaliadores: [0] as number[],
     notaEtapa2: 0,
 
+
     alunosParticipantes: [] as string[],
     relatorioProjeto: [] as object[],
+
 
     criadoEm: '',
     criadoPor: '',
@@ -82,11 +95,13 @@ function FormCadProjeto()  {
   });
 
 
+
   const areaTematicaList = [
     'Comunicação', "Cultura", "Direitos Humanos e Justiça", 
     "Educação", "Meio Ambiente", "Saúde", 
     "Tecnologia e Produção", "Trabalho"
-  ];
+  ]; // criar constants pra isso depois
+
 
   const linhaExtensaoList = [
     "Alfabetizacao", "Comunicacao", "Desenvolvimento Rural",
@@ -106,7 +121,31 @@ function FormCadProjeto()  {
     "Jornalismo", "Metodologias e Estratégias de Ensino/Aprendizagem", "Música",
     "Pessoa com Deficiências, Incapacidades e Necessidades Especiais", "Recursos Hídricos", "Saúde da Família",
     "Segurança Alimentar e Nutricional", "Turismo<", "Desenvolvimento Humano"
-  ];
+  ]; // dentro de constants
+
+
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+
+  const handleEditalChange = (value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      edital: value
+    }));
+  };
+
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement | HTMLSelectElement>) => {
+    e.preventDefault();
+  }
+
 
 
   const bolsasList = [
@@ -114,21 +153,25 @@ function FormCadProjeto()  {
     { tipo: 'SUP II (10h)', valor: 'R$ 350,00'},
     { tipo: 'BEXMED (10h)', valor: 'R$ 350,00'},
     { tipo: 'BEXCOL (até 15h)', valor: 'R$ 900,00'}
-  ];
+  ]; // constants
+
 
   const toggleBolsaTipo = (tipo: string) => {
     setFormData(prev => {
       const jaPossui = prev.tipoBolsa.includes(tipo);
+
 
       if (jaPossui) {
         const tipoIndex = prev.tipoBolsa.indexOf(tipo);
         const novaTipoBolsa = prev.tipoBolsa.filter(b => b !== tipo);
         const novaValorBolsa = prev.valorBolsa.filter((_, i) => i !== tipoIndex);
 
+
         const novaQuantidadeTotal = novaValorBolsa.reduce((acc, item) => {
           const matchQtd = item.match(/Qtd: (\d+)/);
           return acc + (matchQtd ? parseInt(matchQtd[1]) : 0);
         }, 0);
+
 
         return {
           ...prev,
@@ -139,6 +182,7 @@ function FormCadProjeto()  {
         };
       }
 
+
       return {
         ...prev,
         tipoBolsa: [...prev.tipoBolsa, tipo],
@@ -146,15 +190,18 @@ function FormCadProjeto()  {
         quantidade: prev.quantidade, // não muda ainda
       };
     });
-  };
+  }; // ver se encaixa em functions
+
 
   const handleBolsaChange = (tipo: string, quantidadeStr: string) => {
     const bolsaInfo = bolsasList.find(b => b.tipo === tipo);
     if (!bolsaInfo) return;
 
+
     const valorUnitario = parseFloat(bolsaInfo.valor.replace(/[^\d,]/g, '').replace(',', '.'));
     const quantidade = parseInt(quantidadeStr) || 0;
     const valorTotalTipo = quantidade * valorUnitario;
+
 
     setFormData(prev => {
       const novaValorBolsa = prev.valorBolsa.map(item =>
@@ -163,11 +210,13 @@ function FormCadProjeto()  {
           : item
       );
 
+
       // Atualiza a quantidade total somando todas as quantidades registradas
       const novaQuantidadeTotal = novaValorBolsa.reduce((acc, item) => {
         const matchQtd = item.match(/Qtd: (\d+)/);
         return acc + (matchQtd ? parseInt(matchQtd[1]) : 0);
       }, 0);
+
 
       return {
         ...prev,
@@ -177,6 +226,7 @@ function FormCadProjeto()  {
       };
     });
   };
+
 
 
   const calcularTotal = (valores: string[]) => {
@@ -193,6 +243,7 @@ function FormCadProjeto()  {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
+
 
     setFormData(prev => {
       // Campos monetários
@@ -215,6 +266,8 @@ function FormCadProjeto()  {
       return { ...prev, [name]: value };
     });
   };
+
+
 
   const validateForm = (): boolean => {
     const requiredFields = [
@@ -246,6 +299,7 @@ function FormCadProjeto()  {
     return true;
   };
 
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -272,38 +326,54 @@ function FormCadProjeto()  {
           nomeProjeto: '',
           nomeDaAcao: '',
           codigoProjeto: '',
+
           ano: 0,
           periodoInicio: '',
           periodoFim: '',
           abrangencia: '',
+
+
+
           nomeCoordenador: '',
           emailCoordenador: '',
           nomeCoCoordenador: '',
           emailCoCoordenador: '',
+
+
+
+
           publicoInternoDescricao: '',
           publicoInternoQuantidade: 0,
           publicoExternoDescricao: '',
           publicoExternoQuantidade: 0,
+
+
           estado: '',
           municipio: '',
           bairro: '',
           espaco: '',
+
           valorSolicitado: 'R$ 0,00',
           valorDisponibilizado: 'R$ 0,00',
           tipoBolsa: [],
           valorBolsa: [],
           quantidade: 0,
           valorTotalBolsas: 0,
+
           areaTematica: [],
           linhaExtensao: [],
+
           detalhesAcao: '',
           documentosAnexados: [],
           classificacaoDetalhe: '',
+
           statusEtapa1: '',
           notasAvaliadores: [],
           notaEtapa2: 0,
+
           alunosParticipantes: [],
           relatorioProjeto: [],
+
           criadoEm: '',
           criadoPor: '',
           alteradoEm: '',
@@ -314,6 +384,7 @@ function FormCadProjeto()  {
       }
     }
   };
+
   
   const fetchEditais = async () => {
     try {
@@ -351,6 +422,7 @@ function FormCadProjeto()  {
       console.error("Erro ao buscar editais:", error);
     }
   };
+
 
   useEffect(() => {
     fetchEditais();
@@ -476,6 +548,7 @@ function FormCadProjeto()  {
               </div>
             </div>
 
+
              <div className="form-row">
               <div className="form-col">
                 
@@ -484,7 +557,8 @@ function FormCadProjeto()  {
                   {bolsasList.map((bolsa) => {
                     const isSelected = formData.tipoBolsa.includes(bolsa.tipo);
                     const valorRegistrado = formData.valorBolsa.find(item => item.startsWith(bolsa.tipo));
-                    const quantidade = valorRegistrado ? parseInt(valorRegistrado.match(/\d+/)?.[0] || '0') : 0;
+                    const quantidade = valorRegistrado ? parseInt(valorRegistrado.match(/\d+/)?.[0] || '0') : 0; // ver se sera usado
+
 
                     return (
                       <div key={bolsa.tipo} className="flex items-center space-x-2 mb-2">
@@ -494,6 +568,7 @@ function FormCadProjeto()  {
                           onChange={() => toggleBolsaTipo(bolsa.tipo)}
                         />
                         <label>{bolsa.tipo} ({bolsa.valor})</label>
+
 
                         {isSelected && (
                           <input
@@ -507,6 +582,7 @@ function FormCadProjeto()  {
                       </div>
                     );
                   })}
+
 
                   <div className="mt-4">
                     <p><strong>Tipos selecionados:</strong> {formData.tipoBolsa.join(', ') || 'Nenhum'}</p>
@@ -522,6 +598,7 @@ function FormCadProjeto()  {
                 </div>
                 
 
+
                 <div className="form-section">
                     <SelectInput
                       label='Área Temática'
@@ -531,6 +608,7 @@ function FormCadProjeto()  {
                       options={areaTematicaList}
                     />
                 </div>
+
 
                 <div className="form-group">
                     <SelectInput
@@ -551,5 +629,6 @@ function FormCadProjeto()  {
         </div>
   );
 };
+
 
 export default FormCadProjeto;
