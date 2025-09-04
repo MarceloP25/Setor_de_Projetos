@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from 'react';
-//import { db } from '../../firebase/firebaseUtil';
-//import { doc, setDoc, collection, getDocs } from 'firebase/firestore';
-import './styles.css';
-//import firebase from 'firebase/compat/app';
-//import 'firebase/compat/firestore';
-//import Sidebar from '../../components/Sidebar';
-//import Header from '../../components/Header';
+import { db } from '../../services/config';
+import { doc, setDoc, collection, getDocs } from 'firebase/firestore';
 import InputText from '../InputText';
 import InputNumber from '../InputNumber';
 import SelectInput from '../SelectInput';
 import type {Projeto} from '../../interfaces/Projeto'
 import type { Edital } from '../../interfaces/Edital';
+
+import './styles.css';
 
 const formatMoney = (value: string): string => {
   const cleanValue = value.replace(/[^0-9]/g, '');
@@ -58,7 +55,7 @@ function FormCadProjeto()  {
     espaco: '',
 
     valorSolicitado: 'R$ 0,00',
-    valorDisponibilizado: 'R$0,00',
+    valorDisponibilizado: 'R$ 0,00',
     tipoBolsa: [] as string[],
     valorBolsa: [] as string[],
     quantidade: 0,
@@ -111,24 +108,10 @@ function FormCadProjeto()  {
     "Segurança Alimentar e Nutricional", "Turismo<", "Desenvolvimento Humano"
   ];
 
-  const handleChange = (e: React.FormEvent<HTMLFormElement | HTMLSelectElement | HTMLInputElement>) => {
-    // inserir codigos
-  };
-
-  const handleEditalChange = (value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      edital: value
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement | HTMLSelectElement>) => {
-    e.preventDefault();
-  }
 
   const bolsasList = [
     { tipo: 'SUP I (20h)', valor: 'R$ 700,00'},
-    { tipo: 'SUP II (10h)', valor: 'SR$ 350,00'},
+    { tipo: 'SUP II (10h)', valor: 'R$ 350,00'},
     { tipo: 'BEXMED (10h)', valor: 'R$ 350,00'},
     { tipo: 'BEXCOL (até 15h)', valor: 'R$ 900,00'}
   ];
@@ -208,106 +191,129 @@ function FormCadProjeto()  {
   };
 
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value, type } = e.target;
 
-  /*
+    setFormData(prev => {
+      // Campos monetários
+      if (name === "valorSolicitado" || name === "valorDisponibilizado") {
+        const formattedValue = formatMoney(value);
+        return { ...prev, [name]: formattedValue };
+      }
+
+      // Campos numéricos (ano, publicoInternoQuantidade, publicoExternoQuantidade, etc.)
+      if (type === "number") {
+        return { ...prev, [name]: parseInt(value) || 0 };
+      }
+
+      // Campos de seleção múltipla (áreaTematica, linhaExtensao)
+      if (name === "areaTematica" || name === "linhaExtensao") {
+        return { ...prev, [name]: [value] }; // ou [...prev[name], value] se quiser múltipla seleção
+      }
+
+      // Campos padrão (string)
+      return { ...prev, [name]: value };
+    });
+  };
 
   const validateForm = (): boolean => {
     const requiredFields = [
       'edital',
       'nomeProjeto',
+      'nomeDaAcao',
+      'ano',
+      'periodoInicio',
+      'periodoFim',
       'nomeCoordenador',
       'emailCoordenador',
-      'financiamento',
+      'valorSolicitado',
       'areaTematica',
-      'linhaExtensao',
+      'linhaExtensao'
     ];
+
     for (const field of requiredFields) {
-      if (!formData[field]) {
+      if (!formData[field as keyof Projeto] || formData[field as keyof Projeto] === 0) {
         alert(`O campo ${field} é obrigatório!`);
         return false;
       }
     }
+
     if (!formData.nomeProjeto.replace(/\s/g, '').length) {
       alert('Nome do projeto inválido para ID!');
       return false;
     }
+
     return true;
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     if (validateForm()) {
       try {
-        const rawFinanciamento = formData.valorSolicitado.replace(/\\D/g, '');
         const projetoId = sanitizeName(formData.nomeProjeto);
+        const rawValorSolicitado = formData.valorSolicitado.replace(/\D/g, '');
+        const rawValorDisponibilizado = formData.valorDisponibilizado.replace(/\D/g, '');
+
         await setDoc(doc(db, "projetos", projetoId), {
           ...formData,
+          valorSolicitado: rawValorSolicitado,
+          valorDisponibilizado: rawValorDisponibilizado,
+          criadoEm: new Date().toISOString()
         });
+
         alert('Projeto cadastrado com sucesso!');
+
+        // Resetar o formulário
         setFormData({
+          ...formData,
           id: '',
           edital: '',
           nomeProjeto: '',
           nomeDaAcao: '',
           codigoProjeto: '',
-
           ano: 0,
           periodoInicio: '',
           periodoFim: '',
           abrangencia: '',
-
           nomeCoordenador: '',
           emailCoordenador: '',
           nomeCoCoordenador: '',
           emailCoCoordenador: '',
-
           publicoInternoDescricao: '',
           publicoInternoQuantidade: 0,
           publicoExternoDescricao: '',
           publicoExternoQuantidade: 0,
-
           estado: '',
           municipio: '',
           bairro: '',
           espaco: '',
-
           valorSolicitado: 'R$ 0,00',
-          valorDisponibilizado: 'R$0,00',
-          tipoBolsa: [] as string[],
-          valorBolsa: [] as string[],
+          valorDisponibilizado: 'R$ 0,00',
+          tipoBolsa: [],
+          valorBolsa: [],
           quantidade: 0,
           valorTotalBolsas: 0,
-
-          areaTematica: [] as string[],
-          linhaExtensao: [] as string[],
-
+          areaTematica: [],
+          linhaExtensao: [],
           detalhesAcao: '',
-          documentosAnexados: [] as string[],
+          documentosAnexados: [],
           classificacaoDetalhe: '',
-
           statusEtapa1: '',
-          notasAvaliadores: [0] as number[],
+          notasAvaliadores: [],
           notaEtapa2: 0,
-
-          alunosParticipantes: [] as string[],
-          relatorioProjeto: [] as object[],
-
+          alunosParticipantes: [],
+          relatorioProjeto: [],
           criadoEm: '',
           criadoPor: '',
           alteradoEm: '',
           alteradoPor: ''
         });
       } catch (error) {
-        if ((error as firebase.FirebaseError).code === 'already-exists') {
-          alert('Já existe um projeto com este nome!');
-        } else {
-          alert('Erro ao cadastrar projeto: ' + (error as Error).message);
-        }
+        alert('Erro ao cadastrar projeto: ' + (error as Error).message);
       }
     }
   };
-
-  
   
   const fetchEditais = async () => {
     try {
@@ -315,7 +321,30 @@ function FormCadProjeto()  {
       const querySnapshot = await getDocs(editaisRef);
       const editais = querySnapshot.docs.map(doc => ({
         id: doc.id,
-        nome: doc.data().nome
+        nomeEdital: doc.data().nomeEdital,
+        orçamentoEdital: doc.data().orçamentoEdital,
+        valorDisponivel:  doc.data().valorDisponivel,
+        status:  doc.data().status,
+        projetosVinculados:  doc.data().projetosVinculados,
+        anoVigente:  doc.data().anoVigente,
+        dataInicio:  doc.data().dataInicio,
+        dataFim:  doc.data().dataFim,
+        dataInicioSubmissao:  doc.data().dataInicioSubmissao,
+        dataFimSubmissao:  doc.data().dataFimSubmissao,
+        dataInicioDocumentos:  doc.data().dataInicioDocumentos,
+        dataFimDocumentos:  doc.data().dataFimDocumentos,
+        dataInicioRecurso:  doc.data().dataInicioRecurso,
+        dataFimRecurso:  doc.data().dataFimRecurso,
+        dataInicioAvaliacao:  doc.data().dataInicioAvaliacao,
+        dataFimAvaliacao:  doc.data().dataFimAvaliacao,
+        dataInicioEnvioRelatorio:  doc.data().dataFimEnvioRelatorio,
+        dataFimEnvioRelatorio: doc.data().dataFimEnvioRelatorio,
+        dataPagamentoInicio:  doc.data().dataPagamentoInicio,
+        dataPagamentoFim:  doc.data().dataPagamentoFim,
+        criadoEm:  doc.data().criadoEm,
+        criadoPor:  doc.data().criadoPor,
+        alteradoEm:  doc.data().alteradoEm,
+        alteradoPor:  doc.data().alteradoPor,
       }));
       setEditaisList(editais);
     } catch (error) {
@@ -326,7 +355,7 @@ function FormCadProjeto()  {
   useEffect(() => {
     fetchEditais();
   }, []);
-  */
+  
   return (
         <div className="form-container">
           <div className="form-title">Cadastro de Projeto</div>
@@ -437,10 +466,10 @@ function FormCadProjeto()  {
             </div>
             <div className="form-row">
               <div className="form-col">
-                <InputNumber
+                <InputText
                   label='Valor para Financiamento do Projeto'
                   type="text"
-                  name="financiamento"
+                  name="valorSolicitado"
                   value={formData.valorSolicitado}
                   onChange={handleChange}
                 />
