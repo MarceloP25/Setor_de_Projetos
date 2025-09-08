@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { db } from '../../services/config';
+import { db } from '../../services/config'; // criar isso la ainda
 import { doc, setDoc, collection, getDocs } from 'firebase/firestore';
 import InputText from '../InputText';
 import InputNumber from '../InputNumber';
@@ -10,14 +10,14 @@ import type { Projeto } from '../../interfaces/Projeto';
 
 import './styles.css';
 
-const formatMoney = (value: string): string => {
-  const cleanValue = value.replace(/[^0-9]/g, '');
-  if (!cleanValue || cleanValue === '0') {
-    return 'R$ 0,00';
-  }
-  const number = parseFloat(cleanValue) / 100;
-  return `R$ ${number.toFixed(2).replace('.', ',')}`; // isso nao fica aqui, criar um arquivo para functions chamado utils
-}; // coorigir pois nao precisa converte da string para number, ja ira trabalhar apenas com valores numericos
+const formatMoney = (value: number): string => {
+const cleanValue = Math.abs(value);
+if (!cleanValue || cleanValue === 0) {
+return 'R$ 0,00';
+}
+const number = cleanValue/ 100;
+return `R$ ${number.toFixed(2).replace('.', ',')}`; // isso nao fica aqui, criar um arquivo para functions chamado utils
+};
 
 
 const sanitizeName = (name: string): string => {
@@ -62,8 +62,8 @@ function FormCadProjeto()  {
     espaco: '',
 
 
-    valorSolicitado:'R$ 0,00',
-    valorDisponibilizado: 'R$ 0,00',
+    valorSolicitado: 0,
+    valorDisponibilizado: 0,
     tipoBolsa: [] as string[],
     valorBolsa: [] as string[],
     quantidade: 0,
@@ -237,7 +237,7 @@ function FormCadProjeto()  {
     setFormData(prev => {
       // Campos monetários
       if (name === "valorSolicitado" || name === "valorDisponibilizado") {
-        const formattedValue = formatMoney(value);
+        const formattedValue = formatMoney(Number(value));
         return { ...prev, [name]: formattedValue };
       }
 
@@ -342,15 +342,15 @@ function FormCadProjeto()  {
           bairro: '',
           espaco: '',
 
-          valorSolicitado: 'R$ 0,00',
-          valorDisponibilizado: 'R$ 0,00',
+          valorSolicitado: 0,
+          valorDisponibilizado: 0,
           tipoBolsa: [],
           valorBolsa: [],
           quantidade: 0,
           valorTotalBolsas: 0,
 
-          areaTematica: [],
-          linhaExtensao: [],
+          areaTematica: '',
+          linhaExtensao: '',
 
           detalhesAcao: '',
           documentosAnexados: [],
