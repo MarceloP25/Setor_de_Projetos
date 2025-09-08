@@ -17,7 +17,7 @@ const formatMoney = (value: string): string => {
   }
   const number = parseFloat(cleanValue) / 100;
   return `R$ ${number.toFixed(2).replace('.', ',')}`; // isso nao fica aqui, criar um arquivo para functions chamado utils
-};
+}; // coorigir pois nao precisa converte da string para number, ja ira trabalhar apenas com valores numericos
 
 
 const sanitizeName = (name: string): string => {
@@ -62,8 +62,8 @@ function FormCadProjeto()  {
     espaco: '',
 
 
-    valorSolicitado: 0,
-    valorDisponibilizado: 0,
+    valorSolicitado:'R$ 0,00',
+    valorDisponibilizado: 'R$ 0,00',
     tipoBolsa: [] as string[],
     valorBolsa: [] as string[],
     quantidade: 0,
@@ -125,13 +125,6 @@ function FormCadProjeto()  {
 
 
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
 
 
   const handleEditalChange = (value: string) => {
@@ -139,12 +132,8 @@ function FormCadProjeto()  {
       ...prev,
       edital: value
     }));
-  };
+  }; // verificar se tem uso
 
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement | HTMLSelectElement>) => {
-    e.preventDefault();
-  }
 
 
 
@@ -306,8 +295,8 @@ function FormCadProjeto()  {
     if (validateForm()) {
       try {
         const projetoId = sanitizeName(formData.nomeProjeto);
-        const rawValorSolicitado = formData.valorSolicitado.replace(/\D/g, '');
-        const rawValorDisponibilizado = formData.valorDisponibilizado.replace(/\D/g, '');
+        const rawValorSolicitado = formData.valorSolicitado;
+        const rawValorDisponibilizado = formData.valorDisponibilizado;
 
         await setDoc(doc(db, "projetos", projetoId), {
           ...formData,
@@ -538,7 +527,7 @@ function FormCadProjeto()  {
             </div>
             <div className="form-row">
               <div className="form-col">
-                <InputText
+                <InputNumber
                   label='Valor para Financiamento do Projeto'
                   type="text"
                   name="valorSolicitado"
@@ -557,6 +546,8 @@ function FormCadProjeto()  {
                   {bolsasList.map((bolsa) => {
                     const isSelected = formData.tipoBolsa.includes(bolsa.tipo);
                     const valorRegistrado = formData.valorBolsa.find(item => item.startsWith(bolsa.tipo));
+
+                    
                     const quantidade = valorRegistrado ? parseInt(valorRegistrado.match(/\d+/)?.[0] || '0') : 0; // ver se sera usado
 
 
