@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { db } from '../../services/config'; // criar isso la ainda
+import { db } from '../../services/config'; 
 import { doc, setDoc, collection, getDocs } from 'firebase/firestore';
 import InputText from '../InputText';
 import InputNumber from '../InputNumber';
@@ -11,12 +11,12 @@ import type { Projeto } from '../../interfaces/Projeto';
 import './styles.css';
 
 const formatMoney = (value: number): string => {
-const cleanValue = Math.abs(value);
-if (!cleanValue || cleanValue === 0) {
-return 'R$ 0,00';
-}
-const number = cleanValue/ 100;
-return `R$ ${number.toFixed(2).replace('.', ',')}`; // isso nao fica aqui, criar um arquivo para functions chamado utils
+  const cleanValue = Math.abs(value);
+  if (!cleanValue || cleanValue === 0) {
+  return 'R$ 0,00';
+  }
+  const number = cleanValue/ 100;
+  return `R$ ${number.toFixed(2).replace('.', ',')}`; // isso nao fica aqui, criar um arquivo para functions chamado utils
 };
 
 
@@ -122,18 +122,6 @@ function FormCadProjeto()  {
     "Pessoa com Deficiências, Incapacidades e Necessidades Especiais", "Recursos Hídricos", "Saúde da Família",
     "Segurança Alimentar e Nutricional", "Turismo<", "Desenvolvimento Humano"
   ]; // dentro de constants
-
-
-
-
-
-  const handleEditalChange = (value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      edital: value
-    }));
-  }; // verificar se tem uso
-
 
 
 
@@ -545,10 +533,10 @@ function FormCadProjeto()  {
                 <div className="checkbox-group">
                   {bolsasList.map((bolsa) => {
                     const isSelected = formData.tipoBolsa.includes(bolsa.tipo);
-                    const valorRegistrado = formData.valorBolsa.find(item => item.startsWith(bolsa.tipo));
+                    //const valorRegistrado = formData.valorBolsa.find(item => item.startsWith(bolsa.tipo));
 
                     
-                    const quantidade = valorRegistrado ? parseInt(valorRegistrado.match(/\d+/)?.[0] || '0') : 0; // ver se sera usado
+                    //const quantidade = valorRegistrado ? parseInt(valorRegistrado.match(/\d+/)?.[0] || '0') : 0; // ver se sera usado
 
 
                     return (
