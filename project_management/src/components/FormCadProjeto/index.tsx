@@ -534,10 +534,7 @@ function FormCadProjeto()  {
                   {bolsasList.map((bolsa) => {
                     const isSelected = formData.tipoBolsa.includes(bolsa.tipo);
                     //const valorRegistrado = formData.valorBolsa.find(item => item.startsWith(bolsa.tipo));
-
-                    
                     //const quantidade = valorRegistrado ? parseInt(valorRegistrado.match(/\d+/)?.[0] || '0') : 0; // ver se sera usado
-
 
                     return (
                       <div key={bolsa.tipo} className="flex items-center space-x-2 mb-2">
