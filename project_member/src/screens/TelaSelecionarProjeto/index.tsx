@@ -40,6 +40,11 @@ function TelaSelecionarProjeto() {
   };
 
   const handleSalvar = () => {
+    localStorage.setItem("projetos", projetos);
+    localStorage.setItem("vinculo", vinculo);
+    localStorage.setItem("valorBolsa", valorBolsa);
+    localStorage.setItem("valorOutro", valorOutro);
+
     salvarDados({ projetos, vinculo, valorBolsa, valorOutro });
     navigate("/DadosBancarios");
   };
@@ -121,11 +126,7 @@ function TelaSelecionarProjeto() {
           </p>
         )}
 
-        <Botao
-          label="Próximo"
-          onClick={handleSalvar}
-          tipo="secundario"
-        />
+        <Botao label="Próximo" onClick={handleSalvar} tipo="secundario" />
       </div>
     </div>
   );

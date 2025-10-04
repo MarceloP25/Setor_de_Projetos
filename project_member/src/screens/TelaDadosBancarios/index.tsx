@@ -1,5 +1,7 @@
 import React from "react";
 import { salvarDados } from "../../utils/firebaseUtils";
+import { enviarDadosParaSheetDB } from "../../utils/sheetdbUtils";
+
 import InputText from "../../componentes/InputText/index.tsx";
 import Botao from "../../componentes/Botao/index.tsx";
 import "./style.css";
@@ -8,9 +10,22 @@ function TelaDadosBancarios() {
   const [banco, setBanco] = React.useState("");
   const [agencia, setAgencia] = React.useState("");
   const [conta, setConta] = React.useState("");
-  const handleSalvar = () => {
+  const handleSalvar = async () => {
+  localStorage.setItem("banco", banco);
+  localStorage.setItem("agencia", agencia);
+  localStorage.setItem("conta", conta);
+
   salvarDados({ banco, agencia, conta });
+
+  try {
+    await enviarDadosParaSheetDB();
+    alert("✅ Dados enviados com sucesso!");
+  } catch (erro) {
+    alert("❌ Erro ao enviar os dados. Tente novamente.");
+    console.error(erro);
+  }
 };
+
   return (
     <>
       <div className="dadosBancarios-background">
@@ -39,11 +54,7 @@ function TelaDadosBancarios() {
             onChange={setConta}
             placeholder="Digite o número da sua conta"
           />
-          <Botao
-            label="Proximo"
-            onClick={handleSalvar}
-            tipo="secundario"
-          />{" "}
+          <Botao label="Proximo" onClick={handleSalvar} tipo="secundario" />{" "}
         </div>
       </div>
     </>

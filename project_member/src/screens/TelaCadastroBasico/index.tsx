@@ -23,6 +23,10 @@ function TelaCadastroBasico() {
   const navigate = useNavigate();
   const edital = localStorage.getItem("edital");
   const handleSalvar = () => {
+    localStorage.setItem("nome", nome);
+    localStorage.setItem("email", email);
+    localStorage.setItem("telefone", telefone);
+    localStorage.setItem("sexo", sexo);
     localStorage.setItem("cpf", cpf);
     salvarDados({ nome, email, telefone, cpf, sexo, edital });
     navigate("/ModalidadeCurso");

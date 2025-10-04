@@ -120,9 +120,11 @@ const FormularioCursos: React.FC = () => {
 
   const cursosOptions = cursosPorNivel[nivelEnsino] || [];
   const handleSalvar = () => {
-  salvarDados({ nivelEnsino, cursoSelecionado });
-  navigate("/SelecionarProjeto");
-};
+    localStorage.setItem("nivelEnsino", nivelEnsino);
+    localStorage.setItem("cursoSelecionado", cursoSelecionado);
+    salvarDados({ nivelEnsino, cursoSelecionado });
+    navigate("/SelecionarProjeto");
+  };
   const navigate = useNavigate();
 
   return (
@@ -170,11 +172,7 @@ const FormularioCursos: React.FC = () => {
             </strong>
           </p>
         )}
-        <Botao
-          label="Proximo"
-          onClick={handleSalvar}
-          tipo="secundario"
-        />{" "}
+        <Botao label="Proximo" onClick={handleSalvar} tipo="secundario" />{" "}
       </div>
     </div>
   );
