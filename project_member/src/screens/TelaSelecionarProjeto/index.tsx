@@ -5,7 +5,7 @@ import InputTexto from "../../componentes/InputText";
 import Botao from "../../componentes/Botao";
 import RadioInput from "../../componentes/RadioInput";
 import { salvarDados } from "../../utils/firebaseUtils";
-import "./style.css";
+import "./selecaoprojeto.css";
 
 function TelaSelecionarProjeto() {
   const [projetos, setProjetos] = React.useState("");

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import InputSelect from "/home/serafim/FormularioDeDadosIFSUDESTEMG/FomularioIFSUDESTEMGRP/src/componentes/InputSelect/index.tsx";
 import Botao from "/home/serafim/FormularioDeDadosIFSUDESTEMG/FomularioIFSUDESTEMGRP/src/componentes/Botao/index.tsx";
 
-import "./style.css";
+import "./selecaoedital.css";
 function TelaSeleçãoEdital() {
   const [edital, setEdital] = useState("");
 

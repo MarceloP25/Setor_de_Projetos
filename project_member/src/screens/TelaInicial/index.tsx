@@ -1,7 +1,7 @@
 import Botao from "../../componentes/Botao";
 import { useNavigate } from "react-router-dom";
 
-import "./style.css";
+import "./inicial.css";
 
 function TelaInicial() {
   const navigate = useNavigate();

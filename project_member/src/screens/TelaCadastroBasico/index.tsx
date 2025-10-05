@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { salvarDados } from "../../utils/firebaseUtils";
 
 import React from "react";
-import "./style.css";
+import "./basico.css";
 
 function TelaCadastroBasico() {
   const [nome, setNome] = React.useState("");

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import RadioInput from "../../componentes/RadioInput";
 import Botao from "../../componentes/Botao";
 import { salvarDados } from "../../utils/firebaseUtils";
-import "./style.css";
+import "./curso.css";
 
 const nivelEnsinoOptions = [
   { label: "Técnico integrado", value: "tecnico_integrado" },

@@ -4,7 +4,7 @@ import { enviarDadosParaSheetDB } from "../../utils/sheetdbUtils";
 
 import InputText from "../../componentes/InputText/index.tsx";
 import Botao from "../../componentes/Botao/index.tsx";
-import "./style.css";
+import "./bancarios.css";
 
 function TelaDadosBancarios() {
   const [banco, setBanco] = React.useState("");
