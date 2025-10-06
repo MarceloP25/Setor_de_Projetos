@@ -12,7 +12,7 @@ function TelaAgradecimento() {
         </h1>
         <div className="agradecimento-container">
           <p className="agradecimento-texto">
-            Obrigado por responder o formulario!
+            Obrigado por responder o formulário!
           </p>
           <p className="agradecimento-lembrete">
             Seus dados foram salvos, pode fechar agora.
