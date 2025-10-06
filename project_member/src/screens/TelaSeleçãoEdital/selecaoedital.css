@@ -1,51 +1,81 @@
 .selecaoedital-background {
-  padding: 0px;
-  margin: 15px;
-  background-color: #f0f0f0;
-  height: 97vh;
+  background-color: #ffffff;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border-radius: 16px;
-  border: 2px solid var(--verde-escuro);
-  gap: 65px;
-  font-family: var(--texto);
+  font-family: sans-serif;
+  min-height: 100vh;
+  padding: 2rem;
+  gap: 2rem;
 }
 
 .selecaoedital-titulo {
-  font-size: 64px;
-  color: black  ;
-  font-family: var(--texto-titulo);
+  font-size: 3.5rem;
   font-weight: bold;
   text-align: center;
+  color: #222;
 }
 
 .selecaoedital-container {
-  margin: 0px;
-  padding: 25px;
-  background-color: white;
-  border-radius: 16px;
-  border: 2px solid var(--verde-escuro);
-  width: 591px;
-  height: 738px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 70px;
-  font-family: var(--texto);
+  width: 100%;
+  max-width: 500px;
+  padding: 6rem;
+  gap: 1.5rem;
+  background-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
 }
 
 .selecaoedital-texto {
-  font-size: 28px;
-  color: black;
-  font-family: var(--texto-titulo);
-  font-weight: bold;
+  font-size: 1.2rem;
   text-align: center;
+  color: #000000;
 }
+
 .selecaoedital-lembrete {
-  font-size: 18px;
-  color: black;
+  font-size: 1rem;
   text-align: center;
+  color: #000000;
+}
+
+@media (max-width: 768px) {
+  .selecaoedital-titulo {
+    font-size: 2.5rem;
+  }
+
+  .selecaoedital-container {
+    padding: 1.5rem;
+    gap: 1rem;
+  }
+
+  .selecaoedital-texto {
+    font-size: 1.3rem;
+  }
+
+  .selecaoedital-lembrete {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .selecaoedital-titulo {
+    font-size: 2rem;
+  }
+
+  .selecaoedital-container {
+    padding: 1rem;
+  }
+
+  .selecaoedital-texto {
+    font-size: 0.95rem;
+  }
+
+  .selecaoedital-lembrete {
+    font-size: 0.85rem;
+  }
 }

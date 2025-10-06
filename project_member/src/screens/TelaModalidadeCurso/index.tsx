@@ -116,16 +116,22 @@ const cursosPorNivel: Record<string, { label: string; value: string }[]> = {
 
 const FormularioCursos: React.FC = () => {
   const [nivelEnsino, setNivelEnsino] = useState("");
+  const [erro, setErro] = useState(false);
   const [cursoSelecionado, setCursoSelecionado] = useState("");
-
   const cursosOptions = cursosPorNivel[nivelEnsino] || [];
+  const navigate = useNavigate();
+
   const handleSalvar = () => {
+    if (!nivelEnsino || !cursoSelecionado) {
+      setErro(true);
+      return;
+    }
+
     localStorage.setItem("nivelEnsino", nivelEnsino);
     localStorage.setItem("cursoSelecionado", cursoSelecionado);
     salvarDados({ nivelEnsino, cursoSelecionado });
     navigate("/SelecionarProjeto");
   };
-  const navigate = useNavigate();
 
   return (
     <div className="modalidade-background">
@@ -137,6 +143,7 @@ const FormularioCursos: React.FC = () => {
           Por favor, selecione o nível de ensino e o curso que você está
           realizando no IFSudesteMG - Campus Rio Pomba.
         </p>
+
         <div className="modalidade-curso-container">
           <RadioInput
             label="Nível de Ensino"
@@ -145,6 +152,7 @@ const FormularioCursos: React.FC = () => {
             onChange={(value) => {
               setNivelEnsino(value);
               setCursoSelecionado("");
+              setErro(false);
             }}
           />
 
@@ -153,10 +161,14 @@ const FormularioCursos: React.FC = () => {
               label="Curso que está Realizando:"
               options={cursosOptions}
               selectedValue={cursoSelecionado}
-              onChange={setCursoSelecionado}
+              onChange={(value) => {
+                setCursoSelecionado(value);
+                setErro(false);
+              }}
             />
           )}
         </div>
+
         {nivelEnsino && cursoSelecionado && (
           <p className="modalidade-lembrete">
             ✅ Você selecionou:{" "}
@@ -172,7 +184,14 @@ const FormularioCursos: React.FC = () => {
             </strong>
           </p>
         )}
-        <Botao label="Proximo" onClick={handleSalvar} tipo="secundario" />{" "}
+
+        {erro && (
+          <p style={{ color: "red", fontSize: "14px", textAlign: "center" }}>
+            ⚠️ Selecione o nível de ensino e o curso antes de continuar.
+          </p>
+        )}
+
+        <Botao label="Próximo" onClick={handleSalvar} tipo="secundario" />
       </div>
     </div>
   );

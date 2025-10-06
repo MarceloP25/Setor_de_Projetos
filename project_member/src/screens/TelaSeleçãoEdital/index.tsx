@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import InputSelect from "/home/serafim/FormularioDeDadosIFSUDESTEMG/FomularioIFSUDESTEMGRP/src/componentes/InputSelect/index.tsx";
-import Botao from "/home/serafim/FormularioDeDadosIFSUDESTEMG/FomularioIFSUDESTEMGRP/src/componentes/Botao/index.tsx";
+import InputSelect from "../../componentes/InputSelect";
+import Botao from "../../componentes/Botao";
 
 import "./selecaoedital.css";
+
 function TelaSeleçãoEdital() {
   const [edital, setEdital] = useState("");
+  const [erro, setErro] = useState(false);
 
   const navigate = useNavigate();
 
@@ -16,32 +18,47 @@ function TelaSeleçãoEdital() {
   ];
 
   const handleSalvar = () => {
+    if (!edital) {
+      setErro(true);
+      return;
+    }
+
     localStorage.setItem("edital", edital);
     navigate("/CadastroBasico");
   };
 
   return (
-    <>
-      <div className="selecaoedital-background">
-        <h1 className="selecaoedital-titulo">Setor de Projetos IFMG - RP</h1>
-        <div className="selecaoedital-container">
-          <p className="selecaoedital-texto">
-            Selecione o edital que o projeto que voce participa esta cadastrado:
+    <div className="selecaoedital-background">
+      <h1 className="selecaoedital-titulo">Setor de Projetos IFMG - RP</h1>
+      <div className="selecaoedital-container">
+        <p className="selecaoedital-texto">
+          Selecione o edital que o projeto que você participa está cadastrado:
+        </p>
+
+        <InputSelect
+          label="Selecione o edital:"
+          opcoes={opcoes}
+          valorSelecionado={edital}
+          onChange={(valor) => {
+            setEdital(valor);
+            setErro(false);
+          }}
+        />
+
+        {erro && (
+          <p style={{ color: "red", fontSize: "14px", textAlign: "center" }}>
+            ⚠️ Você precisa selecionar um edital antes de continuar.
           </p>
-          <InputSelect
-            label="Selecione o edital:"
-            opcoes={opcoes}
-            valorSelecionado={edital}
-            onChange={setEdital}
-          />
-          <p className="selecaoedital-lembrete">
-            Clique no botão abaixo para continuar o processo de se cadastrar,
-            lembre-se de preencher cuidadosamente os dados.
-          </p>
-          <Botao label="Proximo" onClick={handleSalvar} tipo="secundario" />{" "}
-        </div>
+        )}
+
+        <p className="selecaoedital-lembrete">
+          Clique no botão abaixo para continuar o processo de se cadastrar.
+          Lembre-se de preencher cuidadosamente os dados.
+        </p>
+
+        <Botao label="Próximo" onClick={handleSalvar} tipo="secundario" />
       </div>
-    </>
+    </div>
   );
 }
 

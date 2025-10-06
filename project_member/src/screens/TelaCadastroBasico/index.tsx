@@ -13,6 +13,8 @@ function TelaCadastroBasico() {
   const [telefone, setTelefone] = React.useState("");
   const [cpf, setCpf] = React.useState("");
   const [sexo, setSexo] = React.useState("");
+  const [erro, setErro] = React.useState(false);
+
   const opcoes = [
     { valor: "feminino", label: "Feminino" },
     { valor: "masculino", label: "Masculino" },
@@ -22,7 +24,13 @@ function TelaCadastroBasico() {
 
   const navigate = useNavigate();
   const edital = localStorage.getItem("edital");
+
   const handleSalvar = () => {
+    if (!nome || !email || !telefone || !cpf || !sexo) {
+      setErro(true);
+      return;
+    }
+
     localStorage.setItem("nome", nome);
     localStorage.setItem("email", email);
     localStorage.setItem("telefone", telefone);
@@ -33,51 +41,73 @@ function TelaCadastroBasico() {
   };
 
   return (
-    <>
-      <div className="basico-background">
-        <h1 className="basico-titulo">Setor de Projetos IFMG - RP</h1>
-        <div className="basico-container">
-          <p className="basico-texto">
-            Preencha as informações abaixo para continuar o cadastro:
+    <div className="basico-background">
+      <h1 className="basico-titulo">Setor de Projetos IFMG - RP</h1>
+      <div className="basico-container">
+        <p className="basico-texto">
+          Preencha as informações abaixo para continuar o cadastro:
+        </p>
+
+        <InputTexto
+          label="Nome Completo"
+          value={nome}
+          onChange={(valor) => {
+            setNome(valor);
+            setErro(false);
+          }}
+          placeholder="Digite seu nome"
+        />
+        <InputTexto
+          label="E-mail"
+          value={email}
+          onChange={(valor) => {
+            setEmail(valor);
+            setErro(false);
+          }}
+          placeholder="Digite seu e-mail"
+        />
+        <InputTexto
+          label="Telefone | (DDD) 00000-0000"
+          value={telefone}
+          onChange={(valor) => {
+            setTelefone(valor);
+            setErro(false);
+          }}
+          placeholder="Digite seu telefone"
+        />
+        <InputTexto
+          label="CPF | 000.000.000-00"
+          value={cpf}
+          onChange={(valor) => {
+            setCpf(valor);
+            setErro(false);
+          }}
+          placeholder="Digite seu CPF"
+        />
+        <InputSelect
+          label="Selecione seu sexo:"
+          opcoes={opcoes}
+          valorSelecionado={sexo}
+          onChange={(valor) => {
+            setSexo(valor);
+            setErro(false);
+          }}
+        />
+
+        {erro && (
+          <p style={{ color: "red", fontSize: "14px", textAlign: "center" }}>
+            ⚠️ Preencha todos os campos antes de continuar.
           </p>
-          <InputTexto
-            label="Nome Completo"
-            value={nome}
-            onChange={setNome}
-            placeholder="Digite seu nome"
-          />
-          <InputTexto
-            label="E-mail"
-            value={email}
-            onChange={setEmail}
-            placeholder="Digite seu e-mail"
-          />
-          <InputTexto
-            label="Telefone | Dessa forma (DDD) 00000-0000"
-            value={telefone}
-            onChange={setTelefone}
-            placeholder="Digite seu telefone"
-          />
-          <InputTexto
-            label="CPF | Dessa forma 000.000.000-00"
-            value={cpf}
-            onChange={setCpf}
-            placeholder="Digite seu CPF"
-          />
-          <InputSelect
-            label="Selecione seu sexo:"
-            opcoes={opcoes}
-            valorSelecionado={sexo}
-            onChange={setSexo}
-          />
-          <Botao label="Proximo" onClick={handleSalvar} tipo="secundario" />{" "}
-          <p className="basico-lembrete">
-            Clique no botão abaixo para continuar o processo de se cadastrar,
-            lembre-se de preencher cuidadosamente os dados.
-          </p>
-        </div>
+        )}
+
+        <Botao label="Próximo" onClick={handleSalvar} tipo="secundario" />
+
+        <p className="basico-lembrete">
+          Clique no botão acima para continuar o processo de se cadastrar.
+          Lembre-se de preencher cuidadosamente os dados.
+        </p>
       </div>
-    </>
+    </div>
   );
 }
 

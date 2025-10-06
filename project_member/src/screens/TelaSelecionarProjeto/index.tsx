@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import InputSelect from "../../componentes/InputSelect";
 import InputTexto from "../../componentes/InputText";
@@ -8,10 +8,13 @@ import { salvarDados } from "../../utils/firebaseUtils";
 import "./selecaoprojeto.css";
 
 function TelaSelecionarProjeto() {
-  const [projetos, setProjetos] = React.useState("");
-  const [vinculo, setVinculo] = React.useState("");
-  const [valorBolsa, setValorBolsa] = React.useState("");
-  const [valorOutro, setValorOutro] = React.useState("");
+  const [projetos, setProjetos] = useState("");
+  const [vinculo, setVinculo] = useState("");
+  const [valorBolsa, setValorBolsa] = useState("");
+  const [valorOutro, setValorOutro] = useState("");
+  const [erro, setErro] = useState(false);
+
+  const navigate = useNavigate();
 
   const opcoesProjetos = [
     { valor: "projeto1", label: "Projeto 1" },
@@ -39,7 +42,23 @@ function TelaSelecionarProjeto() {
     ],
   };
 
+  const bolsaOptions =
+    valorBolsaOptions[vinculo as keyof typeof valorBolsaOptions] || [];
+
   const handleSalvar = () => {
+    const precisaValor =
+      vinculo === "bolsista_medio" ||
+      vinculo === "bolsista_superior" ||
+      vinculo === "colaborador_externo";
+
+    const valorPreenchido =
+      valorBolsa !== "" || (vinculo === "colaborador_externo" && valorOutro);
+
+    if (!projetos || !vinculo || (precisaValor && !valorPreenchido)) {
+      setErro(true);
+      return;
+    }
+
     localStorage.setItem("projetos", projetos);
     localStorage.setItem("vinculo", vinculo);
     localStorage.setItem("valorBolsa", valorBolsa);
@@ -49,9 +68,6 @@ function TelaSelecionarProjeto() {
     navigate("/DadosBancarios");
   };
 
-  const bolsaOptions =
-    valorBolsaOptions[vinculo as keyof typeof valorBolsaOptions] || [];
-  const navigate = useNavigate();
   return (
     <div className="projeto-background">
       <h1 className="projeto-titulo">Setor de Projetos IFMG - RP</h1>
@@ -60,7 +76,10 @@ function TelaSelecionarProjeto() {
           label="Selecione o projeto que você participa:"
           opcoes={opcoesProjetos}
           valorSelecionado={projetos}
-          onChange={setProjetos}
+          onChange={(valor) => {
+            setProjetos(valor);
+            setErro(false);
+          }}
         />
 
         <RadioInput
@@ -71,6 +90,7 @@ function TelaSelecionarProjeto() {
             setVinculo(value);
             setValorBolsa("");
             setValorOutro("");
+            setErro(false);
           }}
         />
 
@@ -86,6 +106,7 @@ function TelaSelecionarProjeto() {
               onChange={(value) => {
                 setValorBolsa(value);
                 setValorOutro("");
+                setErro(false);
               }}
             />
           </>
@@ -95,8 +116,11 @@ function TelaSelecionarProjeto() {
           <InputTexto
             label="Digite o valor da bolsa:"
             value={valorOutro}
-            onChange={setValorOutro}
-            placeholder="insira o valor assim: Ex: 100 se voce recebe R$100,00"
+            onChange={(valor) => {
+              setValorOutro(valor);
+              setErro(false);
+            }}
+            placeholder="Ex: 100 para R$100,00"
           />
         )}
 
@@ -120,9 +144,15 @@ function TelaSelecionarProjeto() {
               valorOutro && (
                 <>
                   {" "}
-                  → Valor digitado: <strong> R$: {valorOutro},00</strong>
+                  → Valor digitado: <strong>R$ {valorOutro},00</strong>
                 </>
               )}
+          </p>
+        )}
+
+        {erro && (
+          <p style={{ color: "red", fontSize: "14px", textAlign: "center" }}>
+            ⚠️ Preencha todos os campos obrigatórios antes de continuar.
           </p>
         )}
 

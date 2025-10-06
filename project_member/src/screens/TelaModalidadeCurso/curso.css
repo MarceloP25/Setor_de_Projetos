@@ -1,61 +1,107 @@
 .modalidade-background {
-  padding: 0px;
-  margin: 15px;
-  background-color: #f0f0f0;
-  height: 100vh;
+  background-color: #ffffff;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border-radius: 16px;
-  border: 2px solid var(--verde-escuro);
-  gap:10px;
-  font-family: var(--texto);
+  font-family: sans-serif;
+  min-height: 100vh;
+  padding: 2rem;
+  gap: 2rem;
 }
 
 .modalidade-titulo {
-  font-size: 64px;
-  color: black  ;
+  font-size: 4rem;
+  color: black;
   font-family: var(--texto-titulo);
   font-weight: bold;
   text-align: center;
 }
 
 .modalidade-container {
-  margin: 0px;
-  padding: 15px;
+  margin: 0;
+  padding: 4rem;
   background-color: white;
   border-radius: 16px;
-  border: 2px solid var(--verde-escuro);
-  width: 591px;
-  height: 868px;
+  width: 100%;
+  max-width: 600px;
+  height: auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 0px;
+  gap: 2rem;
   font-family: var(--texto);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .modalidade-texto {
-  font-size: 18px;
+  font-size: 1.125rem;
   color: black;
   font-family: var(--texto-titulo);
   font-weight: bold;
   text-align: center;
 }
+
 .modalidade-lembrete {
-  font-size: 18px;
+  font-size: 1rem;
   color: black;
   text-align: center;
 }
-
 
 .modalidade-curso-container {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding-left: 35px;
-  gap: 0px;
+  padding-left: 2rem;
+  gap: 0.5rem;
+  width: 100%;
 }
 
+/* 📱 Tablets */
+@media (max-width: 768px) {
+  .modalidade-titulo {
+    font-size: 2.5rem;
+  }
+
+  .modalidade-container {
+    padding: 2rem;
+    gap: 1.5rem;
+  }
+
+  .modalidade-texto {
+    font-size: 1rem;
+  }
+
+  .modalidade-lembrete {
+    font-size: 0.9rem;
+  }
+
+  .modalidade-curso-container {
+    padding-left: 1rem;
+  }
+}
+
+/* 📱 Celulares */
+@media (max-width: 480px) {
+  .modalidade-titulo {
+    font-size: 2rem;
+  }
+
+  .modalidade-container {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .modalidade-texto {
+    font-size: 0.95rem;
+  }
+
+  .modalidade-lembrete {
+    font-size: 0.85rem;
+  }
+
+  .modalidade-curso-container {
+    padding-left: 0.5rem;
+  }
+}
