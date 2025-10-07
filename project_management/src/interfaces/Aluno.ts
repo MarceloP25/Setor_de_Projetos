@@ -8,7 +8,7 @@ export interface Aluno {
   matricula?: string;
   modalidadeEnsino?: string;
   curso?: string;
-  proejtoVinculado: string[];
+  projetoVinculado: string[];
   tipoVinculo: string[];
   valorbolsa?: string;
   bancoPagamento?: string;
