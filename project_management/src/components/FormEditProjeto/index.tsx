@@ -389,6 +389,7 @@ function FormEditProjeto()  {
         dataFimEnvioRelatorio: doc.data().dataFimEnvioRelatorio,
         dataPagamentoInicio:  doc.data().dataPagamentoInicio,
         dataPagamentoFim:  doc.data().dataPagamentoFim,
+        linkAcessoEdital: doc.data().linkAcessoEdital,
         criadoEm:  doc.data().criadoEm,
         criadoPor:  doc.data().criadoPor,
         alteradoEm:  doc.data().alteradoEm,

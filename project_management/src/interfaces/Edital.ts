@@ -30,6 +30,8 @@ export interface Edital {
     dataPagamentoInicio: string;
     dataPagamentoFim: string;
 
+    linkAcessoEdital?: string;
+
     criadoEm: string;
     criadoPor?: string;
     alteradoEm?: string;
