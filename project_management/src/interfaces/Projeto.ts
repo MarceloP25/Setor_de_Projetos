@@ -53,6 +53,7 @@ export interface Projeto {
      * A média das notas define a nota final do projeto.
      */
     notasAvaliadores?: number[];
+    comentariosAvaliadores?: string[];
 
 
     /** Média calculada automaticamente com base nas notas dos avaliadores */

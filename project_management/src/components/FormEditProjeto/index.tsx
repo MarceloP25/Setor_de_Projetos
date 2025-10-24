@@ -81,6 +81,7 @@ function FormEditProjeto()  {
 
     statusEtapa1: '',
     notasAvaliadores: [0] as number[],
+    comentariosAvaliadores: [''] as string[],
     notaEtapa2: 0,
 
 

@@ -1,6 +1,7 @@
 //import React, { useState, useEffect } from 'react';
 //import { db } from '../../firebase/firebaseUtil';
 //import { doc, setDoc, collection, getDocs } from 'firebase/firestore';
+//import { useParams } from 'react-router-dom';
 import Button from '../Button';
 import './styles.css';
 //import type {Projeto} from '../../interfaces/Projeto'
