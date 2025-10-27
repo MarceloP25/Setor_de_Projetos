@@ -1,5 +1,5 @@
 import './App.css'
-import FormEditProjeto from './components/FormEditProjeto'
+
 
 
 function App() {
@@ -7,7 +7,7 @@ function App() {
 
   return (
     <>
-      <FormEditProjeto />
+      
     </>
   )
 }

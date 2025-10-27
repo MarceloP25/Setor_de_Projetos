@@ -10,6 +10,7 @@ import type { Projeto } from '../../interfaces/Projeto';
 
 
 import './styles.css';
+import TextAreaInput from '../TextAreaInput';
 
 const formatMoney = (value: number): string => {
   const cleanValue = Math.abs(value);
@@ -123,7 +124,7 @@ function FormEditProjeto()  {
     "Fármacos e Medicamentos", "Gestão Informacional", "Grupos Sociais Vulneráveis",
     "Jornalismo", "Metodologias e Estratégias de Ensino/Aprendizagem", "Música",
     "Pessoa com Deficiências, Incapacidades e Necessidades Especiais", "Recursos Hídricos", "Saúde da Família",
-    "Segurança Alimentar e Nutricional", "Turismo<", "Desenvolvimento Humano"
+    "Segurança Alimentar e Nutricional", "Turismo", "Desenvolvimento Humano"
   ]; // dentro de constants
 
 
@@ -221,7 +222,7 @@ function FormEditProjeto()  {
   };
 
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
 
 
@@ -423,11 +424,13 @@ function FormEditProjeto()  {
     fetchEditais();
     if (id) fetchProjeto(id);
   }, [id]);
-  
+
   return (
         <div className="form-container">
           <div className="form-title">Cadastro de Projeto</div>
           <form onSubmit={handleSubmit}>
+
+            {/* DADOS DE IDENTIFICAÇÃO */}
             <div className="form-group">
               <SelectInput
                 label="Selecione o Edital"
@@ -457,6 +460,8 @@ function FormEditProjeto()  {
                   placeholder="Nome da Ação"
                 />
             </div>
+            
+            {/*DATAS E PERIODO DE DURACAO */}
             <div className="form-row">
               <div className="form-col">
                 <InputNumber
@@ -472,7 +477,6 @@ function FormEditProjeto()  {
             <div className="form-row">
               <div className="form-col">
                 <div className="period-container">
-                
                 <InputText
                   label="Período de realização"
                   type="date"
@@ -492,6 +496,8 @@ function FormEditProjeto()  {
                 </div>
               </div>
             </div>
+
+            {/*COORDENADOR E COORDENADOR ADJUNTO */}
             <div className="form-row">
               <div className="form-col">
                 <InputText
@@ -532,6 +538,116 @@ function FormEditProjeto()  {
                 />
               </div>
             </div>
+
+            {/*REALIZACAO*/}
+            <div className="form-row">
+              <div className="form-col">
+                <InputText
+                  label="Abrangência"
+                  type="text"
+                  name="abrangencia"
+                  value={formData.abrangencia}
+                  onChange={handleChange}
+                  placeholder="Abrangência"
+                />
+              </div>
+            </div>
+            <div className="form-row">
+              <div className="form-col">
+                <InputText
+                  label="Espaço de Realização"
+                  type="text"
+                  name="espaco"
+                  value={formData.espaco}
+                  onChange={handleChange}
+                  placeholder="Espaço de Realização"
+                />
+                <InputText
+                  label="Bairro"
+                  type="text"
+                  name="bairro"
+                  value={formData.bairro}
+                  onChange={handleChange}
+                  placeholder="Bairro"
+                />
+              </div>
+            </div>
+            <div className="form-row">
+              <div className="form-col">
+                <InputText
+                  label="Cidade/Município"
+                  type="text"
+                  name="cidade"
+                  value={formData.municipio}
+                  onChange={handleChange}
+                  placeholder="Cidade/Município"
+                />
+                <InputText
+                  label="Estado"
+                  type="text"
+                  name="estado"
+                  value={formData.estado}
+                  onChange={handleChange}
+                  placeholder="Estado"
+                />
+              </div>
+            </div>
+            <div className="form-row">
+              <div className="form-col">
+                <InputText
+                  label="Público Interno - Descrição"
+                  type="text"
+                  name="publicoInternoDescricao"
+                  value={formData.publicoInternoDescricao}
+                  onChange={handleChange}
+                  placeholder="Público Interno - Descrição"
+                />
+                <InputNumber
+                  label="Público Interno - Quantidade"
+                  type="number"
+                  name="publicoInternoQuantidade"
+                  value={formData.publicoInternoQuantidade}
+                  onChange={handleChange}
+                  placeholder="Público Interno - Quantidade"
+                />
+              </div>
+            </div>
+            <div className="form-row">
+              <div className="form-col">
+                <InputText
+                  label="Público Externo - Descrição"
+                  type="text"
+                  name="publicoExternoDescricao"
+                  value={formData.publicoExternoDescricao}
+                  onChange={handleChange}
+                  placeholder="Público Externo - Descrição"
+                />
+                <InputNumber
+                  label="Público Externo - Quantidade"
+                  type="number"
+                  name="publicoExternoQuantidade"
+                  value={formData.publicoExternoQuantidade}
+                  onChange={handleChange}
+                  placeholder="Público Externo - Quantidade"
+                />
+              </div>
+            </div>
+
+
+            {/*DETALHAMENTO*/}
+            <div className="form-row">
+              <div className="form-col">
+                <TextAreaInput
+                  label="Detalhes da Ação"
+                  name="detalhesAcao"
+                  value={formData.detalhesAcao}
+                  onChange={handleChange}
+                  placeholder="Detalhes da Ação"
+                />
+              </div>
+            </div>
+
+            {/*FINANCIAMENTO E BOLSAS */}
             <div className="form-row">
               <div className="form-col">
                 <InputNumber

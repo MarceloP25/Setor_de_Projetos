@@ -5,25 +5,24 @@ export interface Projeto {
     nomeDaAcao: string;
     codigoProjeto: string;
 
-
     ano: number;
     periodoInicio: string;
     periodoFim: string;
-    abrangencia: string;
-
-
+    
+    
     nomeCoordenador: string;
     emailCoordenador: string;
     nomeCoCoordenador: string;
     emailCoCoordenador: string;
-
-
+    
+    
     publicoInternoDescricao?: string;
     publicoInternoQuantidade?: number;
     publicoExternoDescricao?: string;
     publicoExternoQuantidade?: number;
-
-
+    
+    
+    abrangencia: string;
     estado?: string;
     municipio?: string;
     bairro?: string;

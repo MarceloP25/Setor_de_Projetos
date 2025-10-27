@@ -4,12 +4,12 @@ import './styles.css';
 interface TextAreaProps {
   value: string;
   name: string;
-  onChange: (value: string) => void;
-  label?: string;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   placeholder?: string;
+  label?: string;
 }
 
-const TextAreaInput: React.FC<TextAreaProps> = ({ name, value, onChange, label, placeholder }) => {
+const TextAreaInput: React.FC<TextAreaProps> = ({ value, name, onChange, placeholder, label }) => {
   return (
     <div className="textarea-container">
       {label && <label>{label}</label>}
@@ -17,7 +17,7 @@ const TextAreaInput: React.FC<TextAreaProps> = ({ name, value, onChange, label, 
         className="textarea-input"
         value={value}
         name={name}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={onChange} 
         placeholder={placeholder}
       />
     </div>
