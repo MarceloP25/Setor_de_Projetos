@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../services/config';
-import { doc, collection, getDocs, updateDoc } from 'firebase/firestore';
+import { doc, collection, getDoc, updateDoc, getDocs } from 'firebase/firestore';
+import { useParams } from 'react-router-dom';
 import InputText from '../InputText';
 import InputNumber from '../InputNumber';
 import SelectInput from '../SelectInput';
@@ -29,6 +30,7 @@ const sanitizeName = (name: string): string => {
 
 
 function FormEditProjeto()  {
+  const { id } = useParams();
   const [editaisList, setEditaisList] = useState<Edital[]>([]);
   const [formData, setFormData] = useState<Projeto>({
     id: '',
@@ -283,7 +285,7 @@ function FormEditProjeto()  {
 
     if (validateForm()) {
       try {
-        const projetoId = sanitizeName(formData.nomeProjeto);
+        const projetoId = id || sanitizeName(formData.nomeProjeto);
         const rawValorSolicitado = formData.valorSolicitado;
         const rawValorDisponibilizado = formData.valorDisponibilizado;
 
@@ -291,7 +293,7 @@ function FormEditProjeto()  {
           ...formData,
           valorSolicitado: rawValorSolicitado,
           valorDisponibilizado: rawValorDisponibilizado,
-          criadoEm: new Date().toISOString()
+          alteradoEm: new Date().toISOString()
         });
 
         alert('Projeto cadastrado com sucesso!');
@@ -402,10 +404,25 @@ function FormEditProjeto()  {
     }
   };
 
+  const fetchProjeto = async (id: string) => {
+    try {
+      const projetoRef = doc(db, 'projetos', id);
+      const projetoSnap = await getDoc(projetoRef);
+      if (projetoSnap.exists()) {
+        setFormData(projetoSnap.data() as Projeto);
+      } else {
+        alert('Projeto não encontrado!');
+      }
+    } catch (error) {
+      console.error('Erro ao carregar projeto:', error);
+    }
+  };
+
 
   useEffect(() => {
     fetchEditais();
-  }, []);
+    if (id) fetchProjeto(id);
+  }, [id]);
   
   return (
         <div className="form-container">
