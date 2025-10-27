@@ -54,9 +54,6 @@ export interface Projeto {
      */
     notasAvaliadores?: number[];
     comentariosAvaliadores?: string[];
-
-
-    /** Média calculada automaticamente com base nas notas dos avaliadores */
     notaEtapa2?: number;
 
 
