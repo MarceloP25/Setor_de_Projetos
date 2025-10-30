@@ -1,6 +1,5 @@
 import './App.css'
-import BackButton from './components/Backbutton'
-
+import FormDocumentosProjeto from './components/FormDocumentosProjeto'
 
 
 function App() {
@@ -8,7 +7,7 @@ function App() {
 
   return (
     <>
-      <BackButton />
+      <FormDocumentosProjeto />
     </>
   )
 }
