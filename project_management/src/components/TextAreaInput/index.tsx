@@ -12,7 +12,7 @@ interface TextAreaProps {
 const TextAreaInput: React.FC<TextAreaProps> = ({ value, name, onChange, placeholder, label }) => {
   return (
     <div className="textarea-container">
-      {label && <label>{label}</label>}
+      {label && <h4>{label}</h4>}
       <textarea
         className="textarea-input"
         value={value}

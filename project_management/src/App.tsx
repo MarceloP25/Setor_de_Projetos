@@ -1,5 +1,5 @@
 import './App.css'
-import FormDocumentosProjeto from './components/FormDocumentosProjeto'
+
 
 
 function App() {
@@ -7,7 +7,7 @@ function App() {
 
   return (
     <>
-      <FormDocumentosProjeto />
+
     </>
   )
 }
