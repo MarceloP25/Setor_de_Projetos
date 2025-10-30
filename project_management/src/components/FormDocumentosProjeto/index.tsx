@@ -92,7 +92,7 @@ function FormDocumentosProjeto({ projetoId }: { projetoId: string }) {
     }));
   };
 
-  const handleSummit = async () => {
+  const handleSubmit = async () => {
     try {
       const projetoRef = doc(db, 'projetos', formData.id);
       await updateDoc(projetoRef, {
@@ -146,7 +146,7 @@ function FormDocumentosProjeto({ projetoId }: { projetoId: string }) {
           )}
         </div>
         <div className="button-container">
-            <ActionButton text="CONFIRMAR" variant='medium' onClick={handleSummit} />
+            <ActionButton text="CONFIRMAR" variant='medium' onClick={handleSubmit} />
         </div>
       </div>
     </div>

@@ -1,0 +1,98 @@
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  padding: 30px;
+  overflow-y: auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+
+/* Formulário */
+.form-container {
+  background-color: #FBFBFB;
+  border-radius: var(--border-radius);
+  padding: 30px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  max-width: 100%;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.form-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background-color: var(--primary-color);
+  transform: scaleX(0);
+  transition: transform var(--transition-speed);
+}
+
+.form-container:hover::before {
+  transform: scaleX(1);
+}
+
+.form-title {
+  text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 30px;
+  color: var(--primary-color);
+  font-weight: 600;
+  position: relative;
+}
+
+.form-title::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 2px;
+  background-color: var(--primary-color);
+}
+
+/* Campos do formulário */
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -20px;
+  margin-left: -20px;
+  margin-bottom: 30px;
+  justify-content: center;
+}
+
+.form-col {
+    flex: 1;
+    padding: 0 30px;
+    min-width: 200px;
+    justify-content: center;
+}
+
+
+/* Responsividade */
+@media (max-width: 800px) {
+  .container {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  .form-col {
+    padding: 0 20px;
+  }
+  .form-control {
+    padding: 15px;
+  }
+
+}

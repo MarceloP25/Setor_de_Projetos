@@ -3,7 +3,7 @@ import './styles.css';
 
 interface TextAreaProps {
   value: string;
-  name: string;
+  name?: string;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   placeholder?: string;
   label?: string;

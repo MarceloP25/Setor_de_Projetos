@@ -4,7 +4,7 @@ import './styles.css';
 interface InputTextProps {
   type: string;
   value: string;
-  name: string;
+  name?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   label?: string;

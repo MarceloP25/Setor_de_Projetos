@@ -1,0 +1,153 @@
+import React, { useState } from 'react';
+import { db } from '../../services/config';
+import { doc, updateDoc } from 'firebase/firestore';
+import InputText from '../InputText';
+import InputNumber from '../InputNumber';
+import ActionButton from '../Button';
+import type { Projeto } from '../../interfaces/Projeto';
+import './styles.css';
+import TextAreaInput from '../TextAreaInput';
+
+function FormAvaliadores({ projetoId }: { projetoId: string }) {
+  const [formData, setFormData] = useState<Projeto>({
+    id: projetoId,
+    edital: '',
+    nomeProjeto: '',
+    nomeDaAcao: '',
+    codigoProjeto: '',
+    ano: 0,
+    periodoInicio: '',
+    periodoFim: '',
+    abrangencia: '',
+    nomeCoordenador: '',
+    emailCoordenador: '',
+    nomeCoCoordenador: '',
+    emailCoCoordenador: '',
+    publicoInternoDescricao: '',
+    publicoInternoQuantidade: 0,
+    publicoExternoDescricao: '',
+    publicoExternoQuantidade: 0,
+    estado: '',
+    municipio: '',
+    bairro: '',
+    espaco: '',
+    valorSolicitado: 0,
+    valorDisponibilizado: 0,
+    tipoBolsa: [],
+    valorBolsa: [],
+    quantidade: 0,
+    valorTotalBolsas: 0,
+    areaTematica: '',
+    linhaExtensao: '',
+    detalhesAcao: '',
+    documentosAnexados: [],
+    classificacaoDetalhe: '',
+    statusEtapa1: '',
+    notasAvaliadores: [0, 0, 0],
+    comentariosAvaliadores: ['', '', ''],
+    notaEtapa2: 0,
+    alunosParticipantes: [],
+    relatorioProjeto: [],
+    criadoEm: '',
+    criadoPor: '',
+    alteradoEm: '',
+    alteradoPor: '',
+  });
+
+
+  const calcularNota = (valores: number[]) => {
+    const notasValidas = valores.filter((n) => n > 0);
+    if (notasValidas.length === 0) return 0;
+    const soma = notasValidas.reduce((acc, val) => acc + val, 0);
+    return parseFloat((soma / notasValidas.length).toFixed(2));
+  };
+
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number,
+    tipo: 'nota' | 'comentario'
+  ) => {
+    const { value } = e.target;
+
+    setFormData((prev) => {
+      const novasNotas = [...prev.notasAvaliadores];
+      const novosComentarios = [...prev.comentariosAvaliadores];
+
+      if (tipo === 'nota') {
+        const valorNumerico = parseFloat(value) || 0;
+        novasNotas[index] = valorNumerico;
+      } else {
+        novosComentarios[index] = value;
+      }
+
+      // recalcula a média com as notas atualizadas
+      const novaMedia = calcularNota(novasNotas);
+
+      return {
+        ...prev,
+        notasAvaliadores: novasNotas,
+        comentariosAvaliadores: novosComentarios,
+        notaEtapa2: novaMedia,
+      };
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      const projetoRef = doc(db, 'projetos', formData.id);
+      await updateDoc(projetoRef, {
+        notasAvaliadores: formData.notasAvaliadores,
+        comentariosAvaliadores: formData.comentariosAvaliadores,
+        notaEtapa2: formData.notaEtapa2,
+        alteradoEm: new Date().toISOString(),
+      });
+      alert('Avaliações salvas com sucesso!');
+    } catch (error) {
+      console.error('Erro ao salvar avaliações:', error);
+      alert('Erro ao salvar as avaliações.');
+    }
+  };
+
+
+  return (
+    <div className="form-container">
+      <div className="form-title">Cadastro de Avaliações</div>
+      <form onSubmit={handleSubmit}>
+        {[0, 1, 2].map((index) => (
+          <div className="form-row" key={index}>
+            <div className="form-col">
+              <InputNumber
+                label={`Avaliador ${index + 1}`}
+                type="number"
+                min="0"
+                max="10"
+                step="0.01"
+                value={formData.notasAvaliadores[index] || ''}
+                onChange={(e) => handleChange(e, index, 'nota')}
+              />
+              <TextAreaInput
+                label="Comentários"
+                value={formData.comentariosAvaliadores[index] || ''}
+                onChange={(e) => handleChange(e, index, 'comentario')}
+              />
+            </div>
+          </div>
+        ))}
+
+        <div className="form-summary">
+          <h4>Média Final: {formData.notaEtapa2.toFixed(2)}</h4>
+        </div>
+
+        <div className="form-note">
+            <ActionButton text="CONFIRMAR" variant="medium" onClick={() => {}} />
+        </div>
+
+      </form>
+    </div>
+  );
+}
+
+export default FormAvaliadores;
