@@ -1,3 +1,22 @@
+:root {
+  --primary-color: #006400;
+  --primary-dark: #004d00;
+  --secondary-color: #4CAF50;
+  --background-light: #f5f5f5;
+  --background-dark: #f0f0f0;
+  --text-primary: #333;
+  --text-secondary: #666;
+  --spacing-unit: 8px;
+  --border-radius: 8px;
+  --transition-speed: 0.3s;
+  --label-color: #1a1a1a;
+  --input-padding: 20px;
+}
+
+/* Layout base */
+
+
+
 /* Main Content */
 .main-content {
   flex: 1;

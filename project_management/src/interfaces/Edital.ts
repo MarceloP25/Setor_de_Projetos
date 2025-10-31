@@ -2,13 +2,13 @@ export interface Edital {
     id: string;
     nomeEdital: string;
 
-    orçamentoEdital: string;
+    orcamentoEdital: string;
     valorDisponivel?: string;
     status: boolean;
 
     projetosVinculados?: string[];
 
-    anoVigente: number;
+    anoVigente: string;
     dataInicio: string;
     dataFim: string;
 
@@ -30,7 +30,7 @@ export interface Edital {
     dataPagamentoInicio: string;
     dataPagamentoFim: string;
 
-    linkAcessoEdital?: string;
+    linkAcessoEdital: string;
 
     criadoEm: string;
     criadoPor?: string;

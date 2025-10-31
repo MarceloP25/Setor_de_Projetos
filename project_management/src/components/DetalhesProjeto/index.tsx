@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../../services/config';
@@ -16,7 +16,7 @@ const formatDate = (data: string | undefined): string => {
   return !isNaN(d.getTime()) ? d.toLocaleDateString('pt-BR') : data;
 };
 
-function FormDetalhesProjeto() {
+function DetalhesProjeto() {
   const { id } = useParams<{ id: string }>();
   const [projeto, setProjeto] = useState<Projeto | null>(null);
   const [loading, setLoading] = useState(true);
@@ -211,4 +211,4 @@ function FormDetalhesProjeto() {
   );
 }
 
-export default FormDetalhesProjeto;
+export default DetalhesProjeto;

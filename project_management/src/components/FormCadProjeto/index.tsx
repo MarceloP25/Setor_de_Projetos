@@ -371,7 +371,7 @@ function FormCadProjeto()  {
       const editais = querySnapshot.docs.map(doc => ({
         id: doc.id,
         nomeEdital: doc.data().nomeEdital,
-        orçamentoEdital: doc.data().orçamentoEdital,
+        orcamentoEdital: doc.data().orcamentoEdital,
         valorDisponivel:  doc.data().valorDisponivel,
         status:  doc.data().status,
         projetosVinculados:  doc.data().projetosVinculados,
