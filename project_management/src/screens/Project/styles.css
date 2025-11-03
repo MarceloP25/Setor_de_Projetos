@@ -1,0 +1,117 @@
+/* Variáveis de cores e espaçamento */
+:root {
+    --primary-color: #006400;
+    --primary-dark: #004d00;
+    --secondary-color: #4CAF50;
+    --background-light: #f5f5f5;
+    --background-dark: #f0f0f0;
+    --text-primary: #333;
+    --text-secondary: #666;
+    --spacing-unit: 8px;
+    --border-radius: 8px;
+    --transition-speed: 0.3s;
+    --hover-color: rgba(0, 100, 0, 0.1);
+    }
+    
+    /* Container principal */
+    .container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--background-light);
+    padding: 30px;
+    }
+    
+    /* Lista de projetos */
+    .projects-list {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    }
+    
+    /* Item da lista de projetos */
+    .project-item {
+    background-color: white;
+    border-radius: var(--border-radius);
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: all var(--transition-speed);
+    }
+    
+    .project-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+    }
+    
+    /* Link do projeto */
+    .project-item a {
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color var(--transition-speed);
+    }
+    
+    .project-item a:hover {
+    color: var(--primary-dark);
+    }
+    
+    /* Título da lista */
+    .container h2 {
+    color: var(--primary-color);
+    font-size: 2rem;
+    margin-bottom: 30px;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 10px;
+    }
+
+    .buttons-container {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+    
+    .btn.primary {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        border-radius: var(--border-radius);
+        text-decoration: none;
+        transition: all var(--transition-speed);
+    }
+    
+    .btn.secondary {
+        background-color: var(--secondary-color);
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        border-radius: var(--border-radius);
+        text-decoration: none;
+        transition: all var(--transition-speed);
+    }
+    
+    .btn:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+    }
+    
+    /* Responsividade */
+    @media (max-width: 768px) {
+    .container {
+    flex-direction: column;
+    padding: 15px;
+    }
+    .project-item {
+    padding: 15px;
+    }
+    .buttons-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .btn {
+        width: 100%;
+    }
+    }

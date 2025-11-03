@@ -2,22 +2,23 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
-import { getStorage } from 'firebase/storage';
+import { getStorage } from "firebase/storage";
 
+// Your web app's Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyC3wPLES-clrm92-EysVwnr_quFY9MpfAo",
-    authDomain: "reserva-setor-projetos.firebaseapp.com",
-    projectId: "reserva-setor-projetos",
-    storageBucket: "reserva-setor-projetos.firebasestorage.app",
-    messagingSenderId: "792713377331",
-    appId: "1:792713377331:web:fd67dcd411dc840b1a5546",
-    measurementId: "G-7HSDVS3YNT"
+  apiKey: "AIzaSyC7JZenvTKVMg2EWBJFirdNZhfm6ep_bVQ",
+  authDomain: "setor-projetos.firebaseapp.com",
+  projectId: "setor-projetos",
+  storageBucket: "setor-projetos.firebasestorage.app",
+  messagingSenderId: "400221572503",
+  appId: "1:400221572503:web:a360e29fa6cae93403c8d2",
+  measurementId: "G-6HB8T6WLXD"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
-export const auth = getAuth(app);
-export const analytics = getAnalytics(app);
-export const storage = getStorage(app);
+const db = getFirestore(app);
+const storage = getStorage(app);
+const analytics = getAnalytics(app);
+
+export { app, db, storage, analytics };
