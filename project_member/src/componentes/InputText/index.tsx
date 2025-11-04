@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import InputMask from "react-input-mask";
 
 interface InputTextProps {
   label?: string;
@@ -6,6 +7,9 @@ interface InputTextProps {
   onChange: (value: string) => void;
   placeholder?: string;
   disabled?: boolean;
+  mask?: string;
+  type?: string;
+  id?: string;
 }
 
 const InputText: React.FC<InputTextProps> = ({
@@ -14,6 +18,9 @@ const InputText: React.FC<InputTextProps> = ({
   onChange,
   placeholder = "",
   disabled = false,
+  mask,
+  type = "text",
+  id,
 }) => {
   const [larguraTela, setLarguraTela] = useState(window.innerWidth);
 
@@ -30,43 +37,67 @@ const InputText: React.FC<InputTextProps> = ({
       ? { width: "256px", fontSize: "16px", padding: "14px 10px" }
       : { width: "296px", fontSize: "18px", padding: "16px 14px" };
 
+  const inputStyle: React.CSSProperties = {
+    borderRadius: "4px",
+    border: "1px solid var(--verde)",
+    fontFamily: "var(--texto)",
+    backgroundColor: "#f9f9f9",
+    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+    ...estiloResponsivo,
+  };
+
+  const inputElement = mask ? (
+    <InputMask
+      mask={mask}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      disabled={disabled}
+    >
+      {(inputProps) => (
+        <input
+          {...inputProps}
+          type={type}
+          placeholder={placeholder}
+          style={inputStyle}
+          id={id}
+        />
+      )}
+    </InputMask>
+  ) : (
+    <input
+      type={type}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder={placeholder}
+      disabled={disabled}
+      style={inputStyle}
+      id={id}
+    />
+  );
+
   return (
     <div
-  style={{
-    marginBottom: "1rem",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "flex-start", // 👈 Alinha tudo à esquerda
-  }}
->
-  {label && (
-    <label
       style={{
-        marginBottom: "0.5rem",
-        fontSize: estiloResponsivo.fontSize,
-        fontFamily: "var(--texto)",
+        marginBottom: "1rem",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-start",
       }}
     >
-      {label}
-    </label>
-  )}
-  <input
-    type="text"
-    value={value}
-    onChange={(e) => onChange(e.target.value)}
-    placeholder={placeholder}
-    disabled={disabled}
-    style={{
-      borderRadius: "4px",
-      border: "1px solid var(--verde)",
-      fontFamily: "var(--texto)",
-      backgroundColor: "#f9f9f9",
-      boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-      ...estiloResponsivo,
-    }}
-  />
-</div>
-
+      {label && (
+        <label
+          htmlFor={id}
+          style={{
+            marginBottom: "0.5rem",
+            fontSize: estiloResponsivo.fontSize,
+            fontFamily: "var(--texto)",
+          }}
+        >
+          {label}
+        </label>
+      )}
+      {inputElement}
+    </div>
   );
 };
 

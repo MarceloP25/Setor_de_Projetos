@@ -8,6 +8,8 @@ import TelaModalidadeCurso from "./screens/TelaModalidadeCurso";
 import TelaDadosBancarios from "./screens/TelaDadosBancarios";
 import TelaSelecaoEdital from "./screens/TelaSeleçãoEdital";
 import TelaAgradecimento from "./screens/TelaAgradecimento"
+import TelaDados from "./screens/TelaMostraDadosAlunos"
+
 
 const AppRoutes: React.FC = () => {
   return (
@@ -19,6 +21,7 @@ const AppRoutes: React.FC = () => {
       <Route path="/ModalidadeCurso" element={<TelaModalidadeCurso />} />
       <Route path="/DadosBancarios" element={<TelaDadosBancarios />} />
       <Route path="/Agradecimento" element={<TelaAgradecimento />} />
+      <Route path="/TelaDados" element={<TelaDados/>} />
     </Routes>
   );
 };

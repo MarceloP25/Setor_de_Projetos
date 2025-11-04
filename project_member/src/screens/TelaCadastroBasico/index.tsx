@@ -21,6 +21,22 @@ function TelaCadastroBasico() {
     { valor: "outro", label: "Outro" },
     { valor: "nao-informar", label: "Prefiro não informar" },
   ];
+  const formatarCPF = (valor: string) => {
+    return valor
+      .replace(/\D/g, "")
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d{1,2})$/, "$1-$2")
+      .slice(0, 14);
+  };
+
+  const formatarTelefone = (valor: string) => {
+    return valor
+      .replace(/\D/g, "")
+      .replace(/(\d{2})(\d)/, "($1) $2")
+      .replace(/(\d{5})(\d)/, "$1-$2")
+      .slice(0, 15);
+  };
 
   const navigate = useNavigate();
   const edital = localStorage.getItem("edital");
@@ -67,23 +83,25 @@ function TelaCadastroBasico() {
           placeholder="Digite seu e-mail"
         />
         <InputTexto
-          label="Telefone | (DDD) 00000-0000"
-          value={telefone}
-          onChange={(valor) => {
-            setTelefone(valor);
-            setErro(false);
-          }}
-          placeholder="Digite seu telefone"
-        />
-        <InputTexto
-          label="CPF | 000.000.000-00"
-          value={cpf}
-          onChange={(valor) => {
-            setCpf(valor);
-            setErro(false);
-          }}
-          placeholder="Digite seu CPF"
-        />
+  label="CPF | 000.000.000-00"
+  value={cpf}
+  onChange={(valor) => {
+    setCpf(formatarCPF(valor));
+    setErro(false);
+  }}
+  placeholder="Digite seu CPF"
+/>
+
+<InputTexto
+  label="Telefone | (DDD) 00000-0000"
+  value={telefone}
+  onChange={(valor) => {
+    setTelefone(formatarTelefone(valor));
+    setErro(false);
+  }}
+  placeholder="Digite seu telefone"
+/>
+
         <InputSelect
           label="Selecione seu sexo:"
           opcoes={opcoes}

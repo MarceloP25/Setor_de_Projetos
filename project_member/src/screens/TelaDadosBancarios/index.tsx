@@ -29,14 +29,14 @@ function TelaDadosBancarios() {
     localStorage.setItem("conta", conta);
     salvarDados({ banco, agencia, conta, dataCadastro });
 
-    /*
+
   try {
     await enviarDadosParaSheetDB();
     alert("✅ Dados enviados com sucesso!");
   } catch (erro) {
     alert("❌ Erro ao enviar os dados. Tente novamente.");
     console.error(erro);
-  }*/
+  }
 
     navigate("/Agradecimento");
 

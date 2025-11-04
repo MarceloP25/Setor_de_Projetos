@@ -1,15 +1,66 @@
-table {
+*{
+  font-family: var(--texto);
+}
+
+.lista-container {
+  padding: 1rem;
+}
+
+.lista-titulo {
+  font-size: 2.9rem;
+  margin-bottom: 1rem;
+  color: #333;
+  text-align: center;
+}
+
+.barra-pesquisa {
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-}
-
-th, td {
+  max-width: 400px;
+  padding: 0.6rem;
+  margin: 1rem auto;
+  display: block;
   border: 1px solid #ccc;
-  padding: 0.5rem;
-  text-align: left;
+  border-radius: 6px;
+  font-size: 1rem;
 }
 
-thead {
-  background-color: #f0f0f0;
+.letras-barra {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.letras-barra a {
+  text-decoration: none;
+  font-weight: bold;
+  color: #055902;
+  border: 1px solid #055902;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.letras-barra a:hover {
+  background-color: #055902;
+  color: white;
+}
+
+.letra-secao {
+  margin-bottom: 2rem;
+}
+
+.letra-secao h2 {
+  font-size: 1.4rem;
+  color: #444;
+  margin-bottom: 0.5rem;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 0.3rem;
+}
+
+.alunos-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
 }

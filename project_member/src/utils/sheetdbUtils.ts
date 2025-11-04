@@ -18,7 +18,7 @@ export const enviarDadosParaSheetDB = async () => {
   };
 
   try {
-    const resposta = await fetch("link aqui da api",{
+    const resposta = await fetch("https://sheetdb.io/api/v1/z5bruplvghwm8",{
       method: "POST",
       headers: {
         "Content-Type": "application/json",

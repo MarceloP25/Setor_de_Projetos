@@ -122,16 +122,26 @@ const FormularioCursos: React.FC = () => {
   const navigate = useNavigate();
 
   const handleSalvar = () => {
-    if (!nivelEnsino || !cursoSelecionado) {
-      setErro(true);
-      return;
-    }
+  if (!nivelEnsino) {
+    setErro(true);
+    return;
+  }
 
-    localStorage.setItem("nivelEnsino", nivelEnsino);
-    localStorage.setItem("cursoSelecionado", cursoSelecionado);
-    salvarDados({ nivelEnsino, cursoSelecionado });
-    navigate("/SelecionarProjeto");
-  };
+  // Se for colaborador externo, define curso como "externo"
+  const cursoFinal =
+    nivelEnsino === "nao_sou_aluno" ? "externo" : cursoSelecionado;
+
+  if (nivelEnsino !== "nao_sou_aluno" && !cursoSelecionado) {
+    setErro(true);
+    return;
+  }
+
+  localStorage.setItem("nivelEnsino", nivelEnsino);
+  localStorage.setItem("cursoSelecionado", cursoFinal);
+  salvarDados({ nivelEnsino, cursoSelecionado: cursoFinal });
+  navigate("/SelecionarProjeto");
+};
+
 
   return (
     <div className="modalidade-background">

@@ -51,20 +51,21 @@ function TelaSelecionarProjeto() {
       vinculo === "bolsista_superior" ||
       vinculo === "colaborador_externo";
 
-    const valorPreenchido =
-      valorBolsa !== "" || (vinculo === "colaborador_externo" && valorOutro);
+    const valorFinal =
+      vinculo === "colaborador_externo" && valorBolsa === ""
+        ? valorOutro
+        : valorBolsa;
 
-    if (!projetos || !vinculo || (precisaValor && !valorPreenchido)) {
+    if (!projetos || !vinculo || (precisaValor && !valorFinal)) {
       setErro(true);
       return;
     }
 
     localStorage.setItem("projetos", projetos);
     localStorage.setItem("vinculo", vinculo);
-    localStorage.setItem("valorBolsa", valorBolsa);
-    localStorage.setItem("valorOutro", valorOutro);
+    localStorage.setItem("valorBolsa", valorFinal);
 
-    salvarDados({ projetos, vinculo, valorBolsa, valorOutro });
+    salvarDados({ projetos, vinculo, valorBolsa: valorFinal });
     navigate("/DadosBancarios");
   };
 

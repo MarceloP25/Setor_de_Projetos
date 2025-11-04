@@ -3,11 +3,10 @@ import AppRoutes from "./AppRoutes";
 import TelaMostraDadosAlunos from "./screens/TelaMostraDadosAlunos";
 function App() {
   return (
-    <TelaMostraDadosAlunos/>
 
-    /*<BrowserRouter>
+    <BrowserRouter>
       <AppRoutes />
-    </BrowserRouter>*/
+    </BrowserRouter>
   );
 }
 
