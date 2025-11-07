@@ -4,7 +4,7 @@ import './styles.css';
 interface InputNumberProps {
   type: string;
   value: number;
-  name: string;
+  name?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   label?: string;

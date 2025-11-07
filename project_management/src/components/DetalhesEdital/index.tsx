@@ -1,13 +1,13 @@
 import  { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../../services/config';
 import './styles.css';
 import type { Edital } from '../../interfaces/Edital';
 import ActionButton from '../Button';
+import { useParams } from 'react-router-dom';
 
-function DetalhesEdital() { 
-    const { id } = useParams<{ id: string }>();
+function DetalhesEdital({ editalId }: { editalId: string | undefined }) { 
+    const { editalId: id = editalId } = useParams<{ editalId: string }>();
     const [edital, setEdital] = useState<Edital | null>(null);
     const [loading, setLoading] = useState(true);
     const [erro, setErro] = useState<string | null>(null);
@@ -28,7 +28,7 @@ function DetalhesEdital() {
             if (snap.exists()) {
               setEdital(snap.data() as Edital);
             } else {
-              setErro('Edital não encontrado.');
+              setErro(`Edital não encontrado. ${id}`);
             }
           } catch (err) {
             console.error('Erro ao buscar edital:', err);
@@ -39,7 +39,7 @@ function DetalhesEdital() {
         };
 
         buscarEdital();
-      }, [id]);
+      }, [editalId]);
 
     if (loading) {
         return (
@@ -116,37 +116,34 @@ function DetalhesEdital() {
                 </div>
 
                  {/* Bloco 5 - Projetos vinculados */}
-                <div className="infoBloco">
-                    <div className="info">
-                    <h4>Projetos Vinculados</h4>
+                <div className="bloco-buttons">
                     <ActionButton 
-                        text="VER PROJETOS" 
+                        text="PROJETOS VINCULADOS" 
                         variant="medium" 
                         onClick={() => setIsModalOpen(true)} 
                     />
-                    </div>
+
+                    {/* Modal */}
+                    {isModalOpen && (
+                        <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
+                        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                            <h3>Projetos Vinculados</h3>
+                            {edital.projetosVinculados && edital.projetosVinculados.length > 0 ? (
+                            <ul>
+                                {edital.projetosVinculados.map((proj, index) => (
+                                <li key={index}>{proj}</li>
+                                ))}
+                            </ul>
+                            ) : (
+                            <p>Nenhum projeto vinculado a este edital.</p>
+                            )}
+                            <ActionButton text="FECHAR" variant="medium" onClick={() => setIsModalOpen(false)} />
+                        </div>
+                        </div>
+                    )}
+
+                    <ActionButton text="EDITAR" variant="medium" onClick={() => {}} />
                 </div>
-
-                {/* Modal */}
-                {isModalOpen && (
-                    <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
-                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                        <h3>Projetos Vinculados</h3>
-                        {edital.projetosVinculados && edital.projetosVinculados.length > 0 ? (
-                        <ul>
-                            {edital.projetosVinculados.map((proj, index) => (
-                            <li key={index}>{proj}</li>
-                            ))}
-                        </ul>
-                        ) : (
-                        <p>Nenhum projeto vinculado a este edital.</p>
-                        )}
-                        <ActionButton text="FECHAR" variant="medium" onClick={() => setIsModalOpen(false)} />
-                    </div>
-                    </div>
-                )}
-
-                <ActionButton text="EDITAR" variant="medium" onClick={() => {}} />
             </div>
     );
 }

@@ -1,10 +1,10 @@
 import  { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../../services/config';
 import Button from '../Button';
 import './styles.css';
 import type { Projeto } from '../../interfaces/Projeto';
+import { useParams } from 'react-router-dom';
 
 // Funções utilitárias simples
 const formatCurrency = (valor: number | undefined): string =>
@@ -16,8 +16,8 @@ const formatDate = (data: string | undefined): string => {
   return !isNaN(d.getTime()) ? d.toLocaleDateString('pt-BR') : data;
 };
 
-function DetalhesProjeto() {
-  const { id } = useParams<{ id: string }>();
+function DetalhesProjeto({ projectId }: { projectId: string | undefined }) {
+  const { projectId: id = projectId } = useParams<{ projectId: string }>();
   const [projeto, setProjeto] = useState<Projeto | null>(null);
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState<string | null>(null);

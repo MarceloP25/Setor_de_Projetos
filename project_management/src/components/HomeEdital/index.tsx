@@ -81,7 +81,6 @@ const EditalList: React.FC = () => {
                     <div key={edital.id} className="project-item">
                         <Link to={`/edital/${edital.id}`}>
                             <div className='info-card'>
-                                <h4>{edital.id}</h4>
                                 <h4>{edital.nomeEdital}</h4>
                                 <h4>{edital.status}</h4>
                                 <h4>{edital.anoVigente}</h4>

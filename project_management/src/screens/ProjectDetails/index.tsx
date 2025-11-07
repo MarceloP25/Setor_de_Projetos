@@ -9,7 +9,7 @@ const ProjectDetails: React.FC = () => {
     const { id } = useParams<{ id: string }>();
 
     return (
-        <DetalhesProjeto id={id} />
+        <DetalhesProjeto projectId={id} />
     );
 };
 

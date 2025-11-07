@@ -10,15 +10,6 @@ import type { Projeto } from '../../interfaces/Projeto';
 
 import './styles.css';
 
-const formatMoney = (value: number): string => {
-  const cleanValue = Math.abs(value);
-  if (!cleanValue || cleanValue === 0) {
-  return 'R$ 0,00';
-  }
-  const number = cleanValue/ 100;
-  return `R$ ${number.toFixed(2).replace('.', ',')}`; // isso nao fica aqui, criar um arquivo para functions chamado utils
-};
-
 
 const sanitizeName = (name: string): string => {
   return name
@@ -30,6 +21,8 @@ const sanitizeName = (name: string): string => {
 
 function FormCadProjeto()  {
   const [editaisList, setEditaisList] = useState<Edital[]>([]);
+  const [showModal, setShowModal] = useState(false);
+
   const [formData, setFormData] = useState<Projeto>({
     id: '',
     edital: '',
@@ -226,8 +219,8 @@ function FormCadProjeto()  {
     setFormData(prev => {
       // Campos monetários
       if (name === "valorSolicitado" || name === "valorDisponibilizado") {
-        const formattedValue = formatMoney(Number(value));
-        return { ...prev, [name]: formattedValue };
+        
+        return { ...prev, [name]: parseFloat(value) || 0 };
       }
 
       // Campos numéricos (ano, publicoInternoQuantidade, publicoExternoQuantidade, etc.)
@@ -294,7 +287,7 @@ function FormCadProjeto()  {
           criadoEm: new Date().toISOString()
         });
 
-        alert('Projeto cadastrado com sucesso!');
+        setShowModal(true);
 
         // Resetar o formulário
         setFormData({
@@ -519,7 +512,7 @@ function FormCadProjeto()  {
               <div className="form-col">
                 <InputNumber
                   label='Valor para Financiamento do Projeto'
-                  type="text"
+                  type="number"
                   name="valorSolicitado"
                   value={formData.valorSolicitado}
                   onChange={handleChange}
@@ -604,6 +597,17 @@ function FormCadProjeto()  {
             </div>
             <button className="submit-button" type="submit">CADASTRAR</button>
           </form>
+
+          {/* Modal de sucesso */}
+            {showModal && (
+              <div className="modal-overlay" onClick={() => setShowModal(false)}>
+                <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                  <h2>🎉 Projeto cadastrado com sucesso!</h2>
+                  <p>Os dados foram salvos no banco de dados.</p>
+                  <button className="modal-button" onClick={() => setShowModal(false)}>Fechar</button>
+                </div>
+              </div>
+            )}
         </div>
   );
 };
