@@ -173,7 +173,7 @@ function FormCadEdital()  {
                 <InputText
                   label="Ano de Vigência"
                   type="text"
-                  name="ano"
+                  name="anoVigente"
                   value={formData.anoVigente}
                   onChange={handleChange} 
                   placeholder="Ano"

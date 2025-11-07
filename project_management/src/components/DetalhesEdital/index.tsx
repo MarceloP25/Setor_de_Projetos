@@ -11,7 +11,7 @@ function DetalhesEdital() {
     const [edital, setEdital] = useState<Edital | null>(null);
     const [loading, setLoading] = useState(true);
     const [erro, setErro] = useState<string | null>(null);
-      const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         const buscarEdital = async () => {

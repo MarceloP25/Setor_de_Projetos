@@ -5,8 +5,7 @@ import './styles.css';
 import HomeProjetos from '../../components/HomeProjetos';
 
 
-
-const ProjectList: React.FC = () => {
+const VisaoGeral: React.FC = () => {
 
     return (
         <div className="container">
@@ -15,4 +14,4 @@ const ProjectList: React.FC = () => {
     );
 };
 
-export default ProjectList;
+export default VisaoGeral;

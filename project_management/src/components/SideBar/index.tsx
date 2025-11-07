@@ -7,7 +7,7 @@ const Sidebar = () => {
     { id: 'visao_geral', label: 'Visão Geral' },
     { id: 'edital', label: 'Editais' },
     { id: 'projetos', label: 'Projetos' },
-    { id: 'orcamentos', label: 'Orçamentos' },
+    { id: 'orcamento', label: 'Orçamento' },
   ];
 
   return (

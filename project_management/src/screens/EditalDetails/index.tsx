@@ -2,15 +2,15 @@ import React from 'react';
 
 import { useParams } from 'react-router-dom';
 import './styles.css';
-import DetalhesProjeto from '../../components/DetalhesProjeto';
+import DetalhesEdital from '../../components/DetalhesEdital';
 
 
-const ProjectDetails: React.FC = () => {
+const EditalDetails: React.FC = () => {
     const { id } = useParams<{ id: string }>();
 
     return (
-        <DetalhesProjeto id={id} />
+        <DetalhesEdital id={id} />
     );
 };
 
-export default ProjectDetails;
+export default EditalDetails;

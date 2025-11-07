@@ -1,17 +1,17 @@
 import React from 'react';
 import './styles.css';
-import FormCadProjeto from '../../components/FormCadProjeto';
 import BackButton from '../../components/Backbutton';
+import FormCadEdital from '../../components/FormCadEdital';
 
 
-const ProjectRegistration: React.FC = () => {
+const EditalRegistration: React.FC = () => {
 
   return (
     <div className='container'>
       <BackButton/>
-      <FormCadProjeto />
+      <FormCadEdital />
     </div>
   );
 };
 
-export default ProjectRegistration;
+export default EditalRegistration;
