@@ -206,7 +206,7 @@ function DetalhesProjeto({ projectId }: { projectId: string | undefined }) {
         </div>
       </div>
 
-      <Button text="EDITAR" variant="medium" onClick={() => {}} />
+      <Button text="EDITAR" variant="medium" to={`/projetos/${id}/editar`} />
     </div>
   );
 }

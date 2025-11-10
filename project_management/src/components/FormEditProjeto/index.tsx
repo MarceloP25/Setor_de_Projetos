@@ -12,14 +12,6 @@ import type { Projeto } from '../../interfaces/Projeto';
 import './styles.css';
 import TextAreaInput from '../TextAreaInput';
 
-const formatMoney = (value: number): string => {
-  const cleanValue = Math.abs(value);
-  if (!cleanValue || cleanValue === 0) {
-  return 'R$ 0,00';
-  }
-  const number = cleanValue/ 100;
-  return `R$ ${number.toFixed(2).replace('.', ',')}`; // isso nao fica aqui, criar um arquivo para functions chamado utils
-};
 
 
 const sanitizeName = (name: string): string => {
@@ -30,9 +22,10 @@ const sanitizeName = (name: string): string => {
 };
 
 
-function FormEditProjeto()  {
-  const { id } = useParams();
+function FormEditProjeto({ projectId }: { projectId: string })  {
+  const { projectId: id = projectId } = useParams<{ projectId: string }>();
   const [editaisList, setEditaisList] = useState<Edital[]>([]);
+  const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState<Projeto>({
     id: id,
     edital: '',
@@ -229,8 +222,7 @@ function FormEditProjeto()  {
     setFormData(prev => {
       // Campos monetários
       if (name === "valorSolicitado" || name === "valorDisponibilizado") {
-        const formattedValue = formatMoney(Number(value));
-        return { ...prev, [name]: formattedValue };
+       return { ...prev, [name]: parseFloat(value) || 0 };
       }
 
       // Campos numéricos (ano, publicoInternoQuantidade, publicoExternoQuantidade, etc.)
@@ -297,7 +289,7 @@ function FormEditProjeto()  {
           alteradoEm: new Date().toISOString()
         });
 
-        alert('Projeto cadastrado com sucesso!');
+        setShowModal(true);
 
         // Resetar o formulário
         setFormData({
@@ -442,6 +434,16 @@ function FormEditProjeto()  {
             </div>
             <div className="form-group">
                 <InputText
+                  label="Código do Projeto"
+                  type="text"
+                  name="codigoProjeto"
+                  value={formData.codigoProjeto}
+                  onChange={handleChange}
+                  placeholder="Código do Projeto"
+                />
+            </div>
+            <div className="form-group">
+                <InputText
                   label="Nome do Projeto"
                   type="text"
                   name="nomeProjeto"
@@ -558,7 +560,7 @@ function FormEditProjeto()  {
                   label="Espaço de Realização"
                   type="text"
                   name="espaco"
-                  value={formData.espaco}
+                  value={formData.espaco || ''}
                   onChange={handleChange}
                   placeholder="Espaço de Realização"
                 />
@@ -566,7 +568,7 @@ function FormEditProjeto()  {
                   label="Bairro"
                   type="text"
                   name="bairro"
-                  value={formData.bairro}
+                  value={formData.bairro || ''}
                   onChange={handleChange}
                   placeholder="Bairro"
                 />
@@ -577,8 +579,8 @@ function FormEditProjeto()  {
                 <InputText
                   label="Cidade/Município"
                   type="text"
-                  name="cidade"
-                  value={formData.municipio}
+                  name="municipio"
+                  value={formData.municipio || ''}
                   onChange={handleChange}
                   placeholder="Cidade/Município"
                 />
@@ -586,7 +588,7 @@ function FormEditProjeto()  {
                   label="Estado"
                   type="text"
                   name="estado"
-                  value={formData.estado}
+                  value={formData.estado || ''}
                   onChange={handleChange}
                   placeholder="Estado"
                 />
@@ -598,7 +600,7 @@ function FormEditProjeto()  {
                   label="Público Interno - Descrição"
                   type="text"
                   name="publicoInternoDescricao"
-                  value={formData.publicoInternoDescricao}
+                  value={formData.publicoInternoDescricao || ''}
                   onChange={handleChange}
                   placeholder="Público Interno - Descrição"
                 />
@@ -606,7 +608,7 @@ function FormEditProjeto()  {
                   label="Público Interno - Quantidade"
                   type="number"
                   name="publicoInternoQuantidade"
-                  value={formData.publicoInternoQuantidade}
+                  value={formData.publicoInternoQuantidade || 0}
                   onChange={handleChange}
                   placeholder="Público Interno - Quantidade"
                 />
@@ -618,7 +620,7 @@ function FormEditProjeto()  {
                   label="Público Externo - Descrição"
                   type="text"
                   name="publicoExternoDescricao"
-                  value={formData.publicoExternoDescricao}
+                  value={formData.publicoExternoDescricao || ''}
                   onChange={handleChange}
                   placeholder="Público Externo - Descrição"
                 />
@@ -626,7 +628,7 @@ function FormEditProjeto()  {
                   label="Público Externo - Quantidade"
                   type="number"
                   name="publicoExternoQuantidade"
-                  value={formData.publicoExternoQuantidade}
+                  value={formData.publicoExternoQuantidade || 0}
                   onChange={handleChange}
                   placeholder="Público Externo - Quantidade"
                 />
@@ -640,7 +642,7 @@ function FormEditProjeto()  {
                 <TextAreaInput
                   label="Detalhes da Ação"
                   name="detalhesAcao"
-                  value={formData.detalhesAcao}
+                  value={formData.detalhesAcao || ''}
                   onChange={handleChange}
                   placeholder="Detalhes da Ação"
                 />
@@ -740,6 +742,17 @@ function FormEditProjeto()  {
             </div>
             <button className="submit-button" type="submit">CONFIRMAR</button>
           </form>
+
+          {/* Modal de sucesso */}
+            {showModal && (
+              <div className="modal-overlay" onClick={() => setShowModal(false)}>
+                <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                  <h2>🎉 Projeto atualizado com sucesso!</h2>
+                  <p>Os dados foram salvos no banco de dados.</p>
+                  <button className="modal-button" onClick={() => setShowModal(false)}>Fechar</button>
+                </div>
+              </div>
+            )}
         </div>
   );
 };

@@ -8,7 +8,7 @@ import VisaoGeral from '../screens/VisaoGeral';
 import Project from '../screens/Project';
 import ProjetosRegister from '../screens/ProjectRegistration';
 import ProjectDetails from '../screens/ProjectDetails';
-// import ProjectEdit from '../screens/ProjectEdit';
+import ProjectEdit from '../screens/ProjectEdit'
 // import ProjectDocuments from '../screens/ProjectDocuments';
 // import ProjectAvaliacoes from '../screens/ProjectAvaliacoes';
 
@@ -33,7 +33,7 @@ const AppRoutes = () => {
             <Route path="/projetos" element={<Project />} /> {/* Tem Sidebar */}
             <Route path="/projetos/cadastrar" element={<ProjetosRegister />} />
             <Route path="/projetos/:projectId" element={<ProjectDetails />} />
-            {/* <Route path="/projetos/:projectId/editar" element={<ProjectEdit />} /> */}
+            <Route path="/projetos/:projectId/editar" element={<ProjectEdit />} /> 
             {/* <Route path="/projetos/:projectId/documentos" element={<ProjectDocuments />} /> */}
             {/* <Route path="/projetos/:projectId/avaliacao" element={<ProjectAvaliacoes />} /> */}
             {/* <Route path="/projetos/:projectId/alunos" element={<ProjectAlunos />} /> */}
