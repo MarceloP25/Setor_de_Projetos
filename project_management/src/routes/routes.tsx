@@ -11,11 +11,13 @@ import ProjectDetails from '../screens/ProjectDetails';
 import ProjectEdit from '../screens/ProjectEdit'
 // import ProjectDocuments from '../screens/ProjectDocuments';
 // import ProjectAvaliacoes from '../screens/ProjectAvaliacoes';
+// import ProjectAlunos from '../screens/ProjectAlunos';
 
 // Editais
 import Editais from '../screens/Edital';
 import EditalRegister from '../screens/EditalRegistration';
 import EditalDetails from '../screens/EditalDetails';
+import EditalEdit from '../screens/EditalEdit';
 
 // Orçamentos
 import Orcamento from '../screens/Orcamento';
@@ -38,9 +40,11 @@ const AppRoutes = () => {
             {/* <Route path="/projetos/:projectId/avaliacao" element={<ProjectAvaliacoes />} /> */}
             {/* <Route path="/projetos/:projectId/alunos" element={<ProjectAlunos />} /> */}
 
+
             <Route path="/edital" element={<Editais />} /> {/* Tem Sidebar */}
             <Route path="/edital/cadastrar" element={<EditalRegister />} />
             <Route path="/edital/:editalId" element={<EditalDetails />} />
+            <Route path="/edital/:editalId/editar" element={<EditalEdit />} />
 
 
             <Route path="/orcamento" element={<Orcamento />} /> {/* Tem Sidebar */}

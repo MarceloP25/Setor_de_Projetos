@@ -8,8 +8,8 @@ import type { Edital } from '../../interfaces/Edital';
 import './styles.css';
 import RadioInput from '../RadioInput';
 
-function FormEditEdital()  {
-  const { id } = useParams();
+function FormEditEdital({ editalId }: { editalId: string })  {
+  const { editalId: id = editalId } = useParams<{ editalId: string }>();
   const [formData, setFormData] = useState<Edital>({
     id: id,
     nomeEdital: '',
@@ -159,8 +159,8 @@ function FormEditEdital()  {
                 value={formData.status}
                 onChange={handleChange}
                 options={[
-                  { value: 'ativo', label: 'Ativo' },
-                  { value: 'inativo', label: 'Inativo' },
+                  { value: true, label: 'Ativo' },
+                  { value: false, label: 'Inativo' },
                 ]}
               />
             </div>
@@ -179,7 +179,7 @@ function FormEditEdital()  {
                   label="Orçamento Disponibilizado"
                   type="text"
                   name="valorDisponivel"
-                  value={formData.valorDisponivel}
+                  value={formData.valorDisponivel || ''}
                   onChange={handleChange}
                   placeholder="Orçamento Disponibilizado"
                 />

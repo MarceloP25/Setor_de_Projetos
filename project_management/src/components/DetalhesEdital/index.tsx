@@ -142,7 +142,7 @@ function DetalhesEdital({ editalId }: { editalId: string | undefined }) {
                         </div>
                     )}
 
-                    <ActionButton text="EDITAR" variant="medium" onClick={() => {}} />
+                    <ActionButton text="EDITAR" variant="medium" to={`/edital/${id}/editar`} />
                 </div>
             </div>
     );

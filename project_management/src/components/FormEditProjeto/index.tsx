@@ -245,16 +245,29 @@ function FormEditProjeto({ projectId }: { projectId: string })  {
   const validateForm = (): boolean => {
     const requiredFields = [
       'edital',
+      'codigoProjeto',
       'nomeProjeto',
       'nomeDaAcao',
       'ano',
       'periodoInicio',
       'periodoFim',
+      'abrangencia',
       'nomeCoordenador',
       'emailCoordenador',
+      'nomeCoCoordenador',
+      'emailCoCoordenador',
+      'publicoInternoDescricao',
+      'publicoInternoQuantidade',
+      'publicoExternoDescricao',
+      'publicoExternoQuantidade',
+      'estado',
+      'municipio',
+      'bairro',
+      'espaco',
       'valorSolicitado',
       'areaTematica',
-      'linhaExtensao'
+      'linhaExtensao',
+      'detalhesAcao'
     ];
 
     for (const field of requiredFields) {
