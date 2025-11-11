@@ -30,7 +30,7 @@ const AppRoutes = () => {
         <Sidebar />
         <div className="main-content">
           <Routes>
-            <Route path="/visao_geral" element={<VisaoGeral />} /> {/* Tem Sidebar */}
+            <Route path="/home" element={<VisaoGeral />} /> {/* Tem Sidebar */}
 
             <Route path="/projetos" element={<Project />} /> {/* Tem Sidebar */}
             <Route path="/projetos/cadastrar" element={<ProjetosRegister />} />
