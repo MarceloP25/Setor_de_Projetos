@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../services/config'; 
-import { doc, setDoc, collection, getDocs } from 'firebase/firestore';
+import { doc, setDoc, collection, getDocs, updateDoc, arrayUnion } from 'firebase/firestore';
 import InputText from '../InputText';
 import InputNumber from '../InputNumber';
 import SelectInput from '../SelectInput';
@@ -285,6 +285,10 @@ function FormCadProjeto()  {
           valorSolicitado: rawValorSolicitado,
           valorDisponibilizado: rawValorDisponibilizado,
           criadoEm: new Date().toISOString()
+        });
+
+        await updateDoc(doc(db, "editais", formData.edital), {
+           projetosVinculados: arrayUnion(formData.nomeProjeto)
         });
 
         setShowModal(true);
