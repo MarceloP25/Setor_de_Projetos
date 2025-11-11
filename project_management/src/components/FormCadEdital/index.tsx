@@ -163,7 +163,7 @@ function FormCadEdital()  {
                   label="Orçamento Disponibilizado"
                   type="text"
                   name="valorDisponivel"
-                  value={formData.valorDisponivel}
+                  value={formData.valorDisponivel || ''}
                   onChange={handleChange}
                   placeholder="Orçamento Disponibilizado"
                 />

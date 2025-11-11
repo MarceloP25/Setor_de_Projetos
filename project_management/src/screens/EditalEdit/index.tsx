@@ -6,7 +6,6 @@ import './styles.css';
 import BackButton from '../../components/Backbutton';
 import FormEditEdital from '../../components/FormEditEdital';
 
-
 const ProjectEdit: React.FC = () => {
     const { id } = useParams<{ id: string }>();
 

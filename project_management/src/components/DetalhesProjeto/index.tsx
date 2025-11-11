@@ -176,6 +176,7 @@ function DetalhesProjeto({ projectId }: { projectId: string | undefined }) {
             </ul>
           ) : <p>-</p>}
         </div>
+        <Button text="AVALIAÇÃO" variant="medium" to={`/projetos/${id}/avaliacao`} />
       </div>
 
       {/* Bloco 9 - Anexos e alunos */}
@@ -193,6 +194,7 @@ function DetalhesProjeto({ projectId }: { projectId: string | undefined }) {
               ))}
             </ul>
           ) : <p>Nenhum documento anexado</p>}
+          <Button text="DOCUMENTOS" variant="medium" to={`/projetos/${id}/documentos`} />
         </div>
 
         <div className="info">
@@ -200,7 +202,7 @@ function DetalhesProjeto({ projectId }: { projectId: string | undefined }) {
           {projeto.alunosParticipantes?.length ? (
             <>
               <p>{projeto.alunosParticipantes.join(', ')}</p>
-              <Button text="LISTA" variant="medium" onClick={() => {}} />
+              <Button text="LISTA" variant="medium" to={`/projetos/${id}/alunos`} />
             </>
           ) : <p>Sem alunos vinculados</p>}
         </div>

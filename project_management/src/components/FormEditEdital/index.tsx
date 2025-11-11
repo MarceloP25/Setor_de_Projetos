@@ -8,8 +8,13 @@ import type { Edital } from '../../interfaces/Edital';
 import './styles.css';
 import RadioInput from '../RadioInput';
 
-function FormEditEdital({ editalId }: { editalId: string })  {
+function FormEditEdital({ editalId }: { editalId: string | undefined }) {
   const { editalId: id = editalId } = useParams<{ editalId: string }>();
+
+  if (!id) {
+    return <div>ID do edital não fornecido.</div>;
+  }
+
   const [formData, setFormData] = useState<Edital>({
     id: id,
     nomeEdital: '',
@@ -159,8 +164,8 @@ function FormEditEdital({ editalId }: { editalId: string })  {
                 value={formData.status}
                 onChange={handleChange}
                 options={[
-                  { value: true, label: 'Ativo' },
-                  { value: false, label: 'Inativo' },
+                  { label: 'Ativo', value: true },
+                  { label: 'Inativo', value: false },
                 ]}
               />
             </div>

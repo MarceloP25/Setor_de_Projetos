@@ -2,14 +2,15 @@ import React from 'react';
 
 import './styles.css';
 
-import HomeProjetos from '../../components/HomeProjetos';
+
 
 
 const Orcamento: React.FC = () => {
 
     return (
         <div className="container">
-            <HomeProjetos/>
+            <h1>Orçamento</h1>
+            <p>Esta é a futura tela de Orçamento.</p>
         </div>  
     );
 };

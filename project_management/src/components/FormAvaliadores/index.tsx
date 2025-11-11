@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
 import { db } from '../../services/config';
 import { doc, updateDoc } from 'firebase/firestore';
-import InputText from '../InputText';
 import InputNumber from '../InputNumber';
 import ActionButton from '../Button';
 import type { Projeto } from '../../interfaces/Projeto';
 import './styles.css';
 import TextAreaInput from '../TextAreaInput';
 
-function FormAvaliadores({ projetoId }: { projetoId: string }) {
+function FormAvaliadores({ projectId }: { projectId: string | undefined }) {
+
+  if (!projectId) {
+    return <div>ID do projeto não fornecido.</div>;
+  }
+
   const [formData, setFormData] = useState<Projeto>({
-    id: projetoId,
+    id: projectId,
     edital: '',
     nomeProjeto: '',
     nomeDaAcao: '',
@@ -64,15 +68,15 @@ function FormAvaliadores({ projetoId }: { projetoId: string }) {
 
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     index: number,
     tipo: 'nota' | 'comentario'
   ) => {
     const { value } = e.target;
 
     setFormData((prev) => {
-      const novasNotas = [...prev.notasAvaliadores];
-      const novosComentarios = [...prev.comentariosAvaliadores];
+      const novasNotas = [...(prev.notasAvaliadores || [])];
+      const novosComentarios = [...(prev.comentariosAvaliadores || [])];
 
       if (tipo === 'nota') {
         const valorNumerico = parseFloat(value) || 0;
@@ -122,15 +126,15 @@ function FormAvaliadores({ projetoId }: { projetoId: string }) {
               <InputNumber
                 label={`Avaliador ${index + 1}`}
                 type="number"
-                min="0"
-                max="10"
-                step="0.01"
-                value={formData.notasAvaliadores[index] || ''}
+                min={0}
+                max={10}
+                step={0.01}
+                value={(formData.notasAvaliadores ?? [])[index] ?? 0}
                 onChange={(e) => handleChange(e, index, 'nota')}
               />
               <TextAreaInput
                 label="Comentários"
-                value={formData.comentariosAvaliadores[index] || ''}
+                value={(formData.comentariosAvaliadores ?? [])[index] || ''}
                 onChange={(e) => handleChange(e, index, 'comentario')}
               />
             </div>
@@ -138,11 +142,11 @@ function FormAvaliadores({ projetoId }: { projetoId: string }) {
         ))}
 
         <div className="form-summary">
-          <h4>Média Final: {formData.notaEtapa2.toFixed(2)}</h4>
+          <h4>Média Final: {(formData.notaEtapa2 ?? 0).toFixed(2)}</h4>
         </div>
 
         <div className="form-note">
-            <ActionButton text="CONFIRMAR" variant="medium" onClick={() => {}} />
+            <ActionButton text="CONFIRMAR" variant="medium" onClick={() => {handleSubmit}} />
         </div>
 
       </form>

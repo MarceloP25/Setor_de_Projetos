@@ -22,10 +22,15 @@ const sanitizeName = (name: string): string => {
 };
 
 
-function FormEditProjeto({ projectId }: { projectId: string })  {
+function FormEditProjeto({ projectId }: { projectId: string | undefined }) {
   const { projectId: id = projectId } = useParams<{ projectId: string }>();
   const [editaisList, setEditaisList] = useState<Edital[]>([]);
   const [showModal, setShowModal] = useState(false);
+
+  if (!id) {
+    return <div>ID do edital não fornecido.</div>;
+  }
+
   const [formData, setFormData] = useState<Projeto>({
     id: id,
     edital: '',

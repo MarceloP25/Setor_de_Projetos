@@ -8,9 +8,12 @@ interface InputNumberProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   label?: string;
+  min?: number;
+  max?: number;
+  step?: number;
 }
 
-const InputNumber: React.FC<InputNumberProps> = ({ type, value, name, onChange, placeholder, label }) => {
+const InputNumber: React.FC<InputNumberProps> = ({ type, value, name, onChange, placeholder, label, min, max, step }) => {
   return (
     <div className="input-container">
       {label && <h3>{label}</h3>}
@@ -20,6 +23,9 @@ const InputNumber: React.FC<InputNumberProps> = ({ type, value, name, onChange, 
         name={name}
         onChange={onChange} 
         placeholder={placeholder}
+        min={min}
+        max={max}
+        step={step}
         className="input-text"
       />
     </div>

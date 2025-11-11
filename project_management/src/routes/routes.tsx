@@ -9,8 +9,8 @@ import Project from '../screens/Project';
 import ProjetosRegister from '../screens/ProjectRegistration';
 import ProjectDetails from '../screens/ProjectDetails';
 import ProjectEdit from '../screens/ProjectEdit'
-// import ProjectDocuments from '../screens/ProjectDocuments';
-// import ProjectAvaliacoes from '../screens/ProjectAvaliacoes';
+import ProjectDocuments from '../screens/ProjectDocuments';
+import ProjectAvaliacoes from '../screens/ProjectAvaliacoes';
 // import ProjectAlunos from '../screens/ProjectAlunos';
 
 // Editais
@@ -36,8 +36,8 @@ const AppRoutes = () => {
             <Route path="/projetos/cadastrar" element={<ProjetosRegister />} />
             <Route path="/projetos/:projectId" element={<ProjectDetails />} />
             <Route path="/projetos/:projectId/editar" element={<ProjectEdit />} /> 
-            {/* <Route path="/projetos/:projectId/documentos" element={<ProjectDocuments />} /> */}
-            {/* <Route path="/projetos/:projectId/avaliacao" element={<ProjectAvaliacoes />} /> */}
+            <Route path="/projetos/:projectId/documentos" element={<ProjectDocuments />} /> 
+            <Route path="/projetos/:projectId/avaliacao" element={<ProjectAvaliacoes />} /> 
             {/* <Route path="/projetos/:projectId/alunos" element={<ProjectAlunos />} /> */}
 
 

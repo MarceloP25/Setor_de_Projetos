@@ -7,9 +7,13 @@ import type { Projeto } from '../../interfaces/Projeto';
 import { db } from '../../services/config';
 import { doc, updateDoc } from 'firebase/firestore';
 
-function FormDocumentosProjeto({ projetoId }: { projetoId: string }) {
+function FormDocumentosProjeto({ projectId }: { projectId: string | undefined }) {
+
+  if (!projectId) {
+    return <div>ID do projeto não fornecido.</div>;
+  }
   const [formData, setFormData] = useState<Projeto>({
-    id: projetoId,
+    id: projectId,
     edital: '',
     nomeProjeto: '',
     nomeDaAcao: '',
@@ -76,11 +80,12 @@ function FormDocumentosProjeto({ projetoId }: { projetoId: string }) {
     }));
   };
 
-  const handleClassificacaoUpdate = (valor: string) => {
+  const handleClassificacaoUpdate = (valor: string | null) => {
+    const validValue = valor ?? '';
     setFormData(prev => ({
       ...prev,
-      statusEtapa1: valor,
-      classificacaoDetalhe: valor === 'Desclassificado' ? prev.classificacaoDetalhe : '',
+      statusEtapa1: validValue,
+      classificacaoDetalhe: validValue === 'Desclassificado' ? prev.classificacaoDetalhe : '',
     }));
   };
 
@@ -138,7 +143,7 @@ function FormDocumentosProjeto({ projetoId }: { projetoId: string }) {
               <TextAreaInput
                 label='Caso não esteja classificado, justifique'
                 name="classificacaoDetalhe"
-                value={formData.classificacaoDetalhe}
+                value={formData.classificacaoDetalhe || ''}
                 onChange={handleChangeDetalhe}
                 placeholder="Descreva o motivo da desclassificação"
               />
