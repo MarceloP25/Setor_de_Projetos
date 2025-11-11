@@ -176,7 +176,7 @@ function DetalhesProjeto({ projectId }: { projectId: string | undefined }) {
             </ul>
           ) : <p>-</p>}
         </div>
-        <Button text="AVALIAÇÃO" variant="medium" to={`/projetos/${id}/avaliacao`} />
+        <Button text="AVALIAÇÃO" variant="medium" to={`/projetos/${projectId}/avaliacao`} />
       </div>
 
       {/* Bloco 9 - Anexos e alunos */}
@@ -194,7 +194,7 @@ function DetalhesProjeto({ projectId }: { projectId: string | undefined }) {
               ))}
             </ul>
           ) : <p>Nenhum documento anexado</p>}
-          <Button text="DOCUMENTOS" variant="medium" to={`/projetos/${id}/documentos`} />
+          <Button text="DOCUMENTOS" variant="medium" to={`/projetos/${projectId}/documentos`} />
         </div>
 
         <div className="info">
@@ -202,13 +202,13 @@ function DetalhesProjeto({ projectId }: { projectId: string | undefined }) {
           {projeto.alunosParticipantes?.length ? (
             <>
               <p>{projeto.alunosParticipantes.join(', ')}</p>
-              <Button text="LISTA" variant="medium" to={`/projetos/${id}/alunos`} />
+              <Button text="LISTA" variant="medium" to={`/projetos/${projectId}/alunos`} />
             </>
           ) : <p>Sem alunos vinculados</p>}
         </div>
       </div>
 
-      <Button text="EDITAR" variant="medium" to={`/projetos/${id}/editar`} />
+      <Button text="EDITAR" variant="medium" to={`/projetos/${projectId}/editar`} />
     </div>
   );
 }

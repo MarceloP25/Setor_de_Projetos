@@ -7,7 +7,7 @@ import FormCadEdital from '../../components/FormCadEdital';
 const EditalRegistration: React.FC = () => {
 
   return (
-    <div className='container'>
+    <div className='cad-container'>
       <BackButton/>
       <FormCadEdital />
     </div>

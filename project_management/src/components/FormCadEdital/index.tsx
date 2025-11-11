@@ -138,7 +138,7 @@ function FormCadEdital()  {
           <div className="form-title">Cadastro de Edital</div>
           <form onSubmit={handleSubmit}>
 
-            <div className="form-group">
+            <div className="form-row">
                 <InputText
                   label="Nome do Edital"
                   type="text"
@@ -148,7 +148,7 @@ function FormCadEdital()  {
                   placeholder="Nome do Edital"
                 />
             </div>
-            <div className="form-group">
+            <div className="form-row">
                 <InputText
                   label="Orçamento do Edital"
                   type="text"
@@ -158,7 +158,7 @@ function FormCadEdital()  {
                   placeholder="Orçamento do Edital"
                 />
             </div>
-            <div className="form-group">
+            <div className="form-row">
                 <InputText
                   label="Orçamento Disponibilizado"
                   type="text"
@@ -349,7 +349,7 @@ function FormCadEdital()  {
               </div>
             </div>
 
-            <div className="form-group">
+            <div className="form-row">
                 <InputText
                   label="Link de Acesso ao Edital"
                   type="text"

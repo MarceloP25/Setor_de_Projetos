@@ -1,0 +1,20 @@
+.main-layout {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  height: auto;
+  width: 100%;
+  background-color: #f9f9f9;
+}
+
+.layout-sidebar {
+  background-color: var(--sidebar-bg, #fff);
+  border-right: 1px solid #ddd;
+  height: 100%;
+}
+
+.layout-content {
+  padding: 30px;
+  overflow-y: auto;
+  background-color: #FBFBFB;
+}
+

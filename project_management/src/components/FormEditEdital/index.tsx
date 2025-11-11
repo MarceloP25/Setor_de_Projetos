@@ -41,7 +41,7 @@ function FormEditEdital({ editalId }: { editalId: string | undefined }) {
     const id = editalId || idFromParams;
 
     if (!id) {
-        return <div>ID do edital não fornecido.</div>;
+        return <div>Edital não encontrado!</div>;
     }
 
     const [formData, setFormData] = useState<Edital>({
@@ -136,7 +136,7 @@ function FormEditEdital({ editalId }: { editalId: string | undefined }) {
         <div className="form-container">
             <div className="form-title">{isEditing ? 'Edição de Edital' : 'Cadastro de Edital'}</div>
             <form onSubmit={handleSubmit}>
-                <div className="form-group">
+                <div className="form-row">
                     <InputText
                         label="Nome do Edital"
                         type="text"
@@ -146,7 +146,7 @@ function FormEditEdital({ editalId }: { editalId: string | undefined }) {
                         placeholder="Nome do Edital"
                     />
                 </div>
-                <div className="form-group">
+                <div className="form-row">
                     <RadioInput
                         label="Status do Edital"
                         name="status"
@@ -158,7 +158,7 @@ function FormEditEdital({ editalId }: { editalId: string | undefined }) {
                         ]}
                     />
                 </div>
-                <div className="form-group">
+                <div className="form-row">
                     <InputText
                         label="Orçamento do Edital"
                         type="text"
@@ -168,7 +168,7 @@ function FormEditEdital({ editalId }: { editalId: string | undefined }) {
                         placeholder="Orçamento do Edital"
                     />
                 </div>
-                <div className="form-group">
+                <div className="form-row">
                     <InputText
                         label="Orçamento Disponibilizado"
                         type="text"
@@ -344,7 +344,7 @@ function FormEditEdital({ editalId }: { editalId: string | undefined }) {
                         </div>
                     </div>
                 </div>
-                <div className="form-group">
+                <div className="form-row">
                     <InputText
                         label="Link de Acesso ao Edital"
                         type="text"

@@ -1,5 +1,5 @@
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
-import Sidebar from '../components/SideBar';
+//import Sidebar from '../components/SideBar';
 
 // Visão Geral
 import VisaoGeral from '../screens/VisaoGeral';
@@ -21,16 +21,17 @@ import EditalEdit from '../screens/EditalEdit';
 
 // Orçamentos
 import Orcamento from '../screens/Orcamento';
+import MainLayout from '../layout/MainLayout';
 
 
 const AppRoutes = () => {
   return (
     <BrowserRouter>
-      <div className="app-container">
-        <Sidebar />
-        <div className="main-content">
+      
+        <MainLayout >
+        
           <Routes>
-            <Route path="/home" element={<VisaoGeral />} /> {/* Tem Sidebar */}
+            <Route path="/visao_geral" element={<VisaoGeral />} /> {/* Tem Sidebar */}
 
             <Route path="/projetos" element={<Project />} /> {/* Tem Sidebar */}
             <Route path="/projetos/cadastrar" element={<ProjetosRegister />} />
@@ -49,8 +50,9 @@ const AppRoutes = () => {
 
             <Route path="/orcamento" element={<Orcamento />} /> {/* Tem Sidebar */}
           </Routes>
-        </div>
-      </div>
+       
+        </MainLayout>
+      
     </BrowserRouter>
   );
 };

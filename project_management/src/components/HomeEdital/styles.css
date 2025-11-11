@@ -1,11 +1,12 @@
 
     /* Container principal */
     .container {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    background-color: var(--background-light);
-    padding: 20px;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        background-color: var(--background-light);
+        padding: 20px;
+        width: 100%;
     }
     
     /* Lista de projetos */

@@ -12,7 +12,50 @@ import type { Projeto } from '../../interfaces/Projeto';
 import './styles.css';
 import TextAreaInput from '../TextAreaInput';
 
-
+const initialProjectState: Projeto = {
+    id: '',
+    edital: '',
+    nomeProjeto: '',
+    nomeDaAcao: '',
+    codigoProjeto: '',
+    ano: 0,
+    periodoInicio: '',
+    periodoFim: '',
+    abrangencia: '',
+    nomeCoordenador: '',
+    emailCoordenador: '',
+    nomeCoCoordenador: '',
+    emailCoCoordenador: '',
+    publicoInternoDescricao: '',
+    publicoInternoQuantidade: 0,
+    publicoExternoDescricao: '',
+    publicoExternoQuantidade: 0,
+    estado: '',
+    municipio: '',
+    bairro: '',
+    espaco: '',
+    valorSolicitado: 0,
+    valorDisponibilizado: 0,
+    tipoBolsa: [] as string[],
+    valorBolsa: [] as string[],
+    quantidade: 0,
+    valorTotalBolsas: 0,
+    areaTematica: '',
+    linhaExtensao: '',
+    detalhesAcao: '',
+    documentosAnexados: [] as string[],
+    classificacaoDetalhe: '',
+    statusEtapa1: '',
+    notasAvaliadores: [0] as number[],
+    comentariosAvaliadores: [''] as string[],
+    notaEtapa2: 0,
+    alunosParticipantes: [] as string[],
+    relatorioProjeto: [] as object[],
+    criadoEm: '',
+    criadoPor: '',
+    alteradoEm: '',
+    alteradoPor: ''
+};
 
 const sanitizeName = (name: string): string => {
   return name
@@ -28,72 +71,12 @@ function FormEditProjeto({ projectId }: { projectId: string | undefined }) {
   const [showModal, setShowModal] = useState(false);
 
   if (!id) {
-    return <div>ID do edital não fornecido.</div>;
+    return <div>Projeto não encontrado!</div>;
   }
 
   const [formData, setFormData] = useState<Projeto>({
+    ...initialProjectState,
     id: id,
-    edital: '',
-    nomeProjeto: '',
-    nomeDaAcao: '',
-    codigoProjeto: '',
-
-
-    ano: 0,
-    periodoInicio: '',
-    periodoFim: '',
-    abrangencia: '',
-
-
-    nomeCoordenador: '',
-    emailCoordenador: '',
-    nomeCoCoordenador: '',
-    emailCoCoordenador: '',
-
-
-    publicoInternoDescricao: '',
-    publicoInternoQuantidade: 0,
-    publicoExternoDescricao: '',
-    publicoExternoQuantidade: 0,
-
-
-    estado: '',
-    municipio: '',
-    bairro: '',
-    espaco: '',
-
-
-    valorSolicitado: 0,
-    valorDisponibilizado: 0,
-    tipoBolsa: [] as string[],
-    valorBolsa: [] as string[],
-    quantidade: 0,
-    valorTotalBolsas: 0,
-
-
-    areaTematica: '',
-    linhaExtensao: '',
-
-
-    detalhesAcao: '',
-    documentosAnexados: [] as string[],
-    classificacaoDetalhe: '',
-
-
-    statusEtapa1: '',
-    notasAvaliadores: [0] as number[],
-    comentariosAvaliadores: [''] as string[],
-    notaEtapa2: 0,
-
-
-    alunosParticipantes: [] as string[],
-    relatorioProjeto: [] as object[],
-
-
-    criadoEm: '',
-    criadoPor: '',
-    alteradoEm: '',
-    alteradoPor: ''
   });
 
 
@@ -415,29 +398,28 @@ function FormEditProjeto({ projectId }: { projectId: string | undefined }) {
     }
   };
 
-  const fetchProjeto = async (id: string) => {
-    try {
-      const projetoRef = doc(db, 'projetos', id);
-      const projetoSnap = await getDoc(projetoRef);
-      if (projetoSnap.exists()) {
-        setFormData(projetoSnap.data() as Projeto);
-      } else {
-        alert('Projeto não encontrado!');
-      }
-    } catch (error) {
-      console.error('Erro ao carregar projeto:', error);
-    }
-  };
-
 
   useEffect(() => {
+    const fetchProjetoData = async () => {
+      if(id) {
+        const projetoRef = doc(db, 'projetos', id);
+        const projetoSnap = await getDoc(projetoRef);
+
+        if (projetoSnap.exists()) {
+          setFormData(projetoSnap.data() as Projeto);
+        } else {
+          alert('Projeto não encontrado!');
+          setFormData({ ...initialProjectState, id: id });
+        }
+      }
+    };
     fetchEditais();
-    if (id) fetchProjeto(id);
+    fetchProjetoData();
   }, [id]);
 
   return (
         <div className="form-container">
-          <div className="form-title">Cadastro de Projeto</div>
+          <div className="form-title">Edição de Dados do Projeto</div>
           <form onSubmit={handleSubmit}>
 
             {/* DADOS DE IDENTIFICAÇÃO */}
