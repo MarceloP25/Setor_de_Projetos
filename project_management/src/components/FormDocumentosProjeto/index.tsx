@@ -67,12 +67,12 @@ function FormDocumentosProjeto({ projectId }: { projectId: string | undefined })
 
 
   const [documentos, setDocumentos] = useState([
-    { text: 'Plano de trabalho do(s) bolsista(s)', valor: 'N/A' },
-    { text: 'Plano de trabalho do bolsista Colaborador Externo', valor: 'N/A' },
-    { text: 'Declaração de entrega de documentação', valor: 'N/A' },
-    { text: 'Carta de Anuência assinada', valor: 'N/A' },
-    { text: 'Plano de Ensino para os projetos de extensão em forma de curso', valor: 'N/A' },
-    { text: 'Declaração ou e-mail do setor competente do respectivo campus indicando ciência e disponibilidade do recurso solicitado', valor: 'N/A' },
+    { label: 'Plano de trabalho do(s) bolsista(s)', value: '' },
+    { label: 'Plano de trabalho do bolsista Colaborador Externo', value: '' },
+    { label: 'Declaração de entrega de documentação', value: '' },
+    { label: 'Carta de Anuência assinada', value: '' },
+    { label: 'Plano de Ensino para os projetos de extensão em forma de curso', value: '' },
+    { label: 'Declaração ou e-mail do setor competente do respectivo campus indicando ciência e disponibilidade do recurso solicitado', value: '' },
   ]);
 
   const options = [
@@ -89,12 +89,12 @@ function FormDocumentosProjeto({ projectId }: { projectId: string | undefined })
 
   const handleDocsListUpdate = (index: number, valor: string | null) => {
     const novos = [...documentos];
-    novos[index].valor = valor ?? 'N/A';
+    novos[index].value = valor ?? 'N/A';
     setDocumentos(novos);
-
+    
     setFormData(prev => ({
       ...prev,
-      documentosAnexados: novos.map(d => `${d.text}: ${d.valor}`),
+      documentosAnexados: novos.map(d => `${d.label}: ${d.value}`),
     }));
   };
 
@@ -139,19 +139,27 @@ function FormDocumentosProjeto({ projectId }: { projectId: string | undefined })
           {documentos.map((doc, index) => (
             <RadioInput
               key={index}
-              label={doc.text}
+              label={doc.label}
               options={options}
-              defaultValue={doc.valor}
-              onChange={val => handleDocsListUpdate(index, val)} name={''} value={''}            />
+              name={`documento-${index}`}         // nome único por grupo
+              value={doc.value}                  // valor atual do grupo
+              defaultValue={doc.value}
+              onChange={val => handleDocsListUpdate(index, val)}
+            />
+
           ))}
 
           <div className="checklist">
             <h4>Classifique o Projeto</h4>
-            <RadioInput
-              label={'Classificação do Projeto'}
-              options={status}
-              defaultValue={formData.statusEtapa1}
-              onChange={val => handleClassificacaoUpdate(val)} name={''} value={''}            />
+              <RadioInput
+                label="Classificação do Projeto"
+                options={status}
+                name="classificacao"              // nome fixo
+                value={formData.statusEtapa1}
+                defaultValue={formData.statusEtapa1}
+                onChange={val => handleClassificacaoUpdate(val)}
+              />
+
           </div>
 
           {formData.statusEtapa1 === 'Desclassificado' && (
