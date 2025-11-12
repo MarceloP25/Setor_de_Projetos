@@ -1,11 +1,14 @@
 import type { Aluno } from "../../types/types";
 import "./cardUsuarios.css";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   aluno: Aluno;
 };
 
 function CardUsuarios({ aluno }: Props) {
+  const navigate = useNavigate();
+
   return (
     <div className="card">
       <h3>{aluno.nome}</h3>
@@ -18,7 +21,15 @@ function CardUsuarios({ aluno }: Props) {
       <p><strong>Edital:</strong> {aluno.edital}</p>
       <p><strong>Projeto:</strong> {aluno.projetos}</p>
       <p><strong>Data de Cadastro:</strong> {aluno.dataCadastro.toLocaleString("pt-BR")}</p>
+
+      <button
+        className="btn-editar"
+        onClick={() => navigate(`/editar/${aluno.id}`)}
+      >
+        Editar
+      </button>
     </div>
   );
 }
+
 export default CardUsuarios;

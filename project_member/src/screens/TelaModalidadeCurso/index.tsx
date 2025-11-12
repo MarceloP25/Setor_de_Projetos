@@ -127,7 +127,6 @@ const FormularioCursos: React.FC = () => {
     return;
   }
 
-  // Se for colaborador externo, define curso como "externo"
   const cursoFinal =
     nivelEnsino === "nao_sou_aluno" ? "externo" : cursoSelecionado;
 

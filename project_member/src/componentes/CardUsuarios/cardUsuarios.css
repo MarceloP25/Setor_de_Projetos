@@ -1,30 +1,40 @@
 .card {
-  background-color: #ffffff;
-  border: 1px solid #055902; /* destaque com a cor solicitada */
+  background: #fff;
+  border: 1px solid #ddd;
   border-radius: 8px;
-  padding: 1rem;
-  margin: 1rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  max-width: 300px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  padding: 16px;
+  margin: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
 }
 
 .card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-3px);
 }
 
 .card h3 {
-  margin-top: 0;
-  color: #055902; /* título com cor de destaque */
-  font-size: 1.2rem;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 0.3rem;
+  margin-bottom: 8px;
+  color: #000000;
 }
 
 .card p {
-  margin: 0.5rem 0;
-  font-size: 0.95rem;
-  color: #444;
+  margin: 4px 0;
+  font-size: 14px;
+  color: #000000;
 }
 
+.btn-editar {
+  margin-top: 12px;
+  padding: 8px 14px;
+  background-color: #027313;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.btn-editar:hover {
+  background-color: #027313;
+}

@@ -1,21 +1,44 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../firebase";
 
 import InputSelect from "../../componentes/InputSelect";
 import Botao from "../../componentes/Botao";
 
 import "./selecaoedital.css";
 
+type OpcaoEdital = {
+  valor: string;
+  label: string;
+};
+
 function TelaSeleçãoEdital() {
   const [edital, setEdital] = useState("");
   const [erro, setErro] = useState(false);
+  const [opcoes, setOpcoes] = useState<OpcaoEdital[]>([]);
 
   const navigate = useNavigate();
 
-  const opcoes = [
-    { valor: "piaex", label: "Discentes PIAEX" },
-    { valor: "arteecultura", label: "Discentes Arte e Cultura" },
-  ];
+  useEffect(() => {
+    const fetchEditais = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "editais"));
+        const lista: OpcaoEdital[] = querySnapshot.docs.map((doc) => {
+          const dados = doc.data();
+          return {
+            valor: doc.id,
+            label: dados.nomeEdital,
+          };
+        });
+        setOpcoes(lista);
+      } catch (error) {
+        console.error("Erro ao buscar editais:", error);
+      }
+    };
+
+    fetchEditais();
+  }, []);
 
   const handleSalvar = () => {
     if (!edital) {
