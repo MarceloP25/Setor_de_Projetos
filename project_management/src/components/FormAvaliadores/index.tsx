@@ -6,15 +6,10 @@ import ActionButton from '../Button';
 import type { Projeto } from '../../interfaces/Projeto';
 import './styles.css';
 import TextAreaInput from '../TextAreaInput';
+import { useParams } from 'react-router-dom';
 
-function FormAvaliadores({ projectId }: { projectId: string | undefined }) {
-
-  if (!projectId) {
-    return <div>ID do projeto não fornecido.</div>;
-  }
-
-  const [formData, setFormData] = useState<Projeto>({
-    id: projectId,
+const initialProjectState: Projeto = {
+    id: '',
     edital: '',
     nomeProjeto: '',
     nomeDaAcao: '',
@@ -37,26 +32,39 @@ function FormAvaliadores({ projectId }: { projectId: string | undefined }) {
     espaco: '',
     valorSolicitado: 0,
     valorDisponibilizado: 0,
-    tipoBolsa: [],
-    valorBolsa: [],
+    tipoBolsa: [] as string[],
+    valorBolsa: [] as string[],
     quantidade: 0,
     valorTotalBolsas: 0,
     areaTematica: '',
     linhaExtensao: '',
     detalhesAcao: '',
-    documentosAnexados: [],
+    documentosAnexados: [] as string[],
     classificacaoDetalhe: '',
     statusEtapa1: '',
-    notasAvaliadores: [0, 0, 0],
-    comentariosAvaliadores: ['', '', ''],
+    notasAvaliadores: [0] as number[],
+    comentariosAvaliadores: [''] as string[],
     notaEtapa2: 0,
-    alunosParticipantes: [],
-    relatorioProjeto: [],
+    alunosParticipantes: [] as string[],
+    relatorioProjeto: [] as object[],
     criadoEm: '',
     criadoPor: '',
     alteradoEm: '',
-    alteradoPor: '',
+    alteradoPor: ''
+};
+
+function FormAvaliadores({ projectId }: { projectId: string | undefined }) {
+  const { projectId: id = projectId } = useParams<{ projectId: string }>();
+  
+  if (!id) {
+    return <div>Informação não encontrada!</div>;
+  }
+
+  const [formData, setFormData] = useState<Projeto>({
+    ...initialProjectState,
+    id: id,
   });
+
 
 
   const calcularNota = (valores: number[]) => {

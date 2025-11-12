@@ -154,40 +154,40 @@ function FormEditProjeto({ projectId }: { projectId: string | undefined }) {
     });
   }; // ver se encaixa em functions
 
+  
+const handleBolsaChange = (tipo: string, quantidadeStr: string) => {
+  const bolsaInfo = bolsasList.find(b => b.tipo === tipo);
+  if (!bolsaInfo) return;
 
-  const handleBolsaChange = (tipo: string, quantidadeStr: string) => {
-    const bolsaInfo = bolsasList.find(b => b.tipo === tipo);
-    if (!bolsaInfo) return;
+  const valorUnitario = parseFloat(bolsaInfo.valor.replace(/[^\d,]/g, '').replace(',', '.'));
+  const quantidade = parseInt(quantidadeStr) || 0;
+  const valorTotalTipo = quantidade * valorUnitario;
 
+  setFormData(prev => {
+    let novaValorBolsa = [...prev.valorBolsa];
+    const tipoIndex = novaValorBolsa.findIndex(item => item.startsWith(tipo));
 
-    const valorUnitario = parseFloat(bolsaInfo.valor.replace(/[^\d,]/g, '').replace(',', '.'));
-    const quantidade = parseInt(quantidadeStr) || 0;
-    const valorTotalTipo = quantidade * valorUnitario;
+    if (tipoIndex >= 0) {
+      // Atualiza a bolsa existente
+      novaValorBolsa[tipoIndex] = `${tipo}: R$ ${valorTotalTipo.toFixed(2).replace('.', ',')} (Qtd: ${quantidade})`;
+    } else {
+      // Adiciona a bolsa se ainda não existir
+      novaValorBolsa.push(`${tipo}: R$ ${valorTotalTipo.toFixed(2).replace('.', ',')} (Qtd: ${quantidade})`);
+    }
 
+    const novaQuantidadeTotal = novaValorBolsa.reduce((acc, item) => {
+      const matchQtd = item.match(/Qtd: (\d+)/);
+      return acc + (matchQtd ? parseInt(matchQtd[1]) : 0);
+    }, 0);
 
-    setFormData(prev => {
-      const novaValorBolsa = prev.valorBolsa.map(item =>
-        item.startsWith(tipo)
-          ? `${tipo}: R$ ${valorTotalTipo.toFixed(2).replace('.', ',')} (Qtd: ${quantidade})`
-          : item
-      );
-
-
-      // Atualiza a quantidade total somando todas as quantidades registradas
-      const novaQuantidadeTotal = novaValorBolsa.reduce((acc, item) => {
-        const matchQtd = item.match(/Qtd: (\d+)/);
-        return acc + (matchQtd ? parseInt(matchQtd[1]) : 0);
-      }, 0);
-
-
-      return {
-        ...prev,
-        valorBolsa: novaValorBolsa,
-        valorTotalBolsas: calcularTotal(novaValorBolsa),
-        quantidade: novaQuantidadeTotal,
-      };
-    });
-  };
+    return {
+      ...prev,
+      valorBolsa: novaValorBolsa,
+      valorTotalBolsas: calcularTotal(novaValorBolsa),
+      quantidade: novaQuantidadeTotal,
+    };
+  });
+};
 
 
 
@@ -423,7 +423,7 @@ function FormEditProjeto({ projectId }: { projectId: string | undefined }) {
           <form onSubmit={handleSubmit}>
 
             {/* DADOS DE IDENTIFICAÇÃO */}
-            <div className="form-group">
+            <div className="form-row">
               <SelectInput
                 label="Selecione o Edital"
                 name="edital"
@@ -432,7 +432,7 @@ function FormEditProjeto({ projectId }: { projectId: string | undefined }) {
                 options={editaisList.map(edital => edital.nomeEdital)}
               />
             </div>
-            <div className="form-group">
+            <div className="form-row">
                 <InputText
                   label="Código do Projeto"
                   type="text"
@@ -442,7 +442,7 @@ function FormEditProjeto({ projectId }: { projectId: string | undefined }) {
                   placeholder="Código do Projeto"
                 />
             </div>
-            <div className="form-group">
+            <div className="form-row">
                 <InputText
                   label="Nome do Projeto"
                   type="text"
@@ -452,7 +452,7 @@ function FormEditProjeto({ projectId }: { projectId: string | undefined }) {
                   placeholder="Nome do Projeto"
                 />
             </div>
-            <div className="form-group">
+            <div className="form-row">
                 <InputText
                   label="Nome da Ação"
                   type="text"
@@ -726,7 +726,7 @@ function FormEditProjeto({ projectId }: { projectId: string | undefined }) {
                 </div>
 
 
-                <div className="form-group">
+                <div className="form-row">
                     <SelectInput
                       label='Linha de Extensão'
                       value={formData.linhaExtensao}

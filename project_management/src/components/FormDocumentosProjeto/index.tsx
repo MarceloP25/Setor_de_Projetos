@@ -6,14 +6,10 @@ import ActionButton from '../Button';
 import type { Projeto } from '../../interfaces/Projeto';
 import { db } from '../../services/config';
 import { doc, updateDoc } from 'firebase/firestore';
+import { useParams } from 'react-router-dom';
 
-function FormDocumentosProjeto({ projectId }: { projectId: string | undefined }) {
-
-  if (!projectId) {
-    return <div>ID do projeto não fornecido.</div>;
-  }
-  const [formData, setFormData] = useState<Projeto>({
-    id: projectId,
+const initialProjectState: Projeto = {
+    id: '',
     edital: '',
     nomeProjeto: '',
     nomeDaAcao: '',
@@ -36,26 +32,39 @@ function FormDocumentosProjeto({ projectId }: { projectId: string | undefined })
     espaco: '',
     valorSolicitado: 0,
     valorDisponibilizado: 0,
-    tipoBolsa: [],
-    valorBolsa: [],
+    tipoBolsa: [] as string[],
+    valorBolsa: [] as string[],
     quantidade: 0,
     valorTotalBolsas: 0,
     areaTematica: '',
     linhaExtensao: '',
     detalhesAcao: '',
-    statusEtapa1: '',
-    documentosAnexados: [],
+    documentosAnexados: [] as string[],
     classificacaoDetalhe: '',
-    notasAvaliadores: [0],
-    comentariosAvaliadores: [''],
+    statusEtapa1: '',
+    notasAvaliadores: [0] as number[],
+    comentariosAvaliadores: [''] as string[],
     notaEtapa2: 0,
-    alunosParticipantes: [],
-    relatorioProjeto: [],
+    alunosParticipantes: [] as string[],
+    relatorioProjeto: [] as object[],
     criadoEm: '',
     criadoPor: '',
     alteradoEm: '',
-    alteradoPor: '',
+    alteradoPor: ''
+};
+
+function FormDocumentosProjeto({ projectId }: { projectId: string | undefined }) {
+  const { projectId: id = projectId } = useParams<{ projectId: string }>();
+
+  if (!id) {
+    return <div>ID do projeto não fornecido.</div>;
+  }
+
+  const [formData, setFormData] = useState<Projeto>({
+    ...initialProjectState,
+    id: id,
   });
+
 
   const [documentos, setDocumentos] = useState([
     { text: 'Plano de trabalho do(s) bolsista(s)', valor: 'N/A' },
@@ -66,8 +75,17 @@ function FormDocumentosProjeto({ projectId }: { projectId: string | undefined })
     { text: 'Declaração ou e-mail do setor competente do respectivo campus indicando ciência e disponibilidade do recurso solicitado', valor: 'N/A' },
   ]);
 
-  const options = ['Sim', 'N/A', 'Não'];
-  const status = ['Classificado', 'Desclassificado'];
+  const options = [
+    { label: 'Sim', value: 'Sim' },
+    { label: 'N/A', value: 'N/A' },
+    { label: 'Não', value: 'Não' },
+  ];
+
+  const status = [
+    { label: 'Classificado', value: 'Classificado' },
+    { label: 'Desclassificado', value: 'Desclassificado' },
+  ];
+
 
   const handleDocsListUpdate = (index: number, valor: string | null) => {
     const novos = [...documentos];
@@ -124,8 +142,7 @@ function FormDocumentosProjeto({ projectId }: { projectId: string | undefined })
               label={doc.text}
               options={options}
               defaultValue={doc.valor}
-              onChange={val => handleDocsListUpdate(index, val)}
-            />
+              onChange={val => handleDocsListUpdate(index, val)} name={''} value={''}            />
           ))}
 
           <div className="checklist">
@@ -134,8 +151,7 @@ function FormDocumentosProjeto({ projectId }: { projectId: string | undefined })
               label={'Classificação do Projeto'}
               options={status}
               defaultValue={formData.statusEtapa1}
-              onChange={val => handleClassificacaoUpdate(val)}
-            />
+              onChange={val => handleClassificacaoUpdate(val)} name={''} value={''}            />
           </div>
 
           {formData.statusEtapa1 === 'Desclassificado' && (

@@ -168,26 +168,26 @@ function FormCadProjeto()  {
     const bolsaInfo = bolsasList.find(b => b.tipo === tipo);
     if (!bolsaInfo) return;
 
-
     const valorUnitario = parseFloat(bolsaInfo.valor.replace(/[^\d,]/g, '').replace(',', '.'));
     const quantidade = parseInt(quantidadeStr) || 0;
     const valorTotalTipo = quantidade * valorUnitario;
 
-
     setFormData(prev => {
-      const novaValorBolsa = prev.valorBolsa.map(item =>
-        item.startsWith(tipo)
-          ? `${tipo}: R$ ${valorTotalTipo.toFixed(2).replace('.', ',')} (Qtd: ${quantidade})`
-          : item
-      );
+      let novaValorBolsa = [...prev.valorBolsa];
+      const tipoIndex = novaValorBolsa.findIndex(item => item.startsWith(tipo));
 
+      if (tipoIndex >= 0) {
+        // Atualiza a bolsa existente
+        novaValorBolsa[tipoIndex] = `${tipo}: R$ ${valorTotalTipo.toFixed(2).replace('.', ',')} (Qtd: ${quantidade})`;
+      } else {
+        // Adiciona a bolsa se ainda não existir
+        novaValorBolsa.push(`${tipo}: R$ ${valorTotalTipo.toFixed(2).replace('.', ',')} (Qtd: ${quantidade})`);
+      }
 
-      // Atualiza a quantidade total somando todas as quantidades registradas
       const novaQuantidadeTotal = novaValorBolsa.reduce((acc, item) => {
         const matchQtd = item.match(/Qtd: (\d+)/);
         return acc + (matchQtd ? parseInt(matchQtd[1]) : 0);
       }, 0);
-
 
       return {
         ...prev,
@@ -197,6 +197,7 @@ function FormCadProjeto()  {
       };
     });
   };
+
 
 
 

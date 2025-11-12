@@ -10,7 +10,7 @@ const ProjectAvaliacoes: React.FC = () => {
     const { id } = useParams<{ id: string }>();
 
     return (
-        <div className='container'>
+        <div className='avaliacao-container'>
             <BackButton />
             <FormAvaliadores projectId={id} />
         </div>

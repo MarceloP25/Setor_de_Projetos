@@ -54,7 +54,7 @@ const EditalList: React.FC = () => {
     }, []);
 
     return (
-        <div className="container">
+        <div className="home-edital-list-container">
             <h2>Editais de Extensão</h2>
             <div className="buttons-container">
                 <Link to="/edital/cadastrar" className="btn primary">

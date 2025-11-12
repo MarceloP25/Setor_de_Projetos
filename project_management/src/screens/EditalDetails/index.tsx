@@ -10,7 +10,7 @@ const EditalDetails: React.FC = () => {
     const { id } = useParams<{ id: string }>();
 
     return (
-        <div className="container">
+        <div className="details-container">
             <BackButton />
             <DetalhesEdital editalId={id} />
         </div>

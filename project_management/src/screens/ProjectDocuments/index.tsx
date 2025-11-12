@@ -11,7 +11,7 @@ const ProjectDocuments: React.FC = () => {
     const { id } = useParams<{ id: string }>();
 
     return (
-        <div className='container'>
+        <div className='documentos-container'>
             <BackButton />
             <FormDocumentosProjeto projectId={id} />
         </div>

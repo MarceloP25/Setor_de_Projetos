@@ -11,7 +11,7 @@ const ProjectEdit: React.FC = () => {
     const { id } = useParams<{ id: string }>();
 
     return (
-        <div className='container'>
+        <div className='edit-container'>
             <BackButton />
             <FormEditProjeto projectId={id} />
         </div>

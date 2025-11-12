@@ -110,7 +110,7 @@ const ProjectList: React.FC = () => {
     }, []);
 
     return (
-        <div className="container">
+        <div className="home-project-list-container">
             <h2>Projetos de Extensão</h2>
             <div className="buttons-container">
                 <Link to="/projetos/cadastrar" className="btn primary">
