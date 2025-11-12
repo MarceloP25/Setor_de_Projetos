@@ -382,7 +382,7 @@ const handleBolsaChange = (tipo: string, quantidadeStr: string) => {
         dataFimRecurso:  doc.data().dataFimRecurso,
         dataInicioAvaliacao:  doc.data().dataInicioAvaliacao,
         dataFimAvaliacao:  doc.data().dataFimAvaliacao,
-        dataInicioEnvioRelatorio:  doc.data().dataFimEnvioRelatorio,
+        dataInicioEnvioRelatorio:  doc.data().dataInicioEnvioRelatorio,
         dataFimEnvioRelatorio: doc.data().dataFimEnvioRelatorio,
         dataPagamentoInicio:  doc.data().dataPagamentoInicio,
         dataPagamentoFim:  doc.data().dataPagamentoFim,

@@ -1,0 +1,81 @@
+.selecaoedital-background {
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: sans-serif;
+  min-height: 100vh;
+  padding: 2rem;
+  gap: 2rem;
+}
+
+.selecaoedital-titulo {
+  font-size: 3.5rem;
+  font-weight: bold;
+  text-align: center;
+  color: #222;
+}
+
+.selecaoedital-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 500px;
+  padding: 6rem;
+  gap: 1.5rem;
+  background-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+}
+
+.selecaoedital-texto {
+  font-size: 1.2rem;
+  text-align: center;
+  color: #000000;
+}
+
+.selecaoedital-lembrete {
+  font-size: 1rem;
+  text-align: center;
+  color: #000000;
+}
+
+@media (max-width: 768px) {
+  .selecaoedital-titulo {
+    font-size: 2.5rem;
+  }
+
+  .selecaoedital-container {
+    padding: 1.5rem;
+    gap: 1rem;
+  }
+
+  .selecaoedital-texto {
+    font-size: 1.3rem;
+  }
+
+  .selecaoedital-lembrete {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .selecaoedital-titulo {
+    font-size: 2rem;
+  }
+
+  .selecaoedital-container {
+    padding: 1rem;
+  }
+
+  .selecaoedital-texto {
+    font-size: 0.95rem;
+  }
+
+  .selecaoedital-lembrete {
+    font-size: 0.85rem;
+  }
+}

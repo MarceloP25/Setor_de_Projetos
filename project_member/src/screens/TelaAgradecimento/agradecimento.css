@@ -1,0 +1,87 @@
+.agradecimento-background {
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: sans-serif;
+  min-height: 100vh;
+  padding: 2rem;
+  gap: 2rem;
+}
+
+.agradecimento-titulo {
+  font-size: 4rem;
+  font-weight: bold;
+  text-align: center;
+  color: #000000;
+  font-family: var(--texto-titulo);
+}
+
+.agradecimento-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 600px;
+  padding: 4rem;
+  gap: 4rem;
+  background-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  border-radius: 16px;
+}
+
+.agradecimento-texto {
+  font-size: 1.75rem;
+  text-align: center;
+  color: #000000;
+  font-family: var(--texto-titulo);
+  font-weight: bold;
+}
+
+.agradecimento-lembrete {
+  font-size: 1.125rem;
+  text-align: center;
+  color: #000000;
+}
+
+/* 📱 Tablets */
+@media (max-width: 768px) {
+  .agradecimento-titulo {
+    font-size: 2.5rem;
+  }
+
+  .agradecimento-container {
+    padding: 2rem;
+    gap: 2rem;
+  }
+
+  .agradecimento-texto {
+    font-size: 1.25rem;
+  }
+
+  .agradecimento-lembrete {
+    font-size: 0.95rem;
+  }
+}
+
+/* 📱 Celulares */
+@media (max-width: 480px) {
+  .agradecimento-titulo {
+    font-size: 2rem;
+  }
+
+  .agradecimento-container {
+    padding: 1rem;
+    gap: 1.5rem;
+  }
+
+  .agradecimento-texto {
+    font-size: 1rem;
+  }
+
+  .agradecimento-lembrete {
+    font-size: 0.85rem;
+  }
+}
