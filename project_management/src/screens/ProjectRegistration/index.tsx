@@ -7,7 +7,7 @@ import BackButton from '../../components/Backbutton';
 const ProjectRegistration: React.FC = () => {
 
   return (
-    <div className='container'>
+    <div className='cad-container'>
       <BackButton/>
       <FormCadProjeto />
     </div>

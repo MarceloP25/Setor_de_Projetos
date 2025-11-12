@@ -409,7 +409,7 @@ function FormCadProjeto()  {
         <div className="form-container">
           <div className="form-title">Cadastro de Projeto</div>
           <form onSubmit={handleSubmit}>
-            <div className="form-group">
+            <div className="form-row">
               <SelectInput
                 label="Selecione o Edital"
                 name="edital"
@@ -418,7 +418,7 @@ function FormCadProjeto()  {
                 options={editaisList.map(edital => edital.nomeEdital)}
               />
             </div>
-            <div className="form-group">
+            <div className="form-row">
                 <InputText
                   label="Nome do Projeto"
                   type="text"
@@ -428,7 +428,7 @@ function FormCadProjeto()  {
                   placeholder="Nome do Projeto"
                 />
             </div>
-            <div className="form-group">
+            <div className="form-row">
                 <InputText
                   label="Nome da Ação"
                   type="text"
@@ -586,7 +586,7 @@ function FormCadProjeto()  {
                 </div>
 
 
-                <div className="form-group">
+                <div className="form-row">
                     <SelectInput
                       label='Linha de Extensão'
                       value={formData.linhaExtensao}
