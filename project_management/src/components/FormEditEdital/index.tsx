@@ -25,8 +25,10 @@ const initialEditalState: Edital = {
     dataFimRecurso: '',
     dataInicioAvaliacao: '',
     dataFimAvaliacao: '',
-    dataInicioEnvioRelatorio: '',
-    dataFimEnvioRelatorio: '',
+    dataInicioEnvioRelatorioMensal: '',
+    dataFimEnvioRelatorioMensal: '',
+    dataInicioEnvioRelatorioFinal: '',
+    dataFimEnvioRelatorioFinal: '',
     dataPagamentoInicio: '',
     dataPagamentoFim: '',
     linkAcessoEdital: '',
@@ -108,6 +110,12 @@ function FormEditEdital({ editalId }: { editalId: string | undefined }) {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!validateForm()) return;
+
+          // Verifica se o nome do edital contém "/"
+        if (formData.nomeEdital.includes('/')) {
+            alert('O nome do edital não pode conter "/" (barra). Use outro caractere, como "-".');
+            return;
+        }
 
         try {
             const editalIdToUse = formData.id || crypto.randomUUID();
@@ -300,28 +308,54 @@ function FormEditEdital({ editalId }: { editalId: string | undefined }) {
                         </div>
                     </div>
                 </div>
-                <div className="form-row">
+                    <div className="form-row">
                     <div className="form-col">
                         <div className="period-container">
-                            <InputText
-                                label="Período de Envio de Relatório"
-                                type="date"
-                                name="dataInicioEnvioRelatorio"
-                                value={formData.dataInicioEnvioRelatorio}
-                                onChange={handleChange}
-                                placeholder="Início"
-                            />
-                            <span className="period-separator"></span>
-                            <InputText
-                                type="date"
-                                name="dataFimEnvioRelatorio"
-                                value={formData.dataFimEnvioRelatorio}
-                                onChange={handleChange}
-                                placeholder="Fim"
-                            />
+                        
+                        <InputText
+                        label="Período de Envio de Relatório Mensal"
+                        type="text"
+                        name="dataInicioEnvioRelatorioMensal"
+                        value={formData.dataInicioEnvioRelatorioMensal}
+                        onChange={handleChange}
+                        placeholder="Início"
+                        />
+                        <span className="period-separator"></span>
+                        <InputText
+                        type="text"
+                        name="dataFimEnvioRelatorioMensal"
+                        value={formData.dataFimEnvioRelatorioMensal}
+                        onChange={handleChange}
+                        placeholder="Fim"
+                        />
                         </div>
                     </div>
-                </div>
+                    </div>
+
+                    <div className="form-row">
+                    <div className="form-col">
+                        <div className="period-container">
+                        
+                        <InputText
+                        label="Período de Envio de Relatório Final"
+                        type="text"
+                        name="dataInicioEnvioRelatorioFinal"
+                        value={formData.dataInicioEnvioRelatorioFinal}
+                        onChange={handleChange}
+                        placeholder="Início"
+                        />
+                        <span className="period-separator"></span>
+                        <InputText
+                        type="text"
+                        name="dataFimEnvioRelatorioFinal"
+                        value={formData.dataFimEnvioRelatorioFinal}
+                        onChange={handleChange}
+                        placeholder="Fim"
+                        />
+                        </div>
+                    </div>
+                    </div>
+
                 <div className="form-row">
                     <div className="form-col">
                         <div className="period-container">

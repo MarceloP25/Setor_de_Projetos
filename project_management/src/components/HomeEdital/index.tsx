@@ -18,7 +18,7 @@ const EditalList: React.FC = () => {
               const editaisRef = collection(db, "editais");
               const querySnapshot = await getDocs(editaisRef);
               const editais = querySnapshot.docs.map(doc => ({
-                id: doc.data().id,
+                id: doc.id,
                 nomeEdital: doc.data().nomeEdital,
                 orcamentoEdital: doc.data().orcamentoEdital,
                 valorDisponivel:  doc.data().valorDisponivel,
@@ -35,8 +35,10 @@ const EditalList: React.FC = () => {
                 dataFimRecurso:  doc.data().dataFimRecurso,
                 dataInicioAvaliacao:  doc.data().dataInicioAvaliacao,
                 dataFimAvaliacao:  doc.data().dataFimAvaliacao,
-                dataInicioEnvioRelatorio:  doc.data().dataFimEnvioRelatorio,
-                dataFimEnvioRelatorio: doc.data().dataFimEnvioRelatorio,
+                dataInicioEnvioRelatorioMensal:  doc.data().dataInicioEnvioRelatorioMensal,
+                dataFimEnvioRelatorioMensal:  doc.data().dataFimEnvioRelatorioMensal,
+                dataInicioEnvioRelatorioFinal:  doc.data().dataInicioEnvioRelatorioFinal,
+                dataFimEnvioRelatorioFinal:  doc.data().dataFimEnvioRelatorioFinal,
                 dataPagamentoInicio:  doc.data().dataPagamentoInicio,
                 dataPagamentoFim:  doc.data().dataPagamentoFim,
                 linkAcessoEdital: doc.data().linkAcessoEdital,

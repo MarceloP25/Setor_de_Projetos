@@ -33,8 +33,11 @@ function FormCadEdital()  {
     dataInicioAvaliacao: '',
     dataFimAvaliacao: '',
 
-    dataInicioEnvioRelatorio: '',
-    dataFimEnvioRelatorio: '',
+    dataInicioEnvioRelatorioMensal: '',
+    dataFimEnvioRelatorioMensal: '',
+
+    dataInicioEnvioRelatorioFinal: '',
+    dataFimEnvioRelatorioFinal: '',
 
     dataPagamentoInicio: '',
     dataPagamentoFim: '',
@@ -77,60 +80,69 @@ function FormCadEdital()  {
   };
 
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
 
-    if (!validateForm()) return;
+  if (!validateForm()) return;
 
-    try {
-      // Cria um novo ID se não existir (para novos cadastros)
-      const editalId = formData.id || crypto.randomUUID();
-      const editalRef = doc(collection(db, 'editais'), editalId);
-      const agora = new Date().toISOString();
+  // Verifica se o nome do edital contém "/"
+  if (formData.nomeEdital.includes('/')) {
+    alert('O nome do edital não pode conter "/" (barra). Use outro caractere, como "-".');
+    return;
+  }
 
-      await setDoc(editalRef, {
-        ...formData,
-        id: editalId,
-        criadoEm: formData.criadoEm || agora,
-        alteradoEm: agora,
-      });
+  try {
+    const editalId = formData.id || crypto.randomUUID();
+    const editalRef = doc(collection(db, 'editais'), editalId);
+    const agora = new Date().toISOString();
 
-      alert('Edital cadastrado com sucesso!');
+    await setDoc(editalRef, {
+      ...formData,
+      nomeEdital: formData.nomeEdital.trim(), // remove espaços extras
+      id: editalId,
+      criadoEm: formData.criadoEm || agora,
+      alteradoEm: agora,
+    });
 
-      
-      setFormData({
-        id: '',
-        nomeEdital: '',
-        orcamentoEdital: '',
-        valorDisponivel: '',
-        status: true,
-        projetosVinculados: [],
-        anoVigente: '',
-        dataInicio: '',
-        dataFim: '',
-        dataInicioSubmissao: '',
-        dataFimSubmissao: '',
-        dataInicioDocumentos: '',
-        dataFimDocumentos: '',
-        dataInicioRecurso: '',
-        dataFimRecurso: '',
-        dataInicioAvaliacao: '',
-        dataFimAvaliacao: '',
-        dataInicioEnvioRelatorio: '',
-        dataFimEnvioRelatorio: '',
-        dataPagamentoInicio: '',
-        dataPagamentoFim: '',
-        linkAcessoEdital: '',
-        criadoEm: '',
-        criadoPor: '',
-        alteradoEm: '',
-        alteradoPor: '',
-      });
-    } catch (error) {
-      console.error('Erro ao cadastrar edital:', error);
-      alert('Erro ao cadastrar o edital.');
-    }
-  };
+    alert('Edital cadastrado com sucesso!');
+
+    // Reset do formulário
+    setFormData({
+      id: '',
+      nomeEdital: '',
+      orcamentoEdital: '',
+      valorDisponivel: '',
+      status: true,
+      projetosVinculados: [],
+      anoVigente: '',
+      dataInicio: '',
+      dataFim: '',
+      dataInicioSubmissao: '',
+      dataFimSubmissao: '',
+      dataInicioDocumentos: '',
+      dataFimDocumentos: '',
+      dataInicioRecurso: '',
+      dataFimRecurso: '',
+      dataInicioAvaliacao: '',
+      dataFimAvaliacao: '',
+      dataInicioEnvioRelatorioMensal: '',
+      dataFimEnvioRelatorioMensal: '',
+      dataInicioEnvioRelatorioFinal: '',
+      dataFimEnvioRelatorioFinal: '',
+      dataPagamentoInicio: '',
+      dataPagamentoFim: '',
+      linkAcessoEdital: '',
+      criadoEm: '',
+      criadoPor: '',
+      alteradoEm: '',
+      alteradoPor: '',
+    });
+  } catch (error) {
+    console.error('Erro ao cadastrar edital:', error);
+    alert('Erro ao cadastrar o edital.');
+  }
+};
+
 
 
   return (
@@ -306,18 +318,42 @@ function FormCadEdital()  {
                 <div className="period-container">
                 
                 <InputText
-                  label="Período de Envio de Relatório"
-                  type="date"
-                  name="dataInicioEnvioRelatorio"
-                  value={formData.dataInicioEnvioRelatorio}
+                  label="Período de Envio de Relatório Mensal"
+                  type="text"
+                  name="dataInicioEnvioRelatorioMensal"
+                  value={formData.dataInicioEnvioRelatorioMensal}
                   onChange={handleChange}
                   placeholder="Início"
                 />
                 <span className="period-separator"></span>
                 <InputText
-                  type="date"
-                  name="dataFimEnvioRelatorio"
-                  value={formData.dataFimEnvioRelatorio}
+                  type="text"
+                  name="dataFimEnvioRelatorioMensal"
+                  value={formData.dataFimEnvioRelatorioMensal}
+                  onChange={handleChange}
+                  placeholder="Fim"
+                />
+                </div>
+              </div>
+            </div>
+
+            <div className="form-row">
+              <div className="form-col">
+                <div className="period-container">
+                
+                <InputText
+                  label="Período de Envio de Relatório Final"
+                  type="text"
+                  name="dataInicioEnvioRelatorioFinal"
+                  value={formData.dataInicioEnvioRelatorioFinal}
+                  onChange={handleChange}
+                  placeholder="Início"
+                />
+                <span className="period-separator"></span>
+                <InputText
+                  type="text"
+                  name="dataFimEnvioRelatorioFinal"
+                  value={formData.dataFimEnvioRelatorioFinal}
                   onChange={handleChange}
                   placeholder="Fim"
                 />

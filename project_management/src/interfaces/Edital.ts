@@ -24,8 +24,11 @@ export interface Edital {
     dataInicioAvaliacao: string;
     dataFimAvaliacao: string;
 
-    dataInicioEnvioRelatorio: string;
-    dataFimEnvioRelatorio: string;
+    dataInicioEnvioRelatorioMensal: string;
+    dataFimEnvioRelatorioMensal: string;
+
+    dataInicioEnvioRelatorioFinal: string;
+    dataFimEnvioRelatorioFinal: string;
 
     dataPagamentoInicio: string;
     dataPagamentoFim: string;

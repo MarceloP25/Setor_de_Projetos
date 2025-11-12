@@ -233,29 +233,15 @@ const handleBolsaChange = (tipo: string, quantidadeStr: string) => {
   const validateForm = (): boolean => {
     const requiredFields = [
       'edital',
-      'codigoProjeto',
       'nomeProjeto',
-      'nomeDaAcao',
       'ano',
       'periodoInicio',
       'periodoFim',
-      'abrangencia',
       'nomeCoordenador',
       'emailCoordenador',
-      'nomeCoCoordenador',
-      'emailCoCoordenador',
-      'publicoInternoDescricao',
-      'publicoInternoQuantidade',
-      'publicoExternoDescricao',
-      'publicoExternoQuantidade',
-      'estado',
-      'municipio',
-      'bairro',
-      'espaco',
       'valorSolicitado',
       'areaTematica',
-      'linhaExtensao',
-      'detalhesAcao'
+      'linhaExtensao'
     ];
 
     for (const field of requiredFields) {
@@ -382,8 +368,12 @@ const handleBolsaChange = (tipo: string, quantidadeStr: string) => {
         dataFimRecurso:  doc.data().dataFimRecurso,
         dataInicioAvaliacao:  doc.data().dataInicioAvaliacao,
         dataFimAvaliacao:  doc.data().dataFimAvaliacao,
-        dataInicioEnvioRelatorio:  doc.data().dataInicioEnvioRelatorio,
-        dataFimEnvioRelatorio: doc.data().dataFimEnvioRelatorio,
+
+        dataInicioEnvioRelatorioMensal:  doc.data().dataInicioEnvioRelatorioMensal,
+        dataFimEnvioRelatorioMensal:  doc.data().dataFimEnvioRelatorioMensal,
+        dataInicioEnvioRelatorioFinal:  doc.data().dataInicioEnvioRelatorioFinal,
+        dataFimEnvioRelatorioFinal:  doc.data().dataFimEnvioRelatorioFinal,
+
         dataPagamentoInicio:  doc.data().dataPagamentoInicio,
         dataPagamentoFim:  doc.data().dataPagamentoFim,
         linkAcessoEdital: doc.data().linkAcessoEdital,

@@ -67,14 +67,30 @@ function DetalhesEdital({ editalId }: { editalId: string | undefined }) {
                 <div className="infoBloco">
                     <div className="info"><h4>Nome do Edital</h4><p className='bold'>{edital.nomeEdital}</p></div>
                     <div className="info"><h4>Status</h4><p className='bold'>{edital.status ? 'Ativo' : 'Inativo'}</p></div>
-                    <div className="info"><h4>Link</h4><p className='bold'>{edital.linkAcessoEdital}</p></div>
+                    <div className="info">
+                        <h4>Link</h4>
+                        {edital.linkAcessoEdital ? (
+                            <a 
+                            href={edital.linkAcessoEdital.startsWith('http') 
+                                ? edital.linkAcessoEdital 
+                                : `https://${edital.linkAcessoEdital}`} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="bold link-edital"
+                            >
+                                {edital.linkAcessoEdital}
+                            </a>
+                        ) : (
+                            <p className="bold">Não informado</p>
+                        )}
+                    </div>
                     <div className="info"><h4>Ano Vigente</h4><p className='bold'>{edital.anoVigente}</p></div>
                 </div>
 
                 {/* Bloco 2 - Orçamento */}
                 <div className="infoBloco">
-                    <div className="info"><h4>Orçamento do Edital</h4><p className='bold'>{edital.orcamentoEdital}</p></div>
-                    <div className="info"><h4>Valor Disponível</h4><p className='bold'>{edital.valorDisponivel || 'N/A'}</p></div>
+                    <div className="info"><h4>Orçamento do Edital</h4><p className='bold'>{`R$${edital.orcamentoEdital}`}</p></div>
+                    <div className="info"><h4>Valor Disponível</h4><p className='bold'>{edital.valorDisponivel ? `R$${edital.valorDisponivel}` : 'N/A'}</p></div>
                 </div>
 
                 {/* Bloco 3 - Datas */}
@@ -99,8 +115,12 @@ function DetalhesEdital({ editalId }: { editalId: string | undefined }) {
                     <div className="info"><h4>Fim da Avaliação</h4><p className='bold'>{edital.dataFimAvaliacao}</p></div>
                 </div>
                 <div className="infoBloco">
-                    <div className="info"><h4>Início do Envio do Relatório</h4><p className='bold'>{edital.dataInicioEnvioRelatorio}</p></div>
-                    <div className="info"><h4>Fim do Envio do Relatório</h4><p className='bold'>{edital.dataFimEnvioRelatorio}</p></div>
+                    <div className="info"><h4>Início do Envio do Relatório Mensal</h4><p className='bold'>{edital.dataInicioEnvioRelatorioMensal}</p></div>
+                    <div className="info"><h4>Fim do Envio do Relatório Mensal</h4><p className='bold'>{edital.dataFimEnvioRelatorioMensal}</p></div>
+                </div>
+                <div className="infoBloco">
+                    <div className="info"><h4>Início do Envio do Relatório Final</h4><p className='bold'>{edital.dataInicioEnvioRelatorioFinal}</p></div>
+                    <div className="info"><h4>Fim do Envio do Relatório Final</h4><p className='bold'>{edital.dataFimEnvioRelatorioFinal}</p></div>
                 </div>
                 <div className="infoBloco">
                     <div className="info"><h4>Início do Pagamento</h4><p className='bold'>{edital.dataPagamentoInicio}</p></div>
