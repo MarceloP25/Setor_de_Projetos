@@ -1,8 +1,14 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { collection, getDocs, doc, updateDoc, arrayUnion } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  doc,
+  updateDoc,
+  arrayUnion,
+} from "firebase/firestore";
 import { db } from "../../firebase";
-
+import InputText from "../../componentes/InputText";
 import InputSelect from "../../componentes/InputSelect";
 import Botao from "../../componentes/Botao";
 import RadioInput from "../../componentes/RadioInput";
@@ -111,6 +117,64 @@ function TelaSelecionarProjeto() {
             setErro(false);
           }}
         />
+
+        {/* Renderização condicional dos valores de bolsa */}
+        {vinculo === "bolsista_medio" && (
+          <RadioInput
+            label="Selecione o valor da bolsa:"
+            options={[
+              { label: "R$ 350", value: "350" },
+              { label: "R$ 700", value: "700" },
+            ]}
+            selectedValue={valorBolsa}
+            onChange={(value) => setValorBolsa(value)}
+          />
+        )}
+
+        {vinculo === "bolsista_superior" && (
+          <RadioInput
+            label="Selecione o valor da bolsa:"
+            options={[
+              { label: "R$ 350", value: "350" },
+              { label: "R$ 700", value: "700" },
+            ]}
+            selectedValue={valorBolsa}
+            onChange={(value) => setValorBolsa(value)}
+          />
+        )}
+
+        {vinculo === "colaborador_externo" && (
+          <>
+            <RadioInput
+              label="Selecione o valor da bolsa:"
+              options={[
+                { label: "R$ 900", value: "900" },
+                { label: "Outro", value: "outro" },
+              ]}
+              selectedValue={valorBolsa || (valorOutro ? "outro" : "")}
+              onChange={(value) => {
+                if (value === "outro") {
+                  setValorBolsa(""); // limpa valorBolsa
+                } else {
+                  setValorBolsa(value);
+                  setValorOutro(""); // limpa campo de outro
+                }
+              }}
+            />
+
+            {/* Se o usuário escolher "Outro", renderiza o InputText */}
+            {valorBolsa === "" && (
+              <InputText
+                label="Digite o valor da bolsa:"
+                value={valorOutro}
+                onChange={(val) => setValorOutro(val)}
+                placeholder="Ex: 1200"
+                type="number"
+                id="valorOutro"
+              />
+            )}
+          </>
+        )}
 
         {erro && (
           <p style={{ color: "red", fontSize: "14px", textAlign: "center" }}>
