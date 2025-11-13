@@ -417,7 +417,10 @@ function FormCadProjeto()  {
                 name="edital"
                 value={formData.edital}
                 onChange={handleChange}
-                options={editaisList.map(edital => edital.nomeEdital)}
+                options={editaisList.map((edital) => ({
+                  label: edital.nomeEdital,
+                  value: edital.id
+                }))}
               />
             </div>
             <div className="form-row">
