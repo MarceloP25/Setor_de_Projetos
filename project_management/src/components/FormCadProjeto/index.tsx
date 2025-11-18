@@ -245,7 +245,6 @@ function FormCadProjeto()  {
     const requiredFields = [
       'edital',
       'nomeProjeto',
-      'nomeDaAcao',
       'ano',
       'periodoInicio',
       'periodoFim',

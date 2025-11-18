@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../services/config';
-import { doc, collection, getDoc, updateDoc, getDocs } from 'firebase/firestore';
+import { doc, collection, getDoc, updateDoc, getDocs, arrayUnion } from 'firebase/firestore';
 import { useParams } from 'react-router-dom';
 import InputText from '../InputText';
 import InputNumber from '../InputNumber';
@@ -274,6 +274,10 @@ const handleBolsaChange = (tipo: string, quantidadeStr: string) => {
           valorSolicitado: rawValorSolicitado,
           valorDisponibilizado: rawValorDisponibilizado,
           alteradoEm: new Date().toISOString()
+        });
+
+        await updateDoc(doc(db, "editais", formData.edital), {
+            projetosVinculados: arrayUnion(formData.nomeProjeto)
         });
 
         setShowModal(true);
