@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../services/config';
 import { doc, collection, getDoc, updateDoc, getDocs, arrayUnion } from 'firebase/firestore';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import InputText from '../InputText';
 import InputNumber from '../InputNumber';
 import SelectInput from '../SelectInput';
@@ -11,6 +11,7 @@ import type { Projeto } from '../../interfaces/Projeto';
 
 import './styles.css';
 import TextAreaInput from '../TextAreaInput';
+import { Modal } from '../Modal';
 
 const initialProjectState: Projeto = {
     id: '',
@@ -69,6 +70,7 @@ function FormEditProjeto({ projectId }: { projectId: string | undefined }) {
   const { projectId: id = projectId } = useParams<{ projectId: string }>();
   const [editaisList, setEditaisList] = useState<Edital[]>([]);
   const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
 
   if (!id) {
     return <div>Projeto não encontrado!</div>;
@@ -357,6 +359,7 @@ const handleBolsaChange = (tipo: string, quantidadeStr: string) => {
       const editais = querySnapshot.docs.map(doc => ({
         id: doc.id,
         nomeEdital: doc.data().nomeEdital,
+        numeroProcessoEdital: doc.data().numeroProcessoEdital,
         orcamentoEdital: doc.data().orcamentoEdital,
         valorDisponivel:  doc.data().valorDisponivel,
         status:  doc.data().status,
@@ -368,16 +371,18 @@ const handleBolsaChange = (tipo: string, quantidadeStr: string) => {
         dataFimSubmissao:  doc.data().dataFimSubmissao,
         dataInicioDocumentos:  doc.data().dataInicioDocumentos,
         dataFimDocumentos:  doc.data().dataFimDocumentos,
-        dataInicioRecurso:  doc.data().dataInicioRecurso,
-        dataFimRecurso:  doc.data().dataFimRecurso,
+        dataInicioRecursoSubmissao:  doc.data().dataInicioRecursoSubmissao,
+        dataFimRecursoSubmissao:  doc.data().dataFimRecursoSubmissao,
         dataInicioAvaliacao:  doc.data().dataInicioAvaliacao,
         dataFimAvaliacao:  doc.data().dataFimAvaliacao,
-
+        dataInicioRecursoAvaliacao:  doc.data().dataInicioRecursoAvaliacao,
+        dataFimRecursoAvaliacao:  doc.data().dataFimRecursoAvaliacao,
+        dataInicioRecursoSubimissao:  doc.data().dataInicioRecursoSubimissao,
+        dataFimRecursoSubimissao:  doc.data().dataFimRecursoSubimissao,
         dataInicioEnvioRelatorioMensal:  doc.data().dataInicioEnvioRelatorioMensal,
         dataFimEnvioRelatorioMensal:  doc.data().dataFimEnvioRelatorioMensal,
         dataInicioEnvioRelatorioFinal:  doc.data().dataInicioEnvioRelatorioFinal,
         dataFimEnvioRelatorioFinal:  doc.data().dataFimEnvioRelatorioFinal,
-
         dataPagamentoInicio:  doc.data().dataPagamentoInicio,
         dataPagamentoFim:  doc.data().dataPagamentoFim,
         linkAcessoEdital: doc.data().linkAcessoEdital,
@@ -418,8 +423,9 @@ const handleBolsaChange = (tipo: string, quantidadeStr: string) => {
 
             {/* DADOS DE IDENTIFICAÇÃO */}
             <div className="form-row">
+              <div className="form-col">
+              <h3>Selecione o Edital</h3>
               <SelectInput
-                label="Selecione o Edital"
                 name="edital"
                 value={formData.edital}
                 onChange={handleChange}
@@ -428,43 +434,57 @@ const handleBolsaChange = (tipo: string, quantidadeStr: string) => {
                   value: edital.id
                 }))}
               />
+              </div>
             </div>
+
             <div className="form-row">
-                <InputText
-                  label="Código do Projeto"
+              <div className="form-col">
+                <h3>Código do Projeto</h3>
+                <InputText  
+                  label="Código do Projeto (opcional neste momento)"
                   type="text"
                   name="codigoProjeto"
                   value={formData.codigoProjeto}
                   onChange={handleChange}
                   placeholder="Código do Projeto"
                 />
+              </div>
             </div>
+
             <div className="form-row">
+              <div className="form-col">
+                <h3>Nome do Projeto</h3>
                 <InputText
-                  label="Nome do Projeto"
+                  label="Nome simplificado do projeto"
                   type="text"
                   name="nomeProjeto"
                   value={formData.nomeProjeto}
                   onChange={handleChange}
                   placeholder="Nome do Projeto"
                 />
+                </div>
             </div>
+
             <div className="form-row">
+              <div className="form-col">
+                <h3>Nome da Ação</h3>
                 <InputText
-                  label="Nome da Ação"
+                  label="Nome do projeto presente no SIGAA"
                   type="text"
                   name="nomeDaAcao"
                   value={formData.nomeDaAcao}
                   onChange={handleChange}
                   placeholder="Nome da Ação"
                 />
+                </div>
             </div>
-            
+
             {/*DATAS E PERIODO DE DURACAO */}
             <div className="form-row">
               <div className="form-col">
+                <h3>Vigência do Projeto</h3>
                 <InputNumber
-                  label="Ano de Vigência"
+                  label="Ano de realização do projeto, geralmente a mesma do edital"
                   type="text"
                   name="ano"
                   value={formData.ano}
@@ -473,11 +493,13 @@ const handleBolsaChange = (tipo: string, quantidadeStr: string) => {
                 />
               </div>
             </div>
+
             <div className="form-row">
               <div className="form-col">
                 <div className="period-container">
+                <h3>Período de realização do projeto</h3>
                 <InputText
-                  label="Período de realização"
+                  label="Início do projeto"
                   type="date"
                   name="periodoInicio"
                   value={formData.periodoInicio}
@@ -486,6 +508,7 @@ const handleBolsaChange = (tipo: string, quantidadeStr: string) => {
                 />
                 <span className="period-separator"></span>
                 <InputText
+                  label="Fim do projeto"
                   type="date"
                   name="periodoFim"
                   value={formData.periodoFim}
@@ -499,8 +522,8 @@ const handleBolsaChange = (tipo: string, quantidadeStr: string) => {
             {/*COORDENADOR E COORDENADOR ADJUNTO */}
             <div className="form-row">
               <div className="form-col">
+                <h3>Dados do Coordenador</h3>
                 <InputText
-                  label="Nome do Coordenador"
                   type="text"
                   name="nomeCoordenador"
                   value={formData.nomeCoordenador}
@@ -508,7 +531,6 @@ const handleBolsaChange = (tipo: string, quantidadeStr: string) => {
                   placeholder="Nome do Coordenador"
                 />
                 <InputText
-                  label="Email do Coordenador"
                   type="text"
                   name="emailCoordenador"
                   value={formData.emailCoordenador}
@@ -517,10 +539,11 @@ const handleBolsaChange = (tipo: string, quantidadeStr: string) => {
                 />
               </div>
             </div>
+
             <div className="form-row">
               <div className="form-col">
+                <h3>Dados do CoCoordenador</h3>
                 <InputText
-                  label="Nome do CoCoordenador"
                   type="text"
                   name="nomeCoCoordenador"
                   value={formData.nomeCoCoordenador}
@@ -528,7 +551,6 @@ const handleBolsaChange = (tipo: string, quantidadeStr: string) => {
                   placeholder="Nome do CoCoordenador"
                 />
                 <InputText
-                  label="Email do CoCoordenador"
                   type="text"
                   name="emailCoCoordenador"
                   value={formData.emailCoCoordenador}
@@ -538,11 +560,13 @@ const handleBolsaChange = (tipo: string, quantidadeStr: string) => {
               </div>
             </div>
 
+
             {/*REALIZACAO*/}
             <div className="form-row">
               <div className="form-col">
+                <h3>Abrangência do Projeto</h3>
                 <InputText
-                  label="Abrangência"
+                  label="Estimativa de quantas pessoas serão afetadas pelo projeto"
                   type="text"
                   name="abrangencia"
                   value={formData.abrangencia}
@@ -551,10 +575,12 @@ const handleBolsaChange = (tipo: string, quantidadeStr: string) => {
                 />
               </div>
             </div>
+
             <div className="form-row">
               <div className="form-col">
+                <h3>Local de Realização do Projeto</h3>
                 <InputText
-                  label="Espaço de Realização"
+
                   type="text"
                   name="espaco"
                   value={formData.espaco || ''}
@@ -562,19 +588,13 @@ const handleBolsaChange = (tipo: string, quantidadeStr: string) => {
                   placeholder="Espaço de Realização"
                 />
                 <InputText
-                  label="Bairro"
                   type="text"
                   name="bairro"
                   value={formData.bairro || ''}
                   onChange={handleChange}
                   placeholder="Bairro"
                 />
-              </div>
-            </div>
-            <div className="form-row">
-              <div className="form-col">
                 <InputText
-                  label="Cidade/Município"
                   type="text"
                   name="municipio"
                   value={formData.municipio || ''}
@@ -582,7 +602,6 @@ const handleBolsaChange = (tipo: string, quantidadeStr: string) => {
                   placeholder="Cidade/Município"
                 />
                 <InputText
-                  label="Estado"
                   type="text"
                   name="estado"
                   value={formData.estado || ''}
@@ -591,43 +610,44 @@ const handleBolsaChange = (tipo: string, quantidadeStr: string) => {
                 />
               </div>
             </div>
+
             <div className="form-row">
               <div className="form-col">
+                <h3>Público interno atingido pelo Projeto</h3>
                 <InputText
-                  label="Público Interno - Descrição"
+                  label="Descrição"
                   type="text"
                   name="publicoInternoDescricao"
                   value={formData.publicoInternoDescricao || ''}
                   onChange={handleChange}
-                  placeholder="Público Interno - Descrição"
+                  placeholder="Descrição"
                 />
                 <InputNumber
-                  label="Público Interno - Quantidade"
+                  label="Quantidade"
                   type="number"
                   name="publicoInternoQuantidade"
                   value={formData.publicoInternoQuantidade || 0}
                   onChange={handleChange}
-                  placeholder="Público Interno - Quantidade"
                 />
               </div>
             </div>
             <div className="form-row">
               <div className="form-col">
+                <h3>Público externo atingido pelo Projeto</h3>
                 <InputText
-                  label="Público Externo - Descrição"
+                  label="Descrição"
                   type="text"
                   name="publicoExternoDescricao"
                   value={formData.publicoExternoDescricao || ''}
                   onChange={handleChange}
-                  placeholder="Público Externo - Descrição"
+                  placeholder="Descrição"
                 />
                 <InputNumber
-                  label="Público Externo - Quantidade"
+                  label="Quantidade"
                   type="number"
                   name="publicoExternoQuantidade"
                   value={formData.publicoExternoQuantidade || 0}
                   onChange={handleChange}
-                  placeholder="Público Externo - Quantidade"
                 />
               </div>
             </div>
@@ -636,8 +656,8 @@ const handleBolsaChange = (tipo: string, quantidadeStr: string) => {
             {/*DETALHAMENTO*/}
             <div className="form-row">
               <div className="form-col">
+                <h3>Detalhes da Ação</h3>
                 <TextAreaInput
-                  label="Detalhes da Ação"
                   name="detalhesAcao"
                   value={formData.detalhesAcao || ''}
                   onChange={handleChange}
@@ -649,16 +669,15 @@ const handleBolsaChange = (tipo: string, quantidadeStr: string) => {
             {/*FINANCIAMENTO E BOLSAS */}
             <div className="form-row">
               <div className="form-col">
+                <h3>Valor para Financiamento do Projeto</h3>
                 <InputNumber
-                  label='Valor para Financiamento do Projeto'
-                  type="text"
+                  type="number"
                   name="valorSolicitado"
                   value={formData.valorSolicitado}
                   onChange={handleChange}
                 />
               </div>
             </div>
-
 
              <div className="form-row">
               <div className="form-col">
@@ -667,11 +686,6 @@ const handleBolsaChange = (tipo: string, quantidadeStr: string) => {
                 <div className="checkbox-group">
                   {bolsasList.map((bolsa) => {
                     const isSelected = formData.tipoBolsa.includes(bolsa.tipo);
-                    //const valorRegistrado = formData.valorBolsa.find(item => item.startsWith(bolsa.tipo));
-
-                    
-                    //const quantidade = valorRegistrado ? parseInt(valorRegistrado.match(/\d+/)?.[0] || '0') : 0; // ver se sera usado
-
 
                     return (
                       <div key={bolsa.tipo} className="flex items-center space-x-2 mb-2">
@@ -712,27 +726,31 @@ const handleBolsaChange = (tipo: string, quantidadeStr: string) => {
                 
 
 
-                <div className="form-section">
-                    <SelectInput
-                      label='Área Temática'
-                      value={formData.areaTematica}
-                      name='areaTematica'
-                      onChange={handleChange}
-                      options={areaTematicaList}
-                    />
-                </div>
-
-
-                <div className="form-row">
-                    <SelectInput
-                      label='Linha de Extensão'
-                      value={formData.linhaExtensao}
-                      name='linhaExtensao'
-                      onChange={handleChange}
-                      options={linhaExtensaoList}
-                    />
+              <div className="form-row">
+                <div className="form-col">
+                  <h3>Área Temática</h3>
+                      <SelectInput
+                        value={formData.areaTematica}
+                        name='areaTematica'
+                        onChange={handleChange}
+                        options={areaTematicaList}
+                      />
                 </div>
               </div>
+
+              <div className="form-row">
+                  <div className="form-col">
+                    <h3>Linha de Extensão</h3>
+                      <SelectInput
+                        value={formData.linhaExtensao}
+                        name='linhaExtensao'
+                        onChange={handleChange}
+                        options={linhaExtensaoList}
+                      />
+                  </div>
+                </div>
+              </div>
+
             </div>
             <div className="form-note">
               Antes de finalizar a operação, revise todo o documento.
@@ -741,15 +759,13 @@ const handleBolsaChange = (tipo: string, quantidadeStr: string) => {
           </form>
 
           {/* Modal de sucesso */}
-            {showModal && (
-              <div className="modal-overlay" onClick={() => setShowModal(false)}>
-                <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                  <h2>🎉 Projeto atualizado com sucesso!</h2>
-                  <p>Os dados foram salvos no banco de dados.</p>
-                  <button className="modal-button" onClick={() => setShowModal(false)}>Fechar</button>
-                </div>
-              </div>
-            )}
+          <Modal
+              isOpen={showModal}
+              title="🎉 Projeto editado com sucesso!"
+              message="Os dados foram salvos no banco de dados."
+              onClose={() => setShowModal(false)}
+              onAfterClose={() => navigate("/projetos")}
+            />
         </div>
   );
 };

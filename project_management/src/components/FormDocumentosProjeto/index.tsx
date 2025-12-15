@@ -6,7 +6,8 @@ import ActionButton from '../Button';
 import type { Projeto } from '../../interfaces/Projeto';
 import { db } from '../../services/config';
 import { doc, updateDoc } from 'firebase/firestore';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Modal } from '../Modal';
 
 const initialProjectState: Projeto = {
     id: '',
@@ -55,6 +56,8 @@ const initialProjectState: Projeto = {
 
 function FormDocumentosProjeto({ projectId }: { projectId: string | undefined }) {
   const { projectId: id = projectId } = useParams<{ projectId: string }>();
+  const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
 
   if (!id) {
     return <div>ID do projeto não fornecido.</div>;
@@ -124,7 +127,7 @@ function FormDocumentosProjeto({ projectId }: { projectId: string | undefined })
         classificacaoDetalhe: formData.classificacaoDetalhe,
         alteradoEm: new Date().toISOString(),
       });
-      alert('Checklist salvo com sucesso!');
+      setShowModal(true);
     } catch (error) {
       console.error('Erro ao salvar checklist:', error);
       alert('Erro ao salvar checklist.');
@@ -178,6 +181,15 @@ function FormDocumentosProjeto({ projectId }: { projectId: string | undefined })
             <ActionButton text="CONFIRMAR" variant='medium' onClick={handleSubmit} />
         </div>
       </div>
+
+      {/* Modal de sucesso */}
+      <Modal
+          isOpen={showModal}
+          title="🎉 Classificação da etapa 1 realizada com sucesso!"
+          message="Os dados foram salvos no banco de dados."
+          onClose={() => setShowModal(false)}
+          onAfterClose={() => navigate("/projetos")}
+        />
     </div>
   );
 }

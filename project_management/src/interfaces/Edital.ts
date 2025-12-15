@@ -1,6 +1,7 @@
 export interface Edital {
     id: string;
     nomeEdital: string;
+    numeroProcessoEdital: string;
 
     orcamentoEdital: string;
     valorDisponivel?: string;
@@ -18,11 +19,14 @@ export interface Edital {
     dataInicioDocumentos: string;
     dataFimDocumentos: string;
 
-    dataInicioRecurso: string;
-    dataFimRecurso: string;
+    dataInicioRecursoSubimissao: string;
+    dataFimRecursoSubimissao: string;
 
     dataInicioAvaliacao: string;
     dataFimAvaliacao: string;
+
+    dataInicioRecursoAvaliacao: string;
+    dataFimRecursoAvaliacao: string;
 
     dataInicioEnvioRelatorioMensal: string;
     dataFimEnvioRelatorioMensal: string;

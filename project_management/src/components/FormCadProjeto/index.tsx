@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { db } from '../../services/config'; 
 import { doc, setDoc, collection, getDocs, updateDoc, arrayUnion } from 'firebase/firestore';
 import InputText from '../InputText';
@@ -9,6 +10,7 @@ import type { Projeto } from '../../interfaces/Projeto';
 
 
 import './styles.css';
+import { Modal } from '../Modal';
 
 
 const sanitizeName = (name: string): string => {
@@ -20,6 +22,7 @@ const sanitizeName = (name: string): string => {
 
 
 function FormCadProjeto()  {
+  const navigate = useNavigate();
   const [editaisList, setEditaisList] = useState<Edital[]>([]);
   const [showModal, setShowModal] = useState(false);
 
@@ -368,6 +371,7 @@ function FormCadProjeto()  {
       const editais = querySnapshot.docs.map(doc => ({
         id: doc.id,
         nomeEdital: doc.data().nomeEdital,
+        numeroProcessoEdital: doc.data().numeroProcessoEdital,
         orcamentoEdital: doc.data().orcamentoEdital,
         valorDisponivel:  doc.data().valorDisponivel,
         status:  doc.data().status,
@@ -379,10 +383,14 @@ function FormCadProjeto()  {
         dataFimSubmissao:  doc.data().dataFimSubmissao,
         dataInicioDocumentos:  doc.data().dataInicioDocumentos,
         dataFimDocumentos:  doc.data().dataFimDocumentos,
-        dataInicioRecurso:  doc.data().dataInicioRecurso,
-        dataFimRecurso:  doc.data().dataFimRecurso,
+        dataInicioRecursoSubmissao:  doc.data().dataInicioRecursoSubmissao,
+        dataFimRecursoSubmissao:  doc.data().dataFimRecursoSubmissao,
         dataInicioAvaliacao:  doc.data().dataInicioAvaliacao,
         dataFimAvaliacao:  doc.data().dataFimAvaliacao,
+        dataInicioRecursoAvaliacao:  doc.data().dataInicioRecursoAvaliacao,
+        dataFimRecursoAvaliacao:  doc.data().dataFimRecursoAvaliacao,
+        dataInicioRecursoSubimissao:  doc.data().dataInicioRecursoSubimissao,
+        dataFimRecursoSubimissao:  doc.data().dataFimRecursoSubimissao,
         dataInicioEnvioRelatorioMensal:  doc.data().dataInicioEnvioRelatorioMensal,
         dataFimEnvioRelatorioMensal:  doc.data().dataFimEnvioRelatorioMensal,
         dataInicioEnvioRelatorioFinal:  doc.data().dataInicioEnvioRelatorioFinal,
@@ -410,9 +418,11 @@ function FormCadProjeto()  {
         <div className="form-container">
           <div className="form-title">Cadastro de Projeto</div>
           <form onSubmit={handleSubmit}>
+
             <div className="form-row">
+              <div className="form-col">
+              <h3>Selecione o Edital</h3>
               <SelectInput
-                label="Selecione o Edital"
                 name="edital"
                 value={formData.edital}
                 onChange={handleChange}
@@ -421,31 +431,56 @@ function FormCadProjeto()  {
                   value: edital.id
                 }))}
               />
+              </div>
             </div>
+
             <div className="form-row">
+              <div className="form-col">
+                <h3>Código do Projeto</h3>
+                <InputText  
+                  label="Código do Projeto (opcional neste momento)"
+                  type="text"
+                  name="codigoProjeto"
+                  value={formData.codigoProjeto}
+                  onChange={handleChange}
+                  placeholder="Código do Projeto"
+                />
+              </div>
+            </div>
+
+            <div className="form-row">
+              <div className="form-col">
+                <h3>Nome do Projeto</h3>
                 <InputText
-                  label="Nome do Projeto"
+                  label="Nome simplificado do projeto"
                   type="text"
                   name="nomeProjeto"
                   value={formData.nomeProjeto}
                   onChange={handleChange}
                   placeholder="Nome do Projeto"
                 />
+                </div>
             </div>
+
             <div className="form-row">
+              <div className="form-col">
+                <h3>Nome da Ação</h3>
                 <InputText
-                  label="Nome da Ação"
+                  label="Nome do projeto presente no SIGAA"
                   type="text"
                   name="nomeDaAcao"
                   value={formData.nomeDaAcao}
                   onChange={handleChange}
                   placeholder="Nome da Ação"
                 />
+                </div>
             </div>
+
             <div className="form-row">
               <div className="form-col">
+                <h3>Vigência do Projeto</h3>
                 <InputNumber
-                  label="Ano de Vigência"
+                  label="Ano de realização do projeto, geralmente a mesma do edital"
                   type="text"
                   name="ano"
                   value={formData.ano}
@@ -454,12 +489,13 @@ function FormCadProjeto()  {
                 />
               </div>
             </div>
+
             <div className="form-row">
               <div className="form-col">
                 <div className="period-container">
-                
+                <h3>Período de realização do projeto</h3>
                 <InputText
-                  label="Período de realização"
+                  label="Início do projeto"
                   type="date"
                   name="periodoInicio"
                   value={formData.periodoInicio}
@@ -468,6 +504,7 @@ function FormCadProjeto()  {
                 />
                 <span className="period-separator"></span>
                 <InputText
+                  label="Fim do projeto"
                   type="date"
                   name="periodoFim"
                   value={formData.periodoFim}
@@ -479,8 +516,8 @@ function FormCadProjeto()  {
             </div>
             <div className="form-row">
               <div className="form-col">
+                <h3>Dados do Coordenador</h3>
                 <InputText
-                  label="Nome do Coordenador"
                   type="text"
                   name="nomeCoordenador"
                   value={formData.nomeCoordenador}
@@ -488,7 +525,6 @@ function FormCadProjeto()  {
                   placeholder="Nome do Coordenador"
                 />
                 <InputText
-                  label="Email do Coordenador"
                   type="text"
                   name="emailCoordenador"
                   value={formData.emailCoordenador}
@@ -497,10 +533,11 @@ function FormCadProjeto()  {
                 />
               </div>
             </div>
+
             <div className="form-row">
               <div className="form-col">
+                <h3>Dados do CoCoordenador</h3>
                 <InputText
-                  label="Nome do CoCoordenador"
                   type="text"
                   name="nomeCoCoordenador"
                   value={formData.nomeCoCoordenador}
@@ -508,7 +545,6 @@ function FormCadProjeto()  {
                   placeholder="Nome do CoCoordenador"
                 />
                 <InputText
-                  label="Email do CoCoordenador"
                   type="text"
                   name="emailCoCoordenador"
                   value={formData.emailCoCoordenador}
@@ -517,10 +553,11 @@ function FormCadProjeto()  {
                 />
               </div>
             </div>
+
             <div className="form-row">
               <div className="form-col">
+                <h3>Valor para Financiamento do Projeto</h3>
                 <InputNumber
-                  label='Valor para Financiamento do Projeto'
                   type="number"
                   name="valorSolicitado"
                   value={formData.valorSolicitado}
@@ -529,7 +566,6 @@ function FormCadProjeto()  {
               </div>
             </div>
 
-
              <div className="form-row">
               <div className="form-col">
                 
@@ -537,8 +573,6 @@ function FormCadProjeto()  {
                 <div className="checkbox-group">
                   {bolsasList.map((bolsa) => {
                     const isSelected = formData.tipoBolsa.includes(bolsa.tipo);
-                    //const valorRegistrado = formData.valorBolsa.find(item => item.startsWith(bolsa.tipo));
-                    //const quantidade = valorRegistrado ? parseInt(valorRegistrado.match(/\d+/)?.[0] || '0') : 0; // ver se sera usado
 
                     return (
                       <div key={bolsa.tipo} className="flex items-center space-x-2 mb-2">
@@ -577,29 +611,31 @@ function FormCadProjeto()  {
                   </div>
                 </div>
                 
-
-
-                <div className="form-section">
-                    <SelectInput
-                      label='Área Temática'
-                      value={formData.areaTematica}
-                      name='areaTematica'
-                      onChange={handleChange}
-                      options={areaTematicaList}
-                    />
-                </div>
-
-
-                <div className="form-row">
-                    <SelectInput
-                      label='Linha de Extensão'
-                      value={formData.linhaExtensao}
-                      name='linhaExtensao'
-                      onChange={handleChange}
-                      options={linhaExtensaoList}
-                    />
+              <div className="form-row">
+                <div className="form-col">
+                  <h3>Área Temática</h3>
+                      <SelectInput
+                        value={formData.areaTematica}
+                        name='areaTematica'
+                        onChange={handleChange}
+                        options={areaTematicaList}
+                      />
                 </div>
               </div>
+
+              <div className="form-row">
+                  <div className="form-col">
+                    <h3>Linha de Extensão</h3>
+                      <SelectInput
+                        value={formData.linhaExtensao}
+                        name='linhaExtensao'
+                        onChange={handleChange}
+                        options={linhaExtensaoList}
+                      />
+                  </div>
+                </div>
+              </div>
+              
             </div>
             <div className="form-note">
               Antes de finalizar a operação, revise todo o documento.
@@ -608,15 +644,13 @@ function FormCadProjeto()  {
           </form>
 
           {/* Modal de sucesso */}
-            {showModal && (
-              <div className="modal-overlay" onClick={() => setShowModal(false)}>
-                <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                  <h2>🎉 Projeto cadastrado com sucesso!</h2>
-                  <p>Os dados foram salvos no banco de dados.</p>
-                  <button className="modal-button" onClick={() => setShowModal(false)}>Fechar</button>
-                </div>
-              </div>
-            )}
+          <Modal
+              isOpen={showModal}
+              title="🎉 Projeto cadastrado com sucesso!"
+              message="Os dados foram salvos no banco de dados."
+              onClose={() => setShowModal(false)}
+              onAfterClose={() => navigate("/projetos")}
+            />
         </div>
   );
 };

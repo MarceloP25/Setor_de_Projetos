@@ -5,11 +5,16 @@ import InputText from '../InputText';
 import type { Edital } from '../../interfaces/Edital';
 
 import './styles.css';
+import { Modal } from '../Modal';
+import { useNavigate } from 'react-router-dom';
 
 function FormCadEdital()  {
+  const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<Edital>({
     id: '',
     nomeEdital: '',
+    numeroProcessoEdital: '',
 
     orcamentoEdital: '',
     valorDisponivel: '',
@@ -27,11 +32,14 @@ function FormCadEdital()  {
     dataInicioDocumentos: '',
     dataFimDocumentos: '',
 
-    dataInicioRecurso: '',
-    dataFimRecurso: '',
+    dataInicioRecursoSubimissao: '',
+    dataFimRecursoSubimissao: '',
 
     dataInicioAvaliacao: '',
     dataFimAvaliacao: '',
+
+    dataInicioRecursoAvaliacao: '',
+    dataFimRecursoAvaliacao: '',
 
     dataInicioEnvioRelatorioMensal: '',
     dataFimEnvioRelatorioMensal: '',
@@ -63,6 +71,7 @@ function FormCadEdital()  {
   const validateForm = (): boolean => {
     const obrigatorios = [
       'nomeEdital',
+      'numeroProcessoEdital',
       'orcamentoEdital',
       'anoVigente',
       'dataInicio',
@@ -104,12 +113,13 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       alteradoEm: agora,
     });
 
-    alert('Edital cadastrado com sucesso!');
+    setShowModal(true);
 
     // Reset do formulário
     setFormData({
       id: '',
       nomeEdital: '',
+      numeroProcessoEdital: '',
       orcamentoEdital: '',
       valorDisponivel: '',
       status: true,
@@ -121,10 +131,12 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       dataFimSubmissao: '',
       dataInicioDocumentos: '',
       dataFimDocumentos: '',
-      dataInicioRecurso: '',
-      dataFimRecurso: '',
+      dataInicioRecursoSubimissao: '',
+      dataFimRecursoSubimissao: '',
       dataInicioAvaliacao: '',
       dataFimAvaliacao: '',
+      dataInicioRecursoAvaliacao: '',
+      dataFimRecursoAvaliacao: '',
       dataInicioEnvioRelatorioMensal: '',
       dataFimEnvioRelatorioMensal: '',
       dataInicioEnvioRelatorioFinal: '',
@@ -151,39 +163,59 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
           <form onSubmit={handleSubmit}>
 
             <div className="form-row">
+              <div className="form-col">
+                <h3>Nome do Edital</h3>
                 <InputText
-                  label="Nome do Edital"
                   type="text"
                   name="nomeEdital"
                   value={formData.nomeEdital}
                   onChange={handleChange}
                   placeholder="Nome do Edital"
                 />
+              </div>
             </div>
             <div className="form-row">
+              <div className="form-col">
+                <h3>Número do Processo do Edital</h3>
                 <InputText
-                  label="Orçamento do Edital"
+                  type="text"
+                  name="numeroProcessoEdital"
+                  value={formData.numeroProcessoEdital}
+                  onChange={handleChange}
+                  placeholder="Número do Processo do Edital"
+                />
+              </div>
+            </div>
+            <div className="form-row">
+              <div className="form-col">
+                <h3>Orçamento do Edital</h3>
+                <InputText
+                  label='Orçamento presente no edital no momento de sua divulgação'
                   type="text"
                   name="orcamentoEdital"
                   value={formData.orcamentoEdital}
                   onChange={handleChange}
-                  placeholder="Orçamento do Edital"
+                  placeholder="R$"
                 />
+              </div>
             </div>
             <div className="form-row">
+              <div className="form-col">
+                <h3>Orçamento Disponibilizado</h3>
                 <InputText
-                  label="Orçamento Disponibilizado"
+                  label="Orçamento fornecido a partir do repasse para a instituição"
                   type="text"
                   name="valorDisponivel"
                   value={formData.valorDisponivel || ''}
                   onChange={handleChange}
-                  placeholder="Orçamento Disponibilizado"
+                  placeholder="R$"
                 />
+              </div>
             </div>
             <div className="form-row">
               <div className="form-col">
+                <h3>Ano Vigente do Edital</h3>
                 <InputText
-                  label="Ano de Vigência"
                   type="text"
                   name="anoVigente"
                   value={formData.anoVigente}
@@ -196,9 +228,10 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
             <div className="form-row">
               <div className="form-col">
                 <div className="period-container">
-                
+                <h3>Período de Vigência do Edital</h3>
+
                 <InputText
-                  label="Período de Vigência"
+                  label="Início da Vigência"
                   type="date"
                   name="dataInicio"
                   value={formData.dataInicio}
@@ -207,6 +240,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
                 />
                 <span className="period-separator"></span>
                 <InputText
+                  label="Fim da Vigência"
                   type="date"
                   name="dataFim"
                   value={formData.dataFim}
@@ -220,9 +254,9 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
             <div className="form-row">
               <div className="form-col">
                 <div className="period-container">
-                
+                <h3>Período de Submissão de Projetos</h3>
                 <InputText
-                  label="Período de Submissão"
+                  label="Início da Submissão de Projetos"
                   type="date"
                   name="dataInicioSubmissao"
                   value={formData.dataInicioSubmissao}
@@ -231,6 +265,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
                 />
                 <span className="period-separator"></span>
                 <InputText
+                  label="Fim da Submissão de Projetos"
                   type="date"
                   name="dataFimSubmissao"
                   value={formData.dataFimSubmissao}
@@ -244,9 +279,9 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
             <div className="form-row">
               <div className="form-col">
                 <div className="period-container">
-                
+                <h3>Período de Envio de Documentos (1 etapa)</h3>
                 <InputText
-                  label="Período de Envio de Documentos"
+                  label="Início do Envio de Documentos"
                   type="date"
                   name="dataInicioDocumentos"
                   value={formData.dataInicioDocumentos}
@@ -255,6 +290,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
                 />
                 <span className="period-separator"></span>
                 <InputText
+                  label="Fim do Envio de Documentos"
                   type="date"
                   name="dataFimDocumentos"
                   value={formData.dataFimDocumentos}
@@ -268,20 +304,21 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
             <div className="form-row">
               <div className="form-col">
                 <div className="period-container">
-                
+                <h3>Período de Recurso da Submissão (1 etapa)</h3>
                 <InputText
-                  label="Período de Recurso"
+                  label="Início do Período de Recurso"
                   type="date"
-                  name="dataInicioRecurso"
-                  value={formData.dataInicioRecurso}
+                  name="dataInicioRecursoSubimissao"
+                  value={formData.dataInicioRecursoSubimissao}
                   onChange={handleChange}
                   placeholder="Início"
                 />
                 <span className="period-separator"></span>
                 <InputText
+                  label="Fim do Período de Recurso"
                   type="date"
-                  name="dataFimRecurso"
-                  value={formData.dataFimRecurso}
+                  name="dataFimRecursoSubimissao"
+                  value={formData.dataFimRecursoSubimissao}
                   onChange={handleChange}
                   placeholder="Fim"
                 />
@@ -292,9 +329,9 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
             <div className="form-row">
               <div className="form-col">
                 <div className="period-container">
-                
+                <h3>Período de Avaliação (2 etapa)</h3>
                 <InputText
-                  label="Período de Avaliação"
+                  label="Início do Período de Avaliação"
                   type="date"
                   name="dataInicioAvaliacao"
                   value={formData.dataInicioAvaliacao}
@@ -303,6 +340,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
                 />
                 <span className="period-separator"></span>
                 <InputText
+                  label="Fim do Período de Avaliação"
                   type="date"
                   name="dataFimAvaliacao"
                   value={formData.dataFimAvaliacao}
@@ -315,10 +353,35 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 
             <div className="form-row">
               <div className="form-col">
-                <div className="period-container">
-                
+                <div className="period-container">  
+                <h3>Período de Recurso da Avaliação (2 etapa)</h3>
                 <InputText
-                  label="Período de Envio de Relatório Mensal"
+                  label="Início do Período de Recurso da Avaliação"
+                  type="date"
+                  name="dataInicioRecursoAvaliacao"
+                  value={formData.dataInicioRecursoAvaliacao}
+                  onChange={handleChange}
+                  placeholder="Início"
+                />
+                <span className="period-separator"></span>
+                <InputText
+                  label="Fim do Período de Recurso da Avaliação"
+                  type="date"
+                  name="dataFimRecursoAvaliacao"
+                  value={formData.dataFimRecursoAvaliacao}
+                  onChange={handleChange}
+                  placeholder="Fim"
+                />
+                </div>
+              </div>
+            </div>
+
+            <div className="form-row">
+              <div className="form-col">
+                <div className="period-container">
+                <h3>Período de Envio de Relatório Mensal (Ficha de Frequência)</h3>
+                <InputText
+                  label="Início do Envio"
                   type="text"
                   name="dataInicioEnvioRelatorioMensal"
                   value={formData.dataInicioEnvioRelatorioMensal}
@@ -327,6 +390,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
                 />
                 <span className="period-separator"></span>
                 <InputText
+                  label="Fim do Envio"
                   type="text"
                   name="dataFimEnvioRelatorioMensal"
                   value={formData.dataFimEnvioRelatorioMensal}
@@ -340,9 +404,9 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
             <div className="form-row">
               <div className="form-col">
                 <div className="period-container">
-                
+                <h3>Período de Envio de Relatório Final (ficha de Frequência)</h3>
                 <InputText
-                  label="Período de Envio de Relatório Final"
+                  label="Início do Envio"
                   type="text"
                   name="dataInicioEnvioRelatorioFinal"
                   value={formData.dataInicioEnvioRelatorioFinal}
@@ -351,6 +415,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
                 />
                 <span className="period-separator"></span>
                 <InputText
+                  label="Fim do Envio"
                   type="text"
                   name="dataFimEnvioRelatorioFinal"
                   value={formData.dataFimEnvioRelatorioFinal}
@@ -364,10 +429,10 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
             <div className="form-row">
               <div className="form-col">
                 <div className="period-container">
-                
+                <h3>Período de Pagamento de Bolsas (opicional)</h3>
                 <InputText
-                  label="Período de Pagamento de Bolsas"
-                  type="date"
+                  label="Início do Pagamento de Bolsas"
+                  type="text"
                   name="dataPagamentoInicio"
                   value={formData.dataPagamentoInicio}
                   onChange={handleChange}
@@ -375,7 +440,8 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
                 />
                 <span className="period-separator"></span>
                 <InputText
-                  type="date"
+                  label="Fim do Pagamento de Bolsas"
+                  type="text"
                   name="dataPagamentoFim"
                   value={formData.dataPagamentoFim}
                   onChange={handleChange}
@@ -386,20 +452,31 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
             </div>
 
             <div className="form-row">
+              <div className="form-col">
+                <h3>Link de Acesso ao Edital</h3>
                 <InputText
-                  label="Link de Acesso ao Edital"
+                  label="Link de Acesso ao Edital no site do campus"
                   type="text"
                   name="linkAcessoEdital"
                   value={formData.linkAcessoEdital}
                   onChange={handleChange}
                   placeholder="Link de Acesso ao Edital"
                 />
+              </div>
             </div>
             <div className="form-note">
               <p>Antes de finalizar a operação, revise todo o documento.</p>
             </div>
             <button className="submit-button" type="submit">CADASTRAR</button>
           </form>
+          {/* Modal de sucesso */}
+          <Modal
+              isOpen={showModal}
+              title="🎉 Edital cadastrado com sucesso!"
+              message="Os dados foram salvos no banco de dados."
+              onClose={() => setShowModal(false)}
+              onAfterClose={() => navigate("/editais")}
+            />
         </div>
   );
 };
