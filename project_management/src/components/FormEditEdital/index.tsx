@@ -7,6 +7,7 @@ import type { Edital } from '../../interfaces/Edital';
 import './styles.css';
 import RadioInput from '../RadioInput';
 import { Modal } from '../Modal';
+import InputNumber from '../InputNumber';
 
 const initialEditalState: Edital = {
     id: '',
@@ -38,14 +39,14 @@ const initialEditalState: Edital = {
     dataInicioRecursoAvaliacao: '',
     dataFimRecursoAvaliacao: '',
 
-    dataInicioEnvioRelatorioMensal: '',
-    dataFimEnvioRelatorioMensal: '',
+    dataInicioEnvioRelatorioMensal: 0,
+    dataFimEnvioRelatorioMensal: 0,
 
     dataInicioEnvioRelatorioFinal: '',
     dataFimEnvioRelatorioFinal: '',
 
-    dataPagamentoInicio: '',
-    dataPagamentoFim: '',
+    dataPagamentoInicio: 0,
+    dataPagamentoFim: 0,
 
     linkAcessoEdital: '',
 
@@ -394,7 +395,7 @@ function FormEditEdital({ editalId }: { editalId: string | undefined }) {
                     <div className="form-col">
                         <div className="period-container">
                         <h3>Período de Envio de Relatório Mensal (Ficha de Frequência)</h3>
-                        <InputText
+                        <InputNumber
                         label="Início do Envio"
                         type="text"
                         name="dataInicioEnvioRelatorioMensal"
@@ -403,7 +404,7 @@ function FormEditEdital({ editalId }: { editalId: string | undefined }) {
                         placeholder="Início"
                         />
                         <span className="period-separator"></span>
-                        <InputText
+                        <InputNumber
                         label="Fim do Envio"
                         type="text"
                         name="dataFimEnvioRelatorioMensal"
@@ -444,7 +445,7 @@ function FormEditEdital({ editalId }: { editalId: string | undefined }) {
                     <div className="form-col">
                         <div className="period-container">
                         <h3>Período de Pagamento de Bolsas (opicional)</h3>
-                        <InputText
+                        <InputNumber
                         label="Início do Pagamento de Bolsas"
                         type="text"
                         name="dataPagamentoInicio"
@@ -453,7 +454,7 @@ function FormEditEdital({ editalId }: { editalId: string | undefined }) {
                         placeholder="Início"
                         />
                         <span className="period-separator"></span>
-                        <InputText
+                        <InputNumber
                         label="Fim do Pagamento de Bolsas"
                         type="text"
                         name="dataPagamentoFim"

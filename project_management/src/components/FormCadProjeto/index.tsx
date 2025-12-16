@@ -20,76 +20,77 @@ const sanitizeName = (name: string): string => {
     .replace(/\\s+/g, '-'); // dentro de utils tambem
 };
 
+const initialProjectState: Projeto = {
+  id: '',
+  edital: '',
+  nomeProjeto: '',
+  nomeDaAcao: '',
+  codigoProjeto: '',
+
+  ano: 0,
+  periodoInicio: '',
+  periodoFim: '',
+  abrangencia: '',
+
+  nomeCoordenador: '',
+  emailCoordenador: '',
+  nomeCoCoordenador: '',
+  emailCoCoordenador: '',
+
+  publicoInternoDescricao: '',
+  publicoInternoQuantidade: 0,
+  publicoExternoDescricao: '',
+  publicoExternoQuantidade: 0,
+
+  estado: '',
+  municipio: '',
+  bairro: '',
+  espaco: '',
+
+  valorSolicitado: 0,
+  valorDisponibilizado: 0,
+
+  tipoBolsa: [],
+  quantidadeIndividualBolsas: [],
+  valorUnitarioBolsa: [],
+  valorBolsa: [],
+  quantidade: 0,
+  valorTotalBolsas: 0,
+
+  areaTematica: '',
+  linhaExtensao: '',
+
+  detalhesAcao: '',
+  documentosAnexados: [],
+  classificacaoDetalhe: '',
+
+  statusEtapa1: '',
+  notasAvaliadores: [0],
+  comentariosAvaliadores: [''],
+  notaEtapa2: 0,
+
+  alunosParticipantes: [],
+  relatorioProjeto: [],
+
+  criadoEm: '',
+  criadoPor: '',
+  alteradoEm: '',
+  alteradoPor: ''
+};
+
 
 function FormCadProjeto()  {
   const navigate = useNavigate();
   const [editaisList, setEditaisList] = useState<Edital[]>([]);
   const [showModal, setShowModal] = useState(false);
 
-  const [formData, setFormData] = useState<Projeto>({
-    id: '',
-    edital: '',
-    nomeProjeto: '',
-    nomeDaAcao: '',
-    codigoProjeto: '',
+  const [bolsaSelecionada, setBolsaSelecionada] = useState('');
+  const [quantidadeBolsa, setQuantidadeBolsa] = useState<number>(0);
 
 
-    ano: 0,
-    periodoInicio: '',
-    periodoFim: '',
-    abrangencia: '',
-
-
-    nomeCoordenador: '',
-    emailCoordenador: '',
-    nomeCoCoordenador: '',
-    emailCoCoordenador: '',
-
-
-    publicoInternoDescricao: '',
-    publicoInternoQuantidade: 0,
-    publicoExternoDescricao: '',
-    publicoExternoQuantidade: 0,
-
-
-    estado: '',
-    municipio: '',
-    bairro: '',
-    espaco: '',
-
-
-    valorSolicitado: 0,
-    valorDisponibilizado: 0,
-    tipoBolsa: [] as string[],
-    valorBolsa: [] as string[],
-    quantidade: 0,
-    valorTotalBolsas: 0,
-
-
-    areaTematica: '',
-    linhaExtensao: '',
-
-
-    detalhesAcao: '',
-    documentosAnexados: [] as string[],
-    classificacaoDetalhe: '',
-
-
-    statusEtapa1: '',
-    notasAvaliadores: [0] as number[],
-    comentariosAvaliadores: [''] as string[],
-    notaEtapa2: 0,
-
-
-    alunosParticipantes: [] as string[],
-    relatorioProjeto: [] as object[],
-
-
-    criadoEm: '',
-    criadoPor: '',
-    alteradoEm: '',
-    alteradoPor: ''
-  });
+    const [formData, setFormData] = useState<Projeto>({
+      ...initialProjectState
+    });
 
 
 
@@ -123,97 +124,93 @@ function FormCadProjeto()  {
 
 
   const bolsasList = [
-    { tipo: 'SUP I (20h)', valor: 'R$ 700,00'},
-    { tipo: 'SUP II (10h)', valor: 'R$ 350,00'},
-    { tipo: 'BEXMED (10h)', valor: 'R$ 350,00'},
-    { tipo: 'BEXCOL (até 15h)', valor: 'R$ 900,00'}
+    { tipo: 'SUP I (20h)', valorUnitario: 700 },
+    { tipo: 'SUP II (10h)', valorUnitario: 350 },
+    { tipo: 'BEXMED (10h)', valorUnitario: 350 },
+    { tipo: 'BEXCOL (até 15h)', valorUnitario: 900 }
   ]; // constants
 
 
-  const toggleBolsaTipo = (tipo: string) => {
-    setFormData(prev => {
-      const jaPossui = prev.tipoBolsa.includes(tipo);
+  const addBolsa = () => {
+    if (!bolsaSelecionada || quantidadeBolsa <= 0) return;
 
-
-      if (jaPossui) {
-        const tipoIndex = prev.tipoBolsa.indexOf(tipo);
-        const novaTipoBolsa = prev.tipoBolsa.filter(b => b !== tipo);
-        const novaValorBolsa = prev.valorBolsa.filter((_, i) => i !== tipoIndex);
-
-
-        const novaQuantidadeTotal = novaValorBolsa.reduce((acc, item) => {
-          const matchQtd = item.match(/Qtd: (\d+)/);
-          return acc + (matchQtd ? parseInt(matchQtd[1]) : 0);
-        }, 0);
-
-
-        return {
-          ...prev,
-          tipoBolsa: novaTipoBolsa,
-          valorBolsa: novaValorBolsa,
-          valorTotalBolsas: calcularTotal(novaValorBolsa),
-          quantidade: novaQuantidadeTotal,
-        };
-      }
-
-
-      return {
-        ...prev,
-        tipoBolsa: [...prev.tipoBolsa, tipo],
-        valorBolsa: [...prev.valorBolsa, `${tipo}: R$ 0,00 (Qtd: 0)`],
-        quantidade: prev.quantidade, // não muda ainda
-      };
-    });
-  }; // ver se encaixa em functions
-
-
-  const handleBolsaChange = (tipo: string, quantidadeStr: string) => {
-    const bolsaInfo = bolsasList.find(b => b.tipo === tipo);
+    const bolsaInfo = bolsasList.find(b => b.tipo === bolsaSelecionada);
     if (!bolsaInfo) return;
 
-    const valorUnitario = parseFloat(bolsaInfo.valor.replace(/[^\d,]/g, '').replace(',', '.'));
-    const quantidade = parseInt(quantidadeStr) || 0;
-    const valorTotalTipo = quantidade * valorUnitario;
+    const valorUnitario = bolsaInfo.valorUnitario;
+    const valorTotal = quantidadeBolsa * valorUnitario;
 
     setFormData(prev => {
-      let novaValorBolsa = [...prev.valorBolsa];
-      const tipoIndex = novaValorBolsa.findIndex(item => item.startsWith(tipo));
+      const tipoBolsa = [...prev.tipoBolsa, bolsaSelecionada];
+      const quantidadeIndividualBolsas = [
+        ...prev.quantidadeIndividualBolsas,
+        quantidadeBolsa
+      ];
+      const valorUnitarioBolsa = [
+        ...prev.valorUnitarioBolsa,
+        valorUnitario
+      ];
+      const valorBolsa = [...prev.valorBolsa, valorTotal];
 
-      if (tipoIndex >= 0) {
-        // Atualiza a bolsa existente
-        novaValorBolsa[tipoIndex] = `${tipo}: R$ ${valorTotalTipo.toFixed(2).replace('.', ',')} (Qtd: ${quantidade})`;
-      } else {
-        // Adiciona a bolsa se ainda não existir
-        novaValorBolsa.push(`${tipo}: R$ ${valorTotalTipo.toFixed(2).replace('.', ',')} (Qtd: ${quantidade})`);
-      }
+      const quantidade = quantidadeIndividualBolsas.reduce(
+        (acc, q) => acc + q,
+        0
+      );
 
-      const novaQuantidadeTotal = novaValorBolsa.reduce((acc, item) => {
-        const matchQtd = item.match(/Qtd: (\d+)/);
-        return acc + (matchQtd ? parseInt(matchQtd[1]) : 0);
-      }, 0);
+      const valorTotalBolsas = valorBolsa.reduce(
+        (acc, v) => acc + v,
+        0
+      );
 
       return {
         ...prev,
-        valorBolsa: novaValorBolsa,
-        valorTotalBolsas: calcularTotal(novaValorBolsa),
-        quantidade: novaQuantidadeTotal,
+        tipoBolsa,
+        quantidadeIndividualBolsas,
+        valorUnitarioBolsa,
+        valorBolsa,
+        quantidade,
+        valorTotalBolsas
+      };
+    });
+
+    // reset UX
+    setBolsaSelecionada('');
+    setQuantidadeBolsa(0);
+  };
+
+  const removerBolsa = (index: number) => {
+    setFormData(prev => {
+      const tipoBolsa = prev.tipoBolsa.filter((_, i) => i !== index);
+      const quantidadeIndividualBolsas =
+        prev.quantidadeIndividualBolsas.filter((_, i) => i !== index);
+      const valorUnitarioBolsa =
+        prev.valorUnitarioBolsa.filter((_, i) => i !== index);
+      const valorBolsa =
+        prev.valorBolsa.filter((_, i) => i !== index);
+
+      const quantidade = quantidadeIndividualBolsas.reduce(
+        (acc, q) => acc + q,
+        0
+      );
+
+      const valorTotalBolsas = valorBolsa.reduce(
+        (acc, v) => acc + v,
+        0
+      );
+
+      return {
+        ...prev,
+        tipoBolsa,
+        quantidadeIndividualBolsas,
+        valorUnitarioBolsa,
+        valorBolsa,
+        quantidade,
+        valorTotalBolsas
       };
     });
   };
 
 
-
-
-  const calcularTotal = (valores: string[]) => {
-    return valores.reduce((acc, item) => {
-      const match = item.match(/R\$ ([\d,.]+)/);
-      if (match) {
-        const valor = parseFloat(match[1].replace('.', '').replace(',', '.'));
-        return acc + valor;
-      }
-      return acc;
-    }, 0);
-  };
 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -277,89 +274,25 @@ function FormCadProjeto()  {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (validateForm()) {
-      try {
-        const projetoId = sanitizeName(formData.nomeProjeto);
-        const rawValorSolicitado = formData.valorSolicitado;
-        const rawValorDisponibilizado = formData.valorDisponibilizado;
+    if (!validateForm()) return;
 
-        await setDoc(doc(db, "projetos", projetoId), {
-          ...formData,
-          valorSolicitado: rawValorSolicitado,
-          valorDisponibilizado: rawValorDisponibilizado,
-          criadoEm: new Date().toISOString()
-        });
+    try {
+      const projetoId = sanitizeName(formData.nomeProjeto);
 
-        await updateDoc(doc(db, "editais", formData.edital), {
-           projetosVinculados: arrayUnion(formData.nomeProjeto)
-        });
+      await setDoc(doc(db, "projetos", projetoId), {
+        ...formData,
+        criadoEm: new Date().toISOString()
+      });
 
-        setShowModal(true);
+      await updateDoc(doc(db, "editais", formData.edital), {
+        projetosVinculados: arrayUnion(formData.nomeProjeto)
+      });
 
-        // Resetar o formulário
-        setFormData({
-          ...formData,
-          id: '',
-          edital: '',
-          nomeProjeto: '',
-          nomeDaAcao: '',
-          codigoProjeto: '',
+      setShowModal(true);
+      setFormData(initialProjectState);
 
-          ano: 0,
-          periodoInicio: '',
-          periodoFim: '',
-          abrangencia: '',
-
-
-
-          nomeCoordenador: '',
-          emailCoordenador: '',
-          nomeCoCoordenador: '',
-          emailCoCoordenador: '',
-
-
-
-
-          publicoInternoDescricao: '',
-          publicoInternoQuantidade: 0,
-          publicoExternoDescricao: '',
-          publicoExternoQuantidade: 0,
-
-
-          estado: '',
-          municipio: '',
-          bairro: '',
-          espaco: '',
-
-          valorSolicitado: 0,
-          valorDisponibilizado: 0,
-          tipoBolsa: [],
-          valorBolsa: [],
-          quantidade: 0,
-          valorTotalBolsas: 0,
-
-          areaTematica: '',
-          linhaExtensao: '',
-
-          detalhesAcao: '',
-          documentosAnexados: [],
-          classificacaoDetalhe: '',
-
-          statusEtapa1: '',
-          notasAvaliadores: [],
-          notaEtapa2: 0,
-
-          alunosParticipantes: [],
-          relatorioProjeto: [],
-
-          criadoEm: '',
-          criadoPor: '',
-          alteradoEm: '',
-          alteradoPor: ''
-        });
-      } catch (error) {
-        alert('Erro ao cadastrar projeto: ' + (error as Error).message);
-      }
+    } catch (error) {
+      alert('Erro ao cadastrar projeto: ' + (error as Error).message);
     }
   };
 
@@ -566,51 +499,76 @@ function FormCadProjeto()  {
               </div>
             </div>
 
-             <div className="form-row">
+            <div className="form-row">
               <div className="form-col">
-                
-                <label className="form-label">Tipos de bolsas solicitadas</label>
-                <div className="checkbox-group">
-                  {bolsasList.map((bolsa) => {
-                    const isSelected = formData.tipoBolsa.includes(bolsa.tipo);
+                <label className="form-label">Adicionar bolsa</label>
 
-                    return (
-                      <div key={bolsa.tipo} className="flex items-center space-x-2 mb-2">
-                        <input
-                          type="checkbox"
-                          checked={isSelected}
-                          onChange={() => toggleBolsaTipo(bolsa.tipo)}
-                        />
-                        <label>{bolsa.tipo} ({bolsa.valor})</label>
+                <div className="flex gap-4 items-end">
+                  <select
+                    value={bolsaSelecionada}
+                    onChange={(e) => setBolsaSelecionada(e.target.value)}
+                  >
+                    <option value="">Selecione o tipo</option>
+                    {bolsasList.map(b => (
+                      <option key={b.tipo} value={b.tipo}>
+                        {b.tipo} (R$ {b.valorUnitario})
+                      </option>
+                    ))}
+                  </select>
 
+                  <input
+                    type="number"
+                    min={0}
+                    placeholder="Qtd."
+                    value={quantidadeBolsa}
+                    onChange={(e) => setQuantidadeBolsa(Number(e.target.value))}
+                  />
 
-                        {isSelected && (
-                          <input
-                            type="number"
-                            min="0"
-                            className="ml-4 w-24 border px-2 py-1 rounded"
-                            placeholder="Qtd."
-                            onChange={(e) => handleBolsaChange(bolsa.tipo, e.target.value)}
-                          />
-                        )}
-                      </div>
-                    );
-                  })}
-
-
-                  <div className="mt-4">
-                    <p><strong>Tipos selecionados:</strong> {formData.tipoBolsa.join(', ') || 'Nenhum'}</p>
-                    <p><strong>Valores por tipo:</strong></p>
-                    <ul className="list-disc ml-6">
-                      {formData.valorBolsa.map((item, idx) => (
-                        <li key={idx}>{item}</li>
-                      ))}
-                    </ul>
-                    <p className="mt-2"><strong>Total de bolsas:</strong> {formData.quantidade}</p>
-                    <p><strong>Total geral:</strong> R$ {formData.valorTotalBolsas.toFixed(2).replace('.', ',')}</p>
-                  </div>
+                  <button type="button" onClick={addBolsa}>
+                    Adicionar
+                  </button>
                 </div>
-                
+
+                <div className="mt-4">
+                  <h4>Bolsas adicionadas</h4>
+
+                  {formData.tipoBolsa.length === 0 && (
+                    <p>Nenhuma bolsa adicionada</p>
+                  )}
+
+                  <ul className="list-disc ml-6">
+                    {formData.tipoBolsa.map((tipo, index) => (
+                      <li key={index} className="mb-2">
+                        <strong>{tipo}</strong> — Qtd: {formData.quantidadeIndividualBolsas[index]} — 
+                        Valor unitário: R$ {formData.valorUnitarioBolsa[index]} — 
+                        Total: R$ {formData.valorBolsa[index]}
+
+                        <button
+                          type="button"
+                          className="ml-4 text-red-600"
+                          onClick={() => removerBolsa(index)}
+                        >
+                          Remover
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="mt-4">
+                  <p><strong>Total de bolsas:</strong> {formData.quantidade}</p>
+                  <p>
+                    <strong>Total geral:</strong> R${" "}
+                    {formData.valorTotalBolsas.toFixed(2).replace(".", ",")}
+                  </p>
+                </div>
+
+
+              </div>
+            </div>
+
+
+              {/* */}
               <div className="form-row">
                 <div className="form-col">
                   <h3>Área Temática</h3>
@@ -634,9 +592,6 @@ function FormCadProjeto()  {
                       />
                   </div>
                 </div>
-              </div>
-              
-            </div>
             <div className="form-note">
               Antes de finalizar a operação, revise todo o documento.
             </div>

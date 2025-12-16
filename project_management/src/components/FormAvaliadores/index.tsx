@@ -6,7 +6,8 @@ import ActionButton from '../Button';
 import type { Projeto } from '../../interfaces/Projeto';
 import './styles.css';
 import TextAreaInput from '../TextAreaInput';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Modal } from '../Modal';
 
 const initialProjectState: Projeto = {
     id: '',
@@ -55,6 +56,8 @@ const initialProjectState: Projeto = {
 
 function FormAvaliadores({ projectId }: { projectId: string | undefined }) {
   const { projectId: id = projectId } = useParams<{ projectId: string }>();
+  const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
   
   if (!id) {
     return <div>Informação não encontrada!</div>;
@@ -116,7 +119,7 @@ function FormAvaliadores({ projectId }: { projectId: string | undefined }) {
         notaEtapa2: formData.notaEtapa2,
         alteradoEm: new Date().toISOString(),
       });
-      alert('Avaliações salvas com sucesso!');
+      setShowModal(true);
     } catch (error) {
       console.error('Erro ao salvar avaliações:', error);
       alert('Erro ao salvar as avaliações.');
@@ -158,6 +161,15 @@ function FormAvaliadores({ projectId }: { projectId: string | undefined }) {
         </div>
 
       </form>
+
+      {/* Modal de sucesso */}
+      <Modal
+          isOpen={showModal}
+          title="🎉 Classificação da etapa 2 realizada com sucesso!"
+          message="Os dados foram salvos no banco de dados."
+          onClose={() => setShowModal(false)}
+          onAfterClose={() => navigate("/projetos")}
+        />
     </div>
   );
 }

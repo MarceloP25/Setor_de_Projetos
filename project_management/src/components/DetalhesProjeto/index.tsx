@@ -19,6 +19,8 @@ const formatDate = (data: string | undefined): string => {
 function DetalhesProjeto({ projectId }: { projectId: string | undefined }) {
   const { projectId: id = projectId } = useParams<{ projectId: string }>();
   const [projeto, setProjeto] = useState<Projeto | null>(null);
+  const [nomeEdital, setNomeEdital] = useState<string>('-');
+
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState<string | null>(null);
 
@@ -47,8 +49,28 @@ function DetalhesProjeto({ projectId }: { projectId: string | undefined }) {
       }
     };
 
+    const buscarEdital = async () => {
+      if (!projeto?.edital) return;
+
+      try {
+        const editalRef = doc(db, 'editais', projeto.edital);
+        const snap = await getDoc(editalRef);
+        
+        if (snap.exists()) {
+          setNomeEdital(snap.data().nomeEdital);
+        } else {
+          setNomeEdital('Edital não encontrado');
+        }
+      } catch (err) {
+        console.error('Erro ao buscar edital:', err);
+        setNomeEdital('Erro ao carregar edital');
+      }
+    };
+    
     buscarProjeto();
-  }, [id]);
+    buscarEdital();
+  }, [id, projeto]);
+
 
   if (loading) {
     return (
@@ -74,7 +96,7 @@ function DetalhesProjeto({ projectId }: { projectId: string | undefined }) {
 
       {/* Bloco 1 - Identificação */}
       <div className="infoBloco">
-        <div className="info"><h3>Edital</h3><p className='bold'>{projeto.edital}</p></div>
+        <div className="info"><h3>Edital</h3><p className='bold'>{nomeEdital}</p></div>
         <div className="info"><h3>Código do Projeto</h3><p className='bold'>{projeto.codigoProjeto}</p></div>
         <div className="info"><h3>Nome do Projeto</h3><p className='bold'>{projeto.nomeProjeto}</p></div>
         <div className="info"><h3>Nome da Ação</h3><p className='bold'>{projeto.nomeDaAcao}</p></div>
@@ -86,15 +108,15 @@ function DetalhesProjeto({ projectId }: { projectId: string | undefined }) {
       <div className="infoBloco">
         <div className="info"><h3>Coordenador</h3><p className='bold'>{projeto.nomeCoordenador}</p></div>
         <div className="info"><h3>Email Coordenador</h3><p className='bold'>{projeto.emailCoordenador}</p></div>
-        <div className="info"><h3>CoCoordenador</h3><p className='bold'>{projeto.nomeCoCoordenador}</p></div>
-        <div className="info"><h3>Email CoCoordenador</h3><p className='bold'>{projeto.emailCoCoordenador}</p></div>
+        <div className="info"><h3>CoCoordenador</h3><p className='bold'>{projeto.nomeCoCoordenador ?? '-'}</p></div>
+        <div className="info"><h3>Email CoCoordenador</h3><p className='bold'>{projeto.emailCoCoordenador ?? '-'}</p></div>
       </div>
 
       {/* Bloco 3 - Duração e abrangência */}
       <div className="infoBloco">
         <div className="info"><h3>Ano da Submissão</h3><p className='bold'>{projeto.ano}</p></div>
         <div className="info"><h3>Período de Realização</h3><p className='bold'>{formatDate(projeto.periodoInicio)} a {formatDate(projeto.periodoFim)}</p></div>
-        <div className="info"><h3>Abrangência</h3><p className='bold'>{projeto.abrangencia}</p></div>
+        <div className="info"><h3>Abrangência</h3><p className='bold'>{projeto.abrangencia ?? '-'}</p></div>
       </div>
 
       {/* Bloco 4 - Público Alvo */}
@@ -118,16 +140,27 @@ function DetalhesProjeto({ projectId }: { projectId: string | undefined }) {
         <div className="info"><h3>Valor Solicitado</h3><p className='bold'>{formatCurrency(projeto.valorSolicitado)}</p></div>
         <div className="info"><h3>Valor Disponibilizado</h3><p className='bold'>{formatCurrency(projeto.valorDisponibilizado)}</p></div>
         <div className="info"><h3>Quantidade de Bolsas</h3><p className='bold'>{projeto.quantidade}</p></div>
+
+
         <div className="info">
           <h3>Bolsas</h3>
           {projeto.tipoBolsa?.length > 0 ? (
             <ul>
               {projeto.tipoBolsa.map((tipo, i) => (
                 <li key={i}>
-                  {tipo} — {projeto.valorBolsa[i] ? formatCurrency(Number(projeto.valorBolsa[i])) : '-'}
+                  <h5 className="bold">
+                    {tipo}
+                  </h5>
+                  <p className='bold'>
+                    {projeto.quantidadeIndividualBolsas?.[i] ?? 0} bolsas de {formatCurrency(projeto.valorUnitarioBolsa?.[i])}
+                  </p>
+                  <p className='bold'>
+                    Total: {formatCurrency(projeto.valorBolsa?.[i])}
+                  </p>
                 </li>
               ))}
             </ul>
+
           ) : (
             <p className='bold'>Nenhuma bolsa registrada</p>
           )}
@@ -157,7 +190,7 @@ function DetalhesProjeto({ projectId }: { projectId: string | undefined }) {
             </ul>
           ) : <p className='bold'>Nenhum documento anexado</p>}
           </div>
-          <h3>Status do Projeto</h3>
+          <h3>Status do Projeto na Etapa 1</h3>
             <p className='bold'>{projeto.statusEtapa1 ?? '-'}</p>
 
           {projeto.statusEtapa1 === 'Desclassificado' && projeto.classificacaoDetalhe && (
@@ -165,11 +198,13 @@ function DetalhesProjeto({ projectId }: { projectId: string | undefined }) {
           )}
             <Button text="DOCUMENTOS" variant="medium" to={`/projetos/${id}/documentos`} />
         </div>
+      </div>
 
       {/* Bloco 9 - Avaliação */}
       <div className="infoBloco">
         <div className="info">
         <h3>Notas dos Avaliadores</h3>
+        
           <div className='list'>
             {projeto.notasAvaliadores && projeto.notasAvaliadores.length > 0 ? (
               <ul>
@@ -180,39 +215,49 @@ function DetalhesProjeto({ projectId }: { projectId: string | undefined }) {
                 ))}
               </ul>
             ) : <p className='bold'>Sem notas registradas</p>}
+
           </div>
         </div>
-
         <div className="info">
           <h3>Média Final</h3>
-          <p className='bold'>{projeto.notaEtapa2 ?? '-'}</p>
+          <h4>{projeto.notaEtapa2 ?? '-'} pontos</h4>
         </div>
-
+        
         <div className="info">
           <h3>Comentários Avaliadores</h3>
-          {projeto.comentariosAvaliadores?.length ? (
-            <ul>
-              {projeto.comentariosAvaliadores.map((c, i) => <li key={i}>{c}</li>)}
-            </ul>
-          ) : <p className='bold'>-</p>}
-        <Button to={`/projetos/${id}/avaliacao`} text="AVALIAÇÃO" variant="medium" />
+          <div className='list'>
+              {projeto.comentariosAvaliadores?.length ? (
+                <ul>
+                  {projeto.comentariosAvaliadores.map((c, i) => <li key={i}>{c}</li>)}
+                </ul>
+              ) : <p className='bold'>-</p>}
+          </div>
+
+          <div className="info">
+            <Button to={`/projetos/${id}/avaliacao`} text="AVALIAÇÃO" variant="medium" />
+          </div>
         </div>
       </div>
 
-
+      <div className="infoBloco">
         <div className="info">
           <h3>Alunos Vinculados</h3>
-          {projeto.alunosParticipantes?.length ? (
-            <>
-              <p className='bold'>{projeto.alunosParticipantes.join(', ')}</p>
-              <Button text="LISTA" variant="medium" to={`/projetos/${id}/alunos`} />
-            </>
-          ) : <p className='bold'>Sem alunos vinculados</p>}
+
+          <div className='list'>
+            {projeto.alunosParticipantes?.length ? (
+              <>
+                <p className='bold'>{projeto.alunosParticipantes.join(', ')}</p>
+                <Button text="LISTA" variant="medium" to={`/projetos/${id}/alunos`} />
+              </>
+            ) : <p className='bold'>Sem alunos vinculados</p>}
+          </div>
         </div>
       </div>
+
       <div className="info">
         <Button text="EDITAR" variant="medium" to={`/projetos/${id}/editar`} />
       </div>
+
     </div>
   );
 }

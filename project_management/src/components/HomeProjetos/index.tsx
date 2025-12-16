@@ -137,10 +137,10 @@ const ProjectList: React.FC = () => {
                         <div key={project.id} className="project-item">
                             <Link to={`/projetos/${project.id}`}>
                                 <div className='info-card'> 
-                                    <h4>{project.nomeProjeto}</h4>
-                                    <h4>{project.nomeCoordenador}</h4>
-                                    <h4>{project.areaTematica}</h4>
-                                    <h4>{project.edital}</h4>
+                                    <h5>{project.nomeProjeto}</h5>
+                                    <h5>{project.nomeCoordenador}</h5>
+                                    <h5>{project.areaTematica}</h5>
+                                    <h5>{project.ano}</h5>
                                 </div>
                             </Link>
                         </div>

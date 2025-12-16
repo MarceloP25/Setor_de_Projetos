@@ -28,14 +28,14 @@ export interface Edital {
     dataInicioRecursoAvaliacao: string;
     dataFimRecursoAvaliacao: string;
 
-    dataInicioEnvioRelatorioMensal: string;
-    dataFimEnvioRelatorioMensal: string;
+    dataInicioEnvioRelatorioMensal: number;
+    dataFimEnvioRelatorioMensal: number;
 
     dataInicioEnvioRelatorioFinal: string;
     dataFimEnvioRelatorioFinal: string;
 
-    dataPagamentoInicio: string;
-    dataPagamentoFim: string;
+    dataPagamentoInicio: number;
+    dataPagamentoFim: number;
 
     linkAcessoEdital: string;
 

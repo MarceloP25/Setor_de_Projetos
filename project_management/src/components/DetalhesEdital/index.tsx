@@ -5,6 +5,8 @@ import './styles.css';
 import type { Edital } from '../../interfaces/Edital';
 import ActionButton from '../Button';
 import { useParams } from 'react-router-dom';
+import { formatDateBR } from '../../utils/formattersDate';
+
 
 function DetalhesEdital({ editalId }: { editalId: string | undefined }) { 
     const { editalId: id = editalId } = useParams<{ editalId: string }>();
@@ -95,32 +97,36 @@ function DetalhesEdital({ editalId }: { editalId: string | undefined }) {
 
                 {/* Bloco 3 - Datas */}
                 <div className="infoBloco">
-                    <div className="info"><h4>Início do Edital</h4><p className='bold'>{edital.dataInicio}</p></div>
-                    <div className="info"><h4>Fim do Edital</h4><p className='bold'>{edital.dataFim}</p></div>
+                    <div className="info"><h4>Início do Edital</h4><p className='bold'>{formatDateBR(edital.dataInicio)}</p></div>
+                    <div className="info"><h4>Fim do Edital</h4><p className='bold'>{formatDateBR(edital.dataFim)}</p></div>
                 </div>
                 <div className="infoBloco">
-                    <div className="info"><h4>Início da Submissão</h4><p className='bold'>{edital.dataInicioSubmissao}</p></div>
-                    <div className="info"><h4>Fim da Submissão</h4><p className='bold'>{edital.dataFimSubmissao}</p></div>
+                    <div className="info"><h4>Início da Submissão</h4><p className='bold'>{formatDateBR(edital.dataInicioSubmissao)}</p></div>
+                    <div className="info"><h4>Fim da Submissão</h4><p className='bold'>{formatDateBR(edital.dataFimSubmissao)}</p></div>
                 </div>
                 <div className="infoBloco">
-                    <div className="info"><h4>Início da Documentação</h4><p className='bold'>{edital.dataInicioDocumentos}</p></div>
-                    <div className="info"><h4>Fim da Documentação</h4><p className='bold'>{edital.dataFimDocumentos}</p></div>
+                    <div className="info"><h4>Início da Documentação</h4><p className='bold'>{formatDateBR(edital.dataInicioDocumentos)}</p></div>
+                    <div className="info"><h4>Fim da Documentação</h4><p className='bold'>{formatDateBR(edital.dataFimDocumentos)}</p></div>
                 </div>
                 <div className="infoBloco">
-                    <div className="info"><h4>Início do Recurso</h4><p className='bold'>{edital.dataInicioRecurso}</p></div>
-                    <div className="info"><h4>Fim do Recurso</h4><p className='bold'>{edital.dataFimRecurso}</p></div>
+                    <div className="info"><h4>Início do Recurso</h4><p className='bold'>{formatDateBR(edital.dataInicioRecursoSubimissao)}</p></div>
+                    <div className="info"><h4>Fim do Recurso</h4><p className='bold'>{formatDateBR(edital.dataFimRecursoSubimissao)}</p></div>
                 </div>  
                 <div className="infoBloco"> 
-                    <div className="info"><h4>Início da Avaliação</h4><p className='bold'>{edital.dataInicioAvaliacao}</p></div>
-                    <div className="info"><h4>Fim da Avaliação</h4><p className='bold'>{edital.dataFimAvaliacao}</p></div>
+                    <div className="info"><h4>Início da Avaliação</h4><p className='bold'>{formatDateBR(edital.dataInicioAvaliacao)}</p></div>
+                    <div className="info"><h4>Fim da Avaliação</h4><p className='bold'>{formatDateBR(edital.dataFimAvaliacao)}</p></div>
+                </div>
+                <div className="infoBloco"> 
+                    <div className="info"><h4>Início da Avaliação</h4><p className='bold'>{formatDateBR(edital.dataInicioRecursoAvaliacao)}</p></div>
+                    <div className="info"><h4>Fim da Avaliação</h4><p className='bold'>{formatDateBR(edital.dataFimRecursoAvaliacao)}</p></div>
                 </div>
                 <div className="infoBloco">
                     <div className="info"><h4>Início do Envio do Relatório Mensal</h4><p className='bold'>{edital.dataInicioEnvioRelatorioMensal}</p></div>
                     <div className="info"><h4>Fim do Envio do Relatório Mensal</h4><p className='bold'>{edital.dataFimEnvioRelatorioMensal}</p></div>
                 </div>
                 <div className="infoBloco">
-                    <div className="info"><h4>Início do Envio do Relatório Final</h4><p className='bold'>{edital.dataInicioEnvioRelatorioFinal}</p></div>
-                    <div className="info"><h4>Fim do Envio do Relatório Final</h4><p className='bold'>{edital.dataFimEnvioRelatorioFinal}</p></div>
+                    <div className="info"><h4>Início do Envio do Relatório Final</h4><p className='bold'>{formatDateBR(edital.dataInicioEnvioRelatorioFinal)}</p></div>
+                    <div className="info"><h4>Fim do Envio do Relatório Final</h4><p className='bold'>{formatDateBR(edital.dataFimEnvioRelatorioFinal)}</p></div>
                 </div>
                 <div className="infoBloco">
                     <div className="info"><h4>Início do Pagamento</h4><p className='bold'>{edital.dataPagamentoInicio}</p></div>
@@ -129,9 +135,9 @@ function DetalhesEdital({ editalId }: { editalId: string | undefined }) {
 
                 {/* Bloco 4 - Controle de manipulação */}
                 <div className="infoBloco">
-                    <div className="info"><h4>Criado Em</h4><p className='bold'>{edital.criadoEm}</p></div>
+                    <div className="info"><h4>Criado Em</h4><p className='bold'>{formatDateBR(edital.criadoEm)}</p></div>
                     <div className="info"><h4>Criado Por</h4><p className='bold'>{edital.criadoPor || 'N/A'}</p></div>
-                    <div className="info"><h4>Alterado Em</h4><p className='bold'>{edital.alteradoEm || 'N/A'}</p></div>
+                    <div className="info"><h4>Alterado Em</h4><p className='bold'>{formatDateBR(edital.alteradoEm || 'N/A')}</p></div>
                     <div className="info"><h4>Alterado Por</h4><p className='bold'>{edital.alteradoPor || 'N/A'}</p></div>
                 </div>
 

@@ -7,6 +7,7 @@ import type { Edital } from '../../interfaces/Edital';
 import './styles.css';
 import { Modal } from '../Modal';
 import { useNavigate } from 'react-router-dom';
+import InputNumber from '../InputNumber';
 
 function FormCadEdital()  {
   const [showModal, setShowModal] = useState(false);
@@ -41,14 +42,14 @@ function FormCadEdital()  {
     dataInicioRecursoAvaliacao: '',
     dataFimRecursoAvaliacao: '',
 
-    dataInicioEnvioRelatorioMensal: '',
-    dataFimEnvioRelatorioMensal: '',
+    dataInicioEnvioRelatorioMensal: 0,
+    dataFimEnvioRelatorioMensal: 0,
 
     dataInicioEnvioRelatorioFinal: '',
     dataFimEnvioRelatorioFinal: '',
 
-    dataPagamentoInicio: '',
-    dataPagamentoFim: '',
+    dataPagamentoInicio: 0,
+    dataPagamentoFim: 0,
 
     linkAcessoEdital: '',
 
@@ -137,12 +138,12 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       dataFimAvaliacao: '',
       dataInicioRecursoAvaliacao: '',
       dataFimRecursoAvaliacao: '',
-      dataInicioEnvioRelatorioMensal: '',
-      dataFimEnvioRelatorioMensal: '',
+      dataInicioEnvioRelatorioMensal: 0,
+      dataFimEnvioRelatorioMensal: 0,
       dataInicioEnvioRelatorioFinal: '',
       dataFimEnvioRelatorioFinal: '',
-      dataPagamentoInicio: '',
-      dataPagamentoFim: '',
+      dataPagamentoInicio: 0,
+      dataPagamentoFim: 0,
       linkAcessoEdital: '',
       criadoEm: '',
       criadoPor: '',
@@ -380,7 +381,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
               <div className="form-col">
                 <div className="period-container">
                 <h3>Período de Envio de Relatório Mensal (Ficha de Frequência)</h3>
-                <InputText
+                <InputNumber
                   label="Início do Envio"
                   type="text"
                   name="dataInicioEnvioRelatorioMensal"
@@ -389,7 +390,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
                   placeholder="Início"
                 />
                 <span className="period-separator"></span>
-                <InputText
+                <InputNumber
                   label="Fim do Envio"
                   type="text"
                   name="dataFimEnvioRelatorioMensal"
@@ -430,7 +431,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
               <div className="form-col">
                 <div className="period-container">
                 <h3>Período de Pagamento de Bolsas (opicional)</h3>
-                <InputText
+                <InputNumber
                   label="Início do Pagamento de Bolsas"
                   type="text"
                   name="dataPagamentoInicio"
@@ -439,7 +440,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
                   placeholder="Início"
                 />
                 <span className="period-separator"></span>
-                <InputText
+                <InputNumber
                   label="Fim do Pagamento de Bolsas"
                   type="text"
                   name="dataPagamentoFim"
