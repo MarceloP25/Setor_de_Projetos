@@ -492,7 +492,7 @@ function FormEditEdital({ editalId }: { editalId: string | undefined }) {
                 title="🎉 Edital editado com sucesso!"
                 message="Os dados foram salvos no banco de dados."
                 onClose={() => setShowModal(false)}
-                onAfterClose={() => navigate("/editais")}
+                onAfterClose={() => navigate("/edital")}
                 />
         </div>
     );

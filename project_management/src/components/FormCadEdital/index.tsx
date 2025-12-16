@@ -476,7 +476,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
               title="🎉 Edital cadastrado com sucesso!"
               message="Os dados foram salvos no banco de dados."
               onClose={() => setShowModal(false)}
-              onAfterClose={() => navigate("/editais")}
+              onAfterClose={() => navigate("/edital")}
             />
         </div>
   );

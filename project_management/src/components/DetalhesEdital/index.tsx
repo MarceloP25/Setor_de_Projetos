@@ -105,20 +105,20 @@ function DetalhesEdital({ editalId }: { editalId: string | undefined }) {
                     <div className="info"><h4>Fim da Submissão</h4><p className='bold'>{formatDateBR(edital.dataFimSubmissao)}</p></div>
                 </div>
                 <div className="infoBloco">
-                    <div className="info"><h4>Início da Documentação</h4><p className='bold'>{formatDateBR(edital.dataInicioDocumentos)}</p></div>
-                    <div className="info"><h4>Fim da Documentação</h4><p className='bold'>{formatDateBR(edital.dataFimDocumentos)}</p></div>
+                    <div className="info"><h4>Início da Documentação (etapa 1)</h4><p className='bold'>{formatDateBR(edital.dataInicioDocumentos)}</p></div>
+                    <div className="info"><h4>Fim da Documentação (etapa 1)</h4><p className='bold'>{formatDateBR(edital.dataFimDocumentos)}</p></div>
                 </div>
                 <div className="infoBloco">
-                    <div className="info"><h4>Início do Recurso</h4><p className='bold'>{formatDateBR(edital.dataInicioRecursoSubimissao)}</p></div>
-                    <div className="info"><h4>Fim do Recurso</h4><p className='bold'>{formatDateBR(edital.dataFimRecursoSubimissao)}</p></div>
+                    <div className="info"><h4>Início do Recurso (etapa 1)</h4><p className='bold'>{formatDateBR(edital.dataInicioRecursoSubimissao)}</p></div>
+                    <div className="info"><h4>Fim do Recurso (etapa 1)</h4><p className='bold'>{formatDateBR(edital.dataFimRecursoSubimissao)}</p></div>
                 </div>  
                 <div className="infoBloco"> 
-                    <div className="info"><h4>Início da Avaliação</h4><p className='bold'>{formatDateBR(edital.dataInicioAvaliacao)}</p></div>
-                    <div className="info"><h4>Fim da Avaliação</h4><p className='bold'>{formatDateBR(edital.dataFimAvaliacao)}</p></div>
+                    <div className="info"><h4>Início da Avaliação (etapa 2)</h4><p className='bold'>{formatDateBR(edital.dataInicioAvaliacao)}</p></div>
+                    <div className="info"><h4>Fim da Avaliação (etapa 2)</h4><p className='bold'>{formatDateBR(edital.dataFimAvaliacao)}</p></div>
                 </div>
                 <div className="infoBloco"> 
-                    <div className="info"><h4>Início da Avaliação</h4><p className='bold'>{formatDateBR(edital.dataInicioRecursoAvaliacao)}</p></div>
-                    <div className="info"><h4>Fim da Avaliação</h4><p className='bold'>{formatDateBR(edital.dataFimRecursoAvaliacao)}</p></div>
+                    <div className="info"><h4>Início do Recurso da Avaliação (etapa 2)</h4><p className='bold'>{formatDateBR(edital.dataInicioRecursoAvaliacao)}</p></div>
+                    <div className="info"><h4>Fim do Recurso da Avaliação (etapa 2)</h4><p className='bold'>{formatDateBR(edital.dataFimRecursoAvaliacao)}</p></div>
                 </div>
                 <div className="infoBloco">
                     <div className="info"><h4>Início do Envio do Relatório Mensal</h4><p className='bold'>{edital.dataInicioEnvioRelatorioMensal}</p></div>
