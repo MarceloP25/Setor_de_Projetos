@@ -6,6 +6,8 @@ import type { Edital } from '../../interfaces/Edital';
 import ActionButton from '../Button';
 import { useParams } from 'react-router-dom';
 import { formatDateBR } from '../../utils/formattersDate';
+import { exportEditalIndividual } from '../../utils/excel/exportEditalIndividual';
+
 
 
 function DetalhesEdital({ editalId }: { editalId: string | undefined }) { 
@@ -42,6 +44,12 @@ function DetalhesEdital({ editalId }: { editalId: string | undefined }) {
 
         buscarEdital();
       }, [editalId]);
+
+    const handleExportEdital = () => {
+        if (!edital) return;
+        exportEditalIndividual(edital);
+        };
+
 
     if (loading) {
         return (
@@ -121,8 +129,8 @@ function DetalhesEdital({ editalId }: { editalId: string | undefined }) {
                     <div className="info"><h4>Fim do Recurso da Avaliação (etapa 2)</h4><p className='bold'>{formatDateBR(edital.dataFimRecursoAvaliacao)}</p></div>
                 </div>
                 <div className="infoBloco">
-                    <div className="info"><h4>Início do Envio do Relatório Mensal</h4><p className='bold'>{edital.dataInicioEnvioRelatorioMensal}</p></div>
-                    <div className="info"><h4>Fim do Envio do Relatório Mensal</h4><p className='bold'>{edital.dataFimEnvioRelatorioMensal}</p></div>
+                    <div className="info"><h4>Início do Envio do Relatório Mensal (Ficha de Frequência)</h4><p className='bold'>{edital.dataInicioEnvioRelatorioMensal}</p></div>
+                    <div className="info"><h4>Fim do Envio do Relatório Mensal (Ficha de Frequência)</h4><p className='bold'>{edital.dataFimEnvioRelatorioMensal}</p></div>
                 </div>
                 <div className="infoBloco">
                     <div className="info"><h4>Início do Envio do Relatório Final</h4><p className='bold'>{formatDateBR(edital.dataInicioEnvioRelatorioFinal)}</p></div>
@@ -142,34 +150,53 @@ function DetalhesEdital({ editalId }: { editalId: string | undefined }) {
                 </div>
 
                  {/* Bloco 5 - Projetos vinculados */}
-                <div className="bloco-buttons">
-                    <ActionButton 
-                        text="PROJETOS VINCULADOS" 
-                        variant="medium" 
-                        onClick={() => setIsModalOpen(true)} 
-                    />
+                 <div className="infoBloco">
+                    <div className="info">
+                        <ActionButton 
+                            text="Projetos Vinculados" 
+                            variant="medium" 
+                            onClick={() => setIsModalOpen(true)} 
+                        />
+                    </div>
+                </div>
 
-                    {/* Modal */}
-                    {isModalOpen && (
-                        <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
+                <div className="infoBloco">
+                    <div className="info">
+                        <ActionButton 
+                            text="Extrair Dados" 
+                            variant="medium" 
+                            onClick={handleExportEdital}
+                        />
+                    </div>
+                </div>
+
+                <div className='infoBloco'>
+                    <div className="info">
+                        <ActionButton text="EDITAR" variant="medium" to={`/edital/${id}/editar`} />
+                    </div>
+                </div>
+
+                {/* Modal */}
+                {isModalOpen && (
+                    <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
                         <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                            <h3>Projetos Vinculados</h3>
+                            <h2>Projetos Vinculados</h2>
                             {edital.projetosVinculados && edital.projetosVinculados.length > 0 ? (
-                            <ul>
-                                {edital.projetosVinculados.map((proj, index) => (
-                                <li key={index}>{proj}</li>
-                                ))}
-                            </ul>
-                            ) : (
-                            <p className='bold'>Nenhum projeto vinculado a este edital.</p>
+                                <ul>
+                                    {edital.projetosVinculados.map((proj, index) => (
+                                    <li key={index}>
+                                        <h3>{proj}</h3>
+                                    </li>
+                                    ))}
+                                </ul>
+                                ) : (
+                                <p className='bold'>Nenhum projeto vinculado a este edital.</p>
                             )}
                             <ActionButton text="FECHAR" variant="medium" onClick={() => setIsModalOpen(false)} />
                         </div>
-                        </div>
-                    )}
+                    </div>
+                )}
 
-                    <ActionButton text="EDITAR" variant="medium" to={`/edital/${id}/editar`} />
-                </div>
             </div>
     );
 }

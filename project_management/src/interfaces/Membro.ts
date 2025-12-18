@@ -15,9 +15,7 @@ export interface Membro {
   agencia?: string;
   contaCorrente?: string;
   email: string;
-  
-  nomeProjeto: string;
-  relatorio?: object[];
+  relatorio?: string[];
 
   cadastradoEm: string;
   editadoEm?: string;

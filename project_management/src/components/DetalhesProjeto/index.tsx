@@ -5,6 +5,8 @@ import Button from '../Button';
 import './styles.css';
 import type { Projeto } from '../../interfaces/Projeto';
 import { useParams } from 'react-router-dom';
+import { exportProjetoIndividual } from '../../utils/excel/exportProjetoIndividual';
+
 
 // Funções utilitárias simples
 const formatCurrency = (valor: number | undefined): string =>
@@ -70,6 +72,13 @@ function DetalhesProjeto({ projectId }: { projectId: string | undefined }) {
     buscarProjeto();
     buscarEdital();
   }, [id, projeto]);
+
+  const handleExportProjeto = () => {
+    if (!projeto) return;
+    exportProjetoIndividual(projeto, nomeEdital);
+  };
+
+
 
 
   if (loading) {
@@ -253,9 +262,18 @@ function DetalhesProjeto({ projectId }: { projectId: string | undefined }) {
           </div>
         </div>
       </div>
+      
+      <div className="infoBloco">
+        <div className="info">
+          <Button
+            text="Exportar projeto"
+            onClick={handleExportProjeto}
+          />
+        </div>
 
-      <div className="info">
-        <Button text="EDITAR" variant="medium" to={`/projetos/${id}/editar`} />
+        <div className="info">
+          <Button text="EDITAR" variant="medium" to={`/projetos/${id}/editar`} />
+        </div>
       </div>
 
     </div>

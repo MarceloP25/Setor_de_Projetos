@@ -25,7 +25,7 @@ import MainLayout from '../layout/MainLayout';
 import OrcamentoGestao from '../screens/OrcamentoGestao';
 
 // Membros
-
+import Membros from '../screens/Membros';
 
 
 const AppRoutes = () => {
@@ -56,7 +56,7 @@ const AppRoutes = () => {
             <Route path="/orcamento/gestao" element={<OrcamentoGestao />} />
 
 
-            {/*<Route path="/membros" element={<Membros />} />*/}
+            <Route path="/membros" element={<Membros />} />
           </Routes>
        
         </MainLayout>

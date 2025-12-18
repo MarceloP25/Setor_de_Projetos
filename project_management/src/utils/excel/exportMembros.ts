@@ -2,9 +2,17 @@ import type { Membro } from '../../interfaces/Membro';
 import { exportToExcel } from './exportBase';
 import { normalizeMembro } from './normalizers';
 
-export function exportTodosMembros(membros: Membro[]) {
+export function exportMembros(
+  membros: Membro[],
+  nomeArquivo: string
+) {
   exportToExcel(
-    [{ sheetName: 'Membros', rows: membros.map(normalizeMembro) }],
-    'todos_os_membros'
+    [
+      {
+        sheetName: 'Membros',
+        rows: membros.map(m => normalizeMembro(m))
+      }
+    ],
+    nomeArquivo
   );
 }

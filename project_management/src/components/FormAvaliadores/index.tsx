@@ -10,48 +10,61 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Modal } from '../Modal';
 
 const initialProjectState: Projeto = {
-    id: '',
-    edital: '',
-    nomeProjeto: '',
-    nomeDaAcao: '',
-    codigoProjeto: '',
-    ano: 0,
-    periodoInicio: '',
-    periodoFim: '',
-    abrangencia: '',
-    nomeCoordenador: '',
-    emailCoordenador: '',
-    nomeCoCoordenador: '',
-    emailCoCoordenador: '',
-    publicoInternoDescricao: '',
-    publicoInternoQuantidade: 0,
-    publicoExternoDescricao: '',
-    publicoExternoQuantidade: 0,
-    estado: '',
-    municipio: '',
-    bairro: '',
-    espaco: '',
-    valorSolicitado: 0,
-    valorDisponibilizado: 0,
-    tipoBolsa: [] as string[],
-    valorBolsa: [] as string[],
-    quantidade: 0,
-    valorTotalBolsas: 0,
-    areaTematica: '',
-    linhaExtensao: '',
-    detalhesAcao: '',
-    documentosAnexados: [] as string[],
-    classificacaoDetalhe: '',
-    statusEtapa1: '',
-    notasAvaliadores: [0] as number[],
-    comentariosAvaliadores: [''] as string[],
-    notaEtapa2: 0,
-    alunosParticipantes: [] as string[],
-    relatorioProjeto: [] as object[],
-    criadoEm: '',
-    criadoPor: '',
-    alteradoEm: '',
-    alteradoPor: ''
+  id: '',
+  edital: '',
+  nomeProjeto: '',
+  nomeDaAcao: '',
+  codigoProjeto: '',
+
+  ano: 0,
+  periodoInicio: '',
+  periodoFim: '',
+  abrangencia: '',
+
+  nomeCoordenador: '',
+  emailCoordenador: '',
+  nomeCoCoordenador: '',
+  emailCoCoordenador: '',
+
+  publicoInternoDescricao: '',
+  publicoInternoQuantidade: 0,
+  publicoExternoDescricao: '',
+  publicoExternoQuantidade: 0,
+
+  estado: '',
+  municipio: '',
+  bairro: '',
+  espaco: '',
+
+  valorSolicitado: 0,
+  valorDisponibilizado: 0,
+
+  tipoBolsa: [],
+  quantidadeIndividualBolsas: [],
+  valorUnitarioBolsa: [],
+  valorBolsa: [],
+  quantidade: 0,
+  valorTotalBolsas: 0,
+
+  areaTematica: '',
+  linhaExtensao: '',
+
+  detalhesAcao: '',
+  documentosAnexados: [],
+  classificacaoDetalhe: '',
+
+  statusEtapa1: '',
+  notasAvaliadores: [0],
+  comentariosAvaliadores: [''],
+  notaEtapa2: 0,
+
+  alunosParticipantes: [],
+  relatorioProjeto: [],
+
+  criadoEm: '',
+  criadoPor: '',
+  alteradoEm: '',
+  alteradoPor: ''
 };
 
 function FormAvaliadores({ projectId }: { projectId: string | undefined }) {
