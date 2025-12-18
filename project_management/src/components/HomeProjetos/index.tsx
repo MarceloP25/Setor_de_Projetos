@@ -38,19 +38,26 @@ const ProjectList: React.FC = () => {
     loadData();
   }, []);
 
-  const handleExport = () => {
-    const projetosFiltrados =
-        selectedEdital === ''
-        ? projects
-        : projects.filter(p => p.edital === selectedEdital);
+    const handleExport = () => {
+        const projetosFiltrados =
+            selectedEdital === ''
+            ? projects
+            : projects.filter(p => p.edital === selectedEdital);
 
-    if (!projetosFiltrados.length) {
-        setShowModal(true);
-        return;
-    }
+        if (!projetosFiltrados.length) {
+            setShowModal(true);
+            return;
+        }
 
-    exportProjetos(projetosFiltrados);
+        exportProjetos(
+            projetosFiltrados,
+            (idEdital: string) => {
+            const edital = editaisList.find(e => e.id === idEdital);
+            return edital?.nomeEdital ?? '';
+            }
+        );
     };
+
 
     const handleExportClassificados = () => {
     if (!selectedEdital) {

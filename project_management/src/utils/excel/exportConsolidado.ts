@@ -32,7 +32,7 @@ export function exportConsolidadoEdital(
       },
       {
         sheetName: 'Projetos',
-        rows: projetosDoEdital.map(normalizeProjeto)
+        rows: projetosDoEdital.map(p => normalizeProjeto(p))
       },
       {
         sheetName: 'Membros',

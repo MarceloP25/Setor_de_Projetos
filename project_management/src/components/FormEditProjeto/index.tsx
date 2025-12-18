@@ -76,13 +76,14 @@ const initialProjectState: Projeto = {
 
 function FormEditProjeto({ projectId }: { projectId: string | undefined }) {
   const { projectId: id = projectId } = useParams<{ projectId: string }>();
-  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
+
+  const [showModal, setShowModal] = useState(false);
+  const [editaisList, setEditaisList] = useState<Edital[]>([]);
+  const [formData, setFormData] = useState<Projeto>(initialProjectState);
+
   const [bolsaSelecionada, setBolsaSelecionada] = useState('');
   const [quantidadeBolsa, setQuantidadeBolsa] = useState<number>(0);
-  const [editaisList, setEditaisList] = useState<Edital[]>([]);
-  const [projectsList, setProjectsList] = useState<Projeto[]>([]);
-  const [formData, setFormData] = useState<Projeto>(initialProjectState);
 
 
   const areaTematicaList = [
@@ -281,33 +282,21 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 
   useEffect(() => {
     async function loadData() {
-      try {
-        const [projetos, editais] = await Promise.all([
-          fetchProjetos(),
-          fetchEditais()
-        ]);
+      const [projetos, editais] = await Promise.all([
+        fetchProjetos(),
+        fetchEditais()
+      ]);
 
-        setProjectsList(projetos);
-        setEditaisList(editais);
+      setEditaisList(editais);
 
-        const projetoEncontrado = projetos.find(p => p.id === id);
-
-        if (!projetoEncontrado) {
-          alert('Projeto não encontrado!');
-          navigate('/projetos');
-          return;
-        }
-
-        // Merge defensivo: nunca deixa campo faltar
-        setFormData({
-          ...initialProjectState,
-          ...projetoEncontrado,
-          id: projetoEncontrado.id
-        });
-
-      } catch (error) {
-        console.error('Erro ao carregar dados:', error);
+      const projeto = projetos.find(p => p.id === id);
+      if (!projeto) {
+        alert('Projeto não encontrado');
+        navigate('/projetos');
+        return;
       }
+
+      setFormData({ ...initialProjectState, ...projeto, id: projeto.id });
     }
 
     if (id) loadData();
