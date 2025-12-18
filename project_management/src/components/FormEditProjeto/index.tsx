@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../services/config';
-import { doc, collection, getDoc, updateDoc, getDocs, arrayUnion } from 'firebase/firestore';
+import { doc, collection, getDoc, updateDoc, getDocs } from 'firebase/firestore';
 import { useParams, useNavigate } from 'react-router-dom';
 import InputText from '../InputText';
 import InputNumber from '../InputNumber';
@@ -258,7 +258,7 @@ function FormEditProjeto({ projectId }: { projectId: string | undefined }) {
     }
 
     if (!formData.nomeProjeto.replace(/\s/g, '').length) {
-      alert('Nome do projeto inválido para ID!');
+      alert('Nome do projeto inválido!');
       return false;
     }
 

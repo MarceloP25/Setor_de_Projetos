@@ -7,18 +7,10 @@ import InputNumber from '../InputNumber';
 import SelectInput from '../SelectInput';
 import type { Edital } from '../../interfaces/Edital';
 import type { Projeto } from '../../interfaces/Projeto';
-
-
-import './styles.css';
 import { Modal } from '../Modal';
 
+import './styles.css';
 
-const sanitizeName = (name: string): string => {
-  return name
-    .toLowerCase()
-    .replace(/[^a-z0-9\\s]/g, '')
-    .replace(/\\s+/g, '-'); // dentro de utils tambem
-};
 
 const initialProjectState: Projeto = {
   id: '',
@@ -263,7 +255,7 @@ function FormCadProjeto()  {
     }
 
     if (!formData.nomeProjeto.replace(/\s/g, '').length) {
-      alert('Nome do projeto inválido para ID!');
+      alert('Nome do projeto inválido!');
       return false;
     }
 
@@ -277,7 +269,7 @@ function FormCadProjeto()  {
     if (!validateForm()) return;
 
     try {
-      const projetoId = sanitizeName(formData.nomeProjeto);
+      const projetoId = formData.id || crypto.randomUUID();
 
       await setDoc(doc(db, "projetos", projetoId), {
         ...formData,
@@ -285,7 +277,7 @@ function FormCadProjeto()  {
       });
 
       await updateDoc(doc(db, "editais", formData.edital), {
-        projetosVinculados: arrayUnion(formData.nomeProjeto)
+        projetosVinculados: arrayUnion(formData.id)
       });
 
       setShowModal(true);

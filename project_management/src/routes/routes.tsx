@@ -22,6 +22,10 @@ import EditalEdit from '../screens/EditalEdit';
 // Orçamentos
 import Orcamento from '../screens/Orcamento';
 import MainLayout from '../layout/MainLayout';
+import OrcamentoGestao from '../screens/OrcamentoGestao';
+
+// Membros
+
 
 
 const AppRoutes = () => {
@@ -31,24 +35,28 @@ const AppRoutes = () => {
         <MainLayout >
         
           <Routes>
-            <Route path="/visao_geral" element={<VisaoGeral />} /> {/* Tem Sidebar */}
+            <Route path="/visao_geral" element={<VisaoGeral />} />
 
-            <Route path="/projetos" element={<Project />} /> {/* Tem Sidebar */}
+            <Route path="/projetos" element={<Project />} />
             <Route path="/projetos/cadastrar" element={<ProjetosRegister />} />
             <Route path="/projetos/:projectId" element={<ProjectDetails />} />
             <Route path="/projetos/:projectId/editar" element={<ProjectEdit />} /> 
             <Route path="/projetos/:projectId/documentos" element={<ProjectDocuments />} /> 
             <Route path="/projetos/:projectId/avaliacao" element={<ProjectAvaliacoes />} /> 
-            {/* <Route path="/projetos/:projectId/alunos" element={<ProjectAlunos />} /> */}
+            {/* <Route path="/projetos/:projectId/membros" element={<ProjectAlunos />} /> */}
 
 
-            <Route path="/edital" element={<Editais />} /> {/* Tem Sidebar */}
+            <Route path="/edital" element={<Editais />} />
             <Route path="/edital/cadastrar" element={<EditalRegister />} />
             <Route path="/edital/:editalId" element={<EditalDetails />} />
             <Route path="/edital/:editalId/editar" element={<EditalEdit />} />
 
 
-            <Route path="/orcamento" element={<Orcamento />} /> {/* Tem Sidebar */}
+            <Route path="/orcamento" element={<Orcamento />} />
+            <Route path="/orcamento/gestao" element={<OrcamentoGestao />} />
+
+
+            {/*<Route path="/membros" element={<Membros />} />*/}
           </Routes>
        
         </MainLayout>

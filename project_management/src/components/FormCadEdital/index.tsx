@@ -17,8 +17,8 @@ function FormCadEdital()  {
     nomeEdital: '',
     numeroProcessoEdital: '',
 
-    orcamentoEdital: '',
-    valorDisponivel: '',
+    orcamentoEdital: 0,
+    valorDisponivel: 0,
     status: true,
 
     projetosVinculados: [],
@@ -121,8 +121,8 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       id: '',
       nomeEdital: '',
       numeroProcessoEdital: '',
-      orcamentoEdital: '',
-      valorDisponivel: '',
+      orcamentoEdital: 0,
+      valorDisponivel: 0,
       status: true,
       projetosVinculados: [],
       anoVigente: '',
@@ -190,9 +190,9 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
             <div className="form-row">
               <div className="form-col">
                 <h3>Orçamento do Edital</h3>
-                <InputText
+                <InputNumber
                   label='Orçamento presente no edital no momento de sua divulgação'
-                  type="text"
+                  type="number"
                   name="orcamentoEdital"
                   value={formData.orcamentoEdital}
                   onChange={handleChange}
@@ -203,11 +203,11 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
             <div className="form-row">
               <div className="form-col">
                 <h3>Orçamento Disponibilizado</h3>
-                <InputText
+                <InputNumber
                   label="Orçamento fornecido a partir do repasse para a instituição"
-                  type="text"
+                  type="number"
                   name="valorDisponivel"
-                  value={formData.valorDisponivel || ''}
+                  value={formData.valorDisponivel || 0}
                   onChange={handleChange}
                   placeholder="R$"
                 />

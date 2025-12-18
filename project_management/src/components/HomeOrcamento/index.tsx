@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../services/config'
 import { collection, getDocs } from 'firebase/firestore';
-import { Link } from 'react-router-dom';
 import type { Projeto } from '../../interfaces/Projeto';
 import './styles.css';
 import SelectInput from '../SelectInput';
+import Button from '../Button';
 
 
-const ProjectList: React.FC = () => {
+const HomeOrcamento: React.FC = () => {
     const [projects, setProjects] = useState<Projeto[]>([]);
     const [editaisList, setEditaisList] = useState<any[]>([]);
     const [selectedEdital, setSelectedEdital] = useState<string>('');
@@ -113,14 +113,17 @@ const ProjectList: React.FC = () => {
 
     return (
         <div className="home-project-list-container">
-            <h2>Projetos de Extensão</h2>
+            <h2>Orçamento da Extensão</h2>
             <div className="buttons-container">
-                <Link to="/projetos/cadastrar" className="btn primary">
-                    Novo Projeto
-                </Link>
-                <Link to="/projetos/classificacao" className="btn primary">
-                    Classificação
-                </Link>
+                <Button to="/orcamento/gestao" 
+                    text="Distribuir Orçamento"
+                />
+                <Button
+                    text="Extrair Relatório"
+                    onClick={() => {
+                        // Lógica para extrair o relatório
+                    }}
+                />
             </div>
             <div className="filter-container">
                 <SelectInput
@@ -140,14 +143,12 @@ const ProjectList: React.FC = () => {
                     project => selectedEdital === '' || project.edital === selectedEdital
                     ).map(project => (
                         <div key={project.id} className="project-item">
-                            <Link to={`/projetos/${project.id}`}>
                                 <div className='info-card'> 
                                     <h5>{project.nomeProjeto}</h5>
-                                    <h5>{project.nomeCoordenador}</h5>
-                                    <h5>{project.areaTematica}</h5>
-                                    <h5>{project.ano}</h5>
+                                    <h5> Solicitado: R${project.valorSolicitado}</h5>
+                                    <h5> Disponibilizado: R${project.valorDisponibilizado}</h5>
+                                    <h5> Total das bolsas: R${project.valorTotalBolsas}</h5>
                                 </div>
-                            </Link>
                         </div>
                     ))
                 }
@@ -156,4 +157,4 @@ const ProjectList: React.FC = () => {
     );
 };
 
-export default ProjectList;
+export default HomeOrcamento;

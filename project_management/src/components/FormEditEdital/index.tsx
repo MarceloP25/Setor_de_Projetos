@@ -14,8 +14,8 @@ const initialEditalState: Edital = {
     nomeEdital: '',
     numeroProcessoEdital: '',
 
-    orcamentoEdital: '',
-    valorDisponivel: '',
+    orcamentoEdital: 0,
+    valorDisponivel: 0,
     status: true,
 
     projetosVinculados: [],
@@ -204,26 +204,26 @@ function FormEditEdital({ editalId }: { editalId: string | undefined }) {
                     <div className="form-row">
                     <div className="form-col">
                         <h3>Orçamento do Edital</h3>
-                        <InputText
-                        label='Orçamento presente no edital no momento de sua divulgação'
-                        type="text"
-                        name="orcamentoEdital"
-                        value={formData.orcamentoEdital}
-                        onChange={handleChange}
-                        placeholder="R$"
+                        <InputNumber
+                            label='Orçamento presente no edital no momento de sua divulgação'
+                            type="number"
+                            name="orcamentoEdital"
+                            value={formData.orcamentoEdital}
+                            onChange={handleChange}
+                            placeholder="R$"
                         />
                     </div>
                     </div>
                     <div className="form-row">
                     <div className="form-col">
                         <h3>Orçamento Disponibilizado</h3>
-                        <InputText
-                        label="Orçamento fornecido a partir do repasse para a instituição"
-                        type="text"
-                        name="valorDisponivel"
-                        value={formData.valorDisponivel || ''}
-                        onChange={handleChange}
-                        placeholder="R$"
+                        <InputNumber
+                            label="Orçamento fornecido a partir do repasse para a instituição"
+                            type="number"
+                            name="valorDisponivel"
+                            value={formData.valorDisponivel || 0}
+                            onChange={handleChange}
+                            placeholder="R$"
                         />
                     </div>
                     </div>

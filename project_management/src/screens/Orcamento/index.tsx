@@ -1,6 +1,7 @@
 import React from 'react';
 
 import './styles.css';
+import HomeOrcamento from '../../components/HomeOrcamento';
 
 
 
@@ -9,8 +10,7 @@ const Orcamento: React.FC = () => {
 
     return (
         <div className="home-orcamento-container">
-            <h1>Orçamento</h1>
-            <p>Esta é a futura tela de Orçamento.</p>
+            <HomeOrcamento />
         </div>  
     );
 };
