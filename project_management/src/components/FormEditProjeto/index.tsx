@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../services/config';
-import { doc, collection, getDoc, updateDoc, getDocs, arrayUnion } from 'firebase/firestore';
+import { doc, updateDoc,} from 'firebase/firestore';
 import { useParams, useNavigate } from 'react-router-dom';
 import InputText from '../InputText';
 import InputNumber from '../InputNumber';
 import SelectInput from '../SelectInput';
 import type { Edital } from '../../interfaces/Edital';
 import type { Projeto } from '../../interfaces/Projeto';
+import { fetchProjetos } from '../../services/views/fetchProjetos';
+import { fetchEditais } from '../../services/views/fetchEditais';
 
 
 import './styles.css';
@@ -74,21 +76,14 @@ const initialProjectState: Projeto = {
 
 function FormEditProjeto({ projectId }: { projectId: string | undefined }) {
   const { projectId: id = projectId } = useParams<{ projectId: string }>();
-  const [editaisList, setEditaisList] = useState<Edital[]>([]);
-  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
+
+  const [showModal, setShowModal] = useState(false);
+  const [editaisList, setEditaisList] = useState<Edital[]>([]);
+  const [formData, setFormData] = useState<Projeto>(initialProjectState);
+
   const [bolsaSelecionada, setBolsaSelecionada] = useState('');
   const [quantidadeBolsa, setQuantidadeBolsa] = useState<number>(0);
-
-  if (!id) {
-    return <div>Projeto não encontrado!</div>;
-  }
-
-  const [formData, setFormData] = useState<Projeto>({
-    ...initialProjectState,
-    id: id,
-  });
-
 
 
   const areaTematicaList = [
@@ -258,7 +253,7 @@ function FormEditProjeto({ projectId }: { projectId: string | undefined }) {
     }
 
     if (!formData.nomeProjeto.replace(/\s/g, '').length) {
-      alert('Nome do projeto inválido para ID!');
+      alert('Nome do projeto inválido!');
       return false;
     }
 
@@ -266,90 +261,47 @@ function FormEditProjeto({ projectId }: { projectId: string | undefined }) {
   };
 
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  if (!validateForm()) return;
 
-    if (!validateForm()) return;
+  try {
+    const { id: _, ...dataToSave } = formData;
 
-    try {
-      const { id: _, ...dataToSave } = formData;
+    await updateDoc(doc(db, 'projetos', id!), {
+      ...dataToSave,
+      alteradoEm: new Date().toISOString()
+    });
 
-      await updateDoc(doc(db, "projetos", id), {
-        ...dataToSave,
-        alteradoEm: new Date().toISOString()
-      });
-
-      setShowModal(true);
-
-    } catch (error) {
-      alert('Erro ao editar projeto: ' + (error as Error).message);
-    }
-  };
-
-  
-  const fetchEditais = async () => {
-    try {
-      const editaisRef = collection(db, "editais");
-      const querySnapshot = await getDocs(editaisRef);
-      const editais = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        nomeEdital: doc.data().nomeEdital,
-        numeroProcessoEdital: doc.data().numeroProcessoEdital,
-        orcamentoEdital: doc.data().orcamentoEdital,
-        valorDisponivel:  doc.data().valorDisponivel,
-        status:  doc.data().status,
-        projetosVinculados:  doc.data().projetosVinculados,
-        anoVigente:  doc.data().anoVigente,
-        dataInicio:  doc.data().dataInicio,
-        dataFim:  doc.data().dataFim,
-        dataInicioSubmissao:  doc.data().dataInicioSubmissao,
-        dataFimSubmissao:  doc.data().dataFimSubmissao,
-        dataInicioDocumentos:  doc.data().dataInicioDocumentos,
-        dataFimDocumentos:  doc.data().dataFimDocumentos,
-        dataInicioRecursoSubmissao:  doc.data().dataInicioRecursoSubmissao,
-        dataFimRecursoSubmissao:  doc.data().dataFimRecursoSubmissao,
-        dataInicioAvaliacao:  doc.data().dataInicioAvaliacao,
-        dataFimAvaliacao:  doc.data().dataFimAvaliacao,
-        dataInicioRecursoAvaliacao:  doc.data().dataInicioRecursoAvaliacao,
-        dataFimRecursoAvaliacao:  doc.data().dataFimRecursoAvaliacao,
-        dataInicioRecursoSubimissao:  doc.data().dataInicioRecursoSubimissao,
-        dataFimRecursoSubimissao:  doc.data().dataFimRecursoSubimissao,
-        dataInicioEnvioRelatorioMensal:  doc.data().dataInicioEnvioRelatorioMensal,
-        dataFimEnvioRelatorioMensal:  doc.data().dataFimEnvioRelatorioMensal,
-        dataInicioEnvioRelatorioFinal:  doc.data().dataInicioEnvioRelatorioFinal,
-        dataFimEnvioRelatorioFinal:  doc.data().dataFimEnvioRelatorioFinal,
-        dataPagamentoInicio:  doc.data().dataPagamentoInicio,
-        dataPagamentoFim:  doc.data().dataPagamentoFim,
-        linkAcessoEdital: doc.data().linkAcessoEdital,
-        criadoEm:  doc.data().criadoEm,
-        criadoPor:  doc.data().criadoPor,
-        alteradoEm:  doc.data().alteradoEm,
-        alteradoPor:  doc.data().alteradoPor,
-      }));
-      setEditaisList(editais);
-    } catch (error) {
-      console.error("Erro ao buscar editais:", error);
-    }
-  };
+    setShowModal(true);
+  } catch (error) {
+    alert('Erro ao editar projeto: ' + (error as Error).message);
+  }
+};
 
 
   useEffect(() => {
-    const fetchProjetoData = async () => {
-      if(id) {
-        const projetoRef = doc(db, 'projetos', id);
-        const projetoSnap = await getDoc(projetoRef);
+    async function loadData() {
+      const [projetos, editais] = await Promise.all([
+        fetchProjetos(),
+        fetchEditais()
+      ]);
 
-        if (projetoSnap.exists()) {
-          setFormData(projetoSnap.data() as Projeto);
-        } else {
-          alert('Projeto não encontrado!');
-          setFormData({ ...initialProjectState, id: id });
-        }
+      setEditaisList(editais);
+
+      const projeto = projetos.find(p => p.id === id);
+      if (!projeto) {
+        alert('Projeto não encontrado');
+        navigate('/projetos');
+        return;
       }
-    };
-    fetchEditais();
-    fetchProjetoData();
-  }, [id]);
+
+      setFormData({ ...initialProjectState, ...projeto, id: projeto.id });
+    }
+
+    if (id) loadData();
+  }, [id, navigate]);
+
 
   return (
         <div className="form-container">
@@ -360,15 +312,15 @@ function FormEditProjeto({ projectId }: { projectId: string | undefined }) {
             <div className="form-row">
               <div className="form-col">
               <h3>Selecione o Edital</h3>
-              <SelectInput
-                name="edital"
-                value={formData.edital}
-                onChange={handleChange}
-                options={editaisList.map((edital) => ({
-                  label: edital.nomeEdital,
-                  value: edital.id
-                }))}
-              />
+                <SelectInput
+                  name="edital"
+                  value={formData.edital}
+                  onChange={handleChange}
+                  options={editaisList.map(edital => ({
+                    label: edital.nomeEdital,
+                    value: edital.id
+                  }))}
+                />
               </div>
             </div>
 

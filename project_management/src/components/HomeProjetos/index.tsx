@@ -1,124 +1,98 @@
 import React, { useState, useEffect } from 'react';
-import { db } from '../../services/config'
-import { collection, getDocs } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
 import type { Projeto } from '../../interfaces/Projeto';
+import { fetchProjetos } from '../../services/views/fetchProjetos';
+import { fetchEditais } from '../../services/views/fetchEditais';
 import './styles.css';
 import SelectInput from '../SelectInput';
+import Button from '../Button';
+import { exportProjetos } from '../../utils/excel/exportProjetos';
+import { exportClassificacaoProjetos } from '../../utils/excel/exportClassificacaoProjetos';
+import {Modal} from '../Modal';
+import { useNavigate } from 'react-router-dom';
+
 
 
 const ProjectList: React.FC = () => {
     const [projects, setProjects] = useState<Projeto[]>([]);
     const [editaisList, setEditaisList] = useState<any[]>([]);
     const [selectedEdital, setSelectedEdital] = useState<string>('');
+    const [showModal, setShowModal] = useState(false);
+    const navigate = useNavigate();
 
+ useEffect(() => {
+    async function loadData() {
+      try {
+        const [projetos, editais] = await Promise.all([
+          fetchProjetos(),
+          fetchEditais()
+        ]);
 
-    useEffect(() => {
-        const fetchProjects = async () => {
-            try {
-                const projectsRef = collection(db, "projetos");
-                const querySnapshot = await getDocs(projectsRef);
-                const projectsData = querySnapshot.docs.map(doc => ({
-                    id: doc.id,
-                    nomeProjeto: doc.data().nomeProjeto,
-                    nomeDaAcao: doc.data().nomeDaAcao,
-                    codigoProjeto: doc.data().codigoProjeto,
-                    edital: doc.data().edital,
-                    ano: doc.data().ano,
-                    periodoInicio: doc.data().periodoInicio,
-                    periodoFim: doc.data().periodoFim,
-                    nomeCoordenador: doc.data().nomeCoordenador,
-                    emailCoordenador: doc.data().emailCoordenador,
-                    nomeCoCoordenador: doc.data().nomeCoCoordenador,
-                    emailCoCoordenador: doc.data().emailCoCoordenador,
-                    publicoInternoDescricao: doc.data().publicoInternoDescricao,
-                    publicoInternoQuantidade: doc.data().publicoInternoQuantidade,
-                    publicoExternoDescricao: doc.data().publicoExternoDescricao,
-                    publicoExternoQuantidade: doc.data().publicoExternoQuantidade,
-                    abrangencia: doc.data().abrangencia,
-                    estado: doc.data().estado,
-                    municipio: doc.data().municipio,
-                    bairro: doc.data().bairro,
-                    espaco: doc.data().espaco,
-                    valorSolicitado: doc.data().valorSolicitado,
-                    valorDisponibilizado: doc.data().valorDisponibilizado,
-                    tipoBolsa: doc.data().tipoBolsa,
-                    valorBolsa: doc.data().valorBolsa,
-                    quantidade: doc.data().quantidade,
-                    valorTotalBolsas: doc.data().valorTotalBolsas,
-                    areaTematica: doc.data().areaTematica,
-                    linhaExtensao: doc.data().linhaExtensao,
-                    detalhesAcao: doc.data().detalhesAcao,
-                    documentosAnexados: doc.data().documentosAnexados,
-                    statusEtapa1: doc.data().statusEtapa1,
-                    classificacaoDetalhe: doc.data().classificacaoDetalhe,
-                    notasAvaliadores: doc.data().notasAvaliadores,
-                    comentariosAvaliadores: doc.data().comentariosAvaliadores,
-                    notaEtapa2: doc.data().notaEtapa2,
-                    alunosParticipantes: doc.data().alunosParticipantes,
-                    relatorioProjeto: doc.data().relatorioProjeto,
-                    criadoEm: doc.data().criadoEm,
-                    criadoPor: doc.data().criadoPor,
-                    alteradoEm: doc.data().alteradoEm,
-                    alteradoPor: doc.data().alteradoPor,
-                }));
-                setProjects(projectsData);
-            } catch (error) {
-                console.error("Erro ao buscar projetos:", error);
-            }   
-        };
+        setProjects(projetos);
+        setEditaisList(editais);
+      } catch (err) {
+        console.error('Erro ao carregar dados:', err);
+      }
+    }
 
-        const fetchEditais = async () => {
-            try {
-              const editaisRef = collection(db, "editais");
-              const querySnapshot = await getDocs(editaisRef);
-              const editais = querySnapshot.docs.map(doc => ({
-                id: doc.id,
-                nomeEdital: doc.data().nomeEdital,
-                orcamentoEdital: doc.data().orcamentoEdital,
-                valorDisponivel:  doc.data().valorDisponivel,
-                status:  doc.data().status,
-                projetosVinculados:  doc.data().projetosVinculados,
-                anoVigente:  doc.data().anoVigente,
-                dataInicio:  doc.data().dataInicio,
-                dataFim:  doc.data().dataFim,
-                dataInicioSubmissao:  doc.data().dataInicioSubmissao,
-                dataFimSubmissao:  doc.data().dataFimSubmissao,
-                dataInicioDocumentos:  doc.data().dataInicioDocumentos,
-                dataFimDocumentos:  doc.data().dataFimDocumentos,
-                dataInicioRecurso:  doc.data().dataInicioRecurso,
-                dataFimRecurso:  doc.data().dataFimRecurso,
-                dataInicioAvaliacao:  doc.data().dataInicioAvaliacao,
-                dataFimAvaliacao:  doc.data().dataFimAvaliacao,
-                dataInicioEnvioRelatorio:  doc.data().dataFimEnvioRelatorio,
-                dataFimEnvioRelatorio: doc.data().dataFimEnvioRelatorio,
-                dataPagamentoInicio:  doc.data().dataPagamentoInicio,
-                dataPagamentoFim:  doc.data().dataPagamentoFim,
-                linkAcessoEdital: doc.data().linkAcessoEdital,
-                criadoEm:  doc.data().criadoEm,
-                criadoPor:  doc.data().criadoPor,
-                alteradoEm:  doc.data().alteradoEm,
-                alteradoPor:  doc.data().alteradoPor,
-              }));
-              setEditaisList(editais);
-            } catch (error) {
-              console.error("Erro ao buscar editais:", error);
+    loadData();
+  }, []);
+
+    const handleExport = () => {
+        const projetosFiltrados =
+            selectedEdital === ''
+            ? projects
+            : projects.filter(p => p.edital === selectedEdital);
+
+        if (!projetosFiltrados.length) {
+            setShowModal(true);
+            return;
+        }
+
+        exportProjetos(
+            projetosFiltrados,
+            (idEdital: string) => {
+            const edital = editaisList.find(e => e.id === idEdital);
+            return edital?.nomeEdital ?? '';
             }
-          };
-        fetchProjects();
-        fetchEditais();
-    }, []);
+        );
+    };
+
+
+    const handleExportClassificados = () => {
+    if (!selectedEdital) {
+        alert('Selecione um edital.');
+        return;
+    }
+
+    const editalSelecionado = editaisList.find(
+        e => e.id === selectedEdital
+    );
+
+    if (!editalSelecionado) {
+        alert('Edital não encontrado.');
+        return;
+    }
+
+    exportClassificacaoProjetos(
+        editalSelecionado,
+        projects
+    );
+    };
+
 
     return (
         <div className="home-project-list-container">
             <h2>Projetos de Extensão</h2>
             <div className="buttons-container">
-                <Link to="/projetos/cadastrar" className="btn primary">
-                    Novo Projeto
-                </Link>
-                <Link to="/projetos/classificacao" className="btn primary">
-                    Classificação
-                </Link>
+                <Button 
+                    to="/projetos/cadastrar" 
+                    text="Novo Projeto"
+                />
+                <Button 
+                    onClick={handleExportClassificados}
+                    text="Classificação"
+                />
             </div>
             <div className="filter-container">
                 <SelectInput
@@ -126,7 +100,20 @@ const ProjectList: React.FC = () => {
                     name="editalSelect"
                     value={selectedEdital}
                     onChange={(e) => setSelectedEdital(e.target.value)}
-                    options={[...editaisList.map(edital => edital.nomeEdital)]}
+                    options={editaisList.map((edital) => ({
+                        label: edital.nomeEdital,
+                        value: edital.id
+                    }))}
+                />
+            </div>
+                <p className='bold'>Para extrair uma planilha com os projetos, 
+                    selecione o edital e clique no botão, caso não seja selecionado um edital, 
+                    será extraido os dados de todos os projetos.
+                </p>
+            <div className="filter-container">
+                <Button 
+                    text='Extrair dados'
+                    onClick={handleExport}
                 />
             </div>
 
@@ -147,6 +134,13 @@ const ProjectList: React.FC = () => {
                     ))
                 }
             </div>
+            <Modal
+                isOpen={showModal}
+                title="Nenhum projeto encontrado!"
+                message="Cadastrar um novo projeto."
+                onClose={() => setShowModal(false)}
+                onAfterClose={() => navigate("/projetos/cadastrar")}
+            />
         </div>
     );
 };

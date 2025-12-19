@@ -26,6 +26,10 @@ import EditalEdit from '../screens/EditalEdit';
 // Orçamentos
 import Orcamento from '../screens/Orcamento';
 import MainLayout from '../layout/MainLayout';
+import OrcamentoGestao from '../screens/OrcamentoGestao';
+
+// Membros
+import Membros from '../screens/Membros';
 
 
 const AppRoutes = () => {

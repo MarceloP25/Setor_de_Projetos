@@ -12,6 +12,7 @@ const Sidebar = () => {
     { id: 'edital', label: 'EDITAIS' },
     { id: 'projetos', label: 'PROJETOS' },
     { id: 'orcamento', label: 'ORÇAMENTO' },
+    { id: 'membros', label: 'MEMBROS' },
   ];
 
   const handleLogout = async () => {

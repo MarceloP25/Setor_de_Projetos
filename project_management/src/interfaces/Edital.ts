@@ -3,8 +3,8 @@ export interface Edital {
     nomeEdital: string;
     numeroProcessoEdital: string;
 
-    orcamentoEdital: string;
-    valorDisponivel?: string;
+    orcamentoEdital: number;
+    valorDisponivel?: number;
     status: boolean;
 
     projetosVinculados?: string[];

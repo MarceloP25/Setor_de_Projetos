@@ -1,24 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { db } from '../../services/config'; 
-import { doc, setDoc, collection, getDocs, updateDoc, arrayUnion } from 'firebase/firestore';
+import { db } from '../../services/config';
+import { doc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore';
+
 import InputText from '../InputText';
 import InputNumber from '../InputNumber';
 import SelectInput from '../SelectInput';
+import { Modal } from '../Modal';
+
 import type { Edital } from '../../interfaces/Edital';
 import type { Projeto } from '../../interfaces/Projeto';
 
+import { fetchEditais } from '../../services/views/fetchEditais';
 
 import './styles.css';
-import { Modal } from '../Modal';
-
-
-const sanitizeName = (name: string): string => {
-  return name
-    .toLowerCase()
-    .replace(/[^a-z0-9\\s]/g, '')
-    .replace(/\\s+/g, '-'); // dentro de utils tambem
-};
 
 const initialProjectState: Projeto = {
   id: '',
@@ -81,18 +76,13 @@ const initialProjectState: Projeto = {
 
 function FormCadProjeto()  {
   const navigate = useNavigate();
+
   const [editaisList, setEditaisList] = useState<Edital[]>([]);
+  const [formData, setFormData] = useState<Projeto>(initialProjectState);
   const [showModal, setShowModal] = useState(false);
 
   const [bolsaSelecionada, setBolsaSelecionada] = useState('');
   const [quantidadeBolsa, setQuantidadeBolsa] = useState<number>(0);
-
-
-    const [formData, setFormData] = useState<Projeto>({
-      ...initialProjectState
-    });
-
-
 
   const areaTematicaList = [
     'Comunicação', "Cultura", "Direitos Humanos e Justiça", 
@@ -192,12 +182,12 @@ function FormCadProjeto()  {
         (acc, q) => acc + q,
         0
       );
-
+      
       const valorTotalBolsas = valorBolsa.reduce(
         (acc, v) => acc + v,
         0
       );
-
+      
       return {
         ...prev,
         tipoBolsa,
@@ -209,37 +199,37 @@ function FormCadProjeto()  {
       };
     });
   };
+  
+  useEffect(() => {
+    async function loadEditais() {
+      try {
+        const editais = await fetchEditais();
+        setEditaisList(editais);
+      } catch (error) {
+        console.error('Erro ao carregar editais:', error);
+      }
+    }
 
-
-
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    loadEditais();
+  }, []);
+  
+const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value, type } = e.target;
 
-
     setFormData(prev => {
-      // Campos monetários
-      if (name === "valorSolicitado" || name === "valorDisponibilizado") {
-        
+      if (name === 'valorSolicitado' || name === 'valorDisponibilizado') {
         return { ...prev, [name]: parseFloat(value) || 0 };
       }
 
-      // Campos numéricos (ano, publicoInternoQuantidade, publicoExternoQuantidade, etc.)
-      if (type === "number") {
+      if (type === 'number') {
         return { ...prev, [name]: parseInt(value) || 0 };
       }
 
-      // Campos de seleção múltipla (áreaTematica, linhaExtensao)
-      if (name === "areaTematica" || name === "linhaExtensao") {
-        return { ...prev, [name]: [value] }; // ou [...prev[name], value] se quiser múltipla seleção
-      }
-
-      // Campos padrão (string)
       return { ...prev, [name]: value };
     });
   };
-
-
 
   const validateForm = (): boolean => {
     const requiredFields = [
@@ -256,96 +246,38 @@ function FormCadProjeto()  {
     ];
 
     for (const field of requiredFields) {
-      if (!formData[field as keyof Projeto] || formData[field as keyof Projeto] === 0) {
+      if (!formData[field as keyof Projeto]) {
         alert(`O campo ${field} é obrigatório!`);
         return false;
       }
     }
 
-    if (!formData.nomeProjeto.replace(/\s/g, '').length) {
-      alert('Nome do projeto inválido para ID!');
-      return false;
-    }
-
     return true;
   };
 
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     if (!validateForm()) return;
 
     try {
-      const projetoId = sanitizeName(formData.nomeProjeto);
+      const projetoId = crypto.randomUUID();
 
-      await setDoc(doc(db, "projetos", projetoId), {
+      await setDoc(doc(db, 'projetos', projetoId), {
         ...formData,
+        id: projetoId,
         criadoEm: new Date().toISOString()
       });
 
-      await updateDoc(doc(db, "editais", formData.edital), {
-        projetosVinculados: arrayUnion(formData.nomeProjeto)
+      await updateDoc(doc(db, 'editais', formData.edital), {
+        projetosVinculados: arrayUnion(projetoId)
       });
 
       setShowModal(true);
       setFormData(initialProjectState);
-
     } catch (error) {
       alert('Erro ao cadastrar projeto: ' + (error as Error).message);
     }
   };
-
-  
-  const fetchEditais = async () => {
-    try {
-      const editaisRef = collection(db, "editais");
-      const querySnapshot = await getDocs(editaisRef);
-      const editais = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        nomeEdital: doc.data().nomeEdital,
-        numeroProcessoEdital: doc.data().numeroProcessoEdital,
-        orcamentoEdital: doc.data().orcamentoEdital,
-        valorDisponivel:  doc.data().valorDisponivel,
-        status:  doc.data().status,
-        projetosVinculados:  doc.data().projetosVinculados,
-        anoVigente:  doc.data().anoVigente,
-        dataInicio:  doc.data().dataInicio,
-        dataFim:  doc.data().dataFim,
-        dataInicioSubmissao:  doc.data().dataInicioSubmissao,
-        dataFimSubmissao:  doc.data().dataFimSubmissao,
-        dataInicioDocumentos:  doc.data().dataInicioDocumentos,
-        dataFimDocumentos:  doc.data().dataFimDocumentos,
-        dataInicioRecursoSubmissao:  doc.data().dataInicioRecursoSubmissao,
-        dataFimRecursoSubmissao:  doc.data().dataFimRecursoSubmissao,
-        dataInicioAvaliacao:  doc.data().dataInicioAvaliacao,
-        dataFimAvaliacao:  doc.data().dataFimAvaliacao,
-        dataInicioRecursoAvaliacao:  doc.data().dataInicioRecursoAvaliacao,
-        dataFimRecursoAvaliacao:  doc.data().dataFimRecursoAvaliacao,
-        dataInicioRecursoSubimissao:  doc.data().dataInicioRecursoSubimissao,
-        dataFimRecursoSubimissao:  doc.data().dataFimRecursoSubimissao,
-        dataInicioEnvioRelatorioMensal:  doc.data().dataInicioEnvioRelatorioMensal,
-        dataFimEnvioRelatorioMensal:  doc.data().dataFimEnvioRelatorioMensal,
-        dataInicioEnvioRelatorioFinal:  doc.data().dataInicioEnvioRelatorioFinal,
-        dataFimEnvioRelatorioFinal:  doc.data().dataFimEnvioRelatorioFinal,
-        dataPagamentoInicio:  doc.data().dataPagamentoInicio,
-        dataPagamentoFim:  doc.data().dataPagamentoFim,
-        linkAcessoEdital: doc.data().linkAcessoEdital,
-        criadoEm:  doc.data().criadoEm,
-        criadoPor:  doc.data().criadoPor,
-        alteradoEm:  doc.data().alteradoEm,
-        alteradoPor:  doc.data().alteradoPor,
-      }));
-      setEditaisList(editais);
-    } catch (error) {
-      console.error("Erro ao buscar editais:", error);
-    }
-  };
-
-
-  useEffect(() => {
-    fetchEditais();
-  }, []);
   
   return (
         <div className="form-container">

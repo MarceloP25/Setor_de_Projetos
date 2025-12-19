@@ -11,6 +11,7 @@ interface InputNumberProps {
   min?: number;
   max?: number;
   step?: number;
+  disabled?: boolean;
 }
 
 const InputNumber: React.FC<InputNumberProps> = ({ type, value, name, onChange, placeholder, label, min, max, step }) => {
