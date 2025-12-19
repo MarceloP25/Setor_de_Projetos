@@ -1,5 +1,9 @@
-import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import { Routes, Route, BrowserRouter, Navigate } from 'react-router-dom';
 //import Sidebar from '../components/SideBar';
+
+// Autenticação
+import Login from '../screens/Login';
+import PrivateRoute from '../components/PrivateRoute';
 
 // Visão Geral
 import VisaoGeral from '../screens/VisaoGeral';
@@ -31,36 +35,82 @@ import Membros from '../screens/Membros';
 const AppRoutes = () => {
   return (
     <BrowserRouter>
-      
-        <MainLayout >
+      <Routes>
+        {/* Rota pública de login */}
+        <Route path="/login" element={<Login />} />
         
-          <Routes>
-            <Route path="/visao_geral" element={<VisaoGeral />} />
+        {/* Rotas protegidas */}
+        <Route path="/" element={<Navigate to="/visao_geral" replace />} />
+        
+        <Route path="/visao_geral" element={
+          <PrivateRoute>
+            <MainLayout><VisaoGeral /></MainLayout>
+          </PrivateRoute>
+        } />
 
-            <Route path="/projetos" element={<Project />} />
-            <Route path="/projetos/cadastrar" element={<ProjetosRegister />} />
-            <Route path="/projetos/:projectId" element={<ProjectDetails />} />
-            <Route path="/projetos/:projectId/editar" element={<ProjectEdit />} /> 
-            <Route path="/projetos/:projectId/documentos" element={<ProjectDocuments />} /> 
-            <Route path="/projetos/:projectId/avaliacao" element={<ProjectAvaliacoes />} /> 
-            {/* <Route path="/projetos/:projectId/membros" element={<ProjectAlunos />} /> */}
+        <Route path="/projetos" element={
+          <PrivateRoute>
+            <MainLayout><Project /></MainLayout>
+          </PrivateRoute>
+        } />
+        <Route path="/projetos/cadastrar" element={
+          <PrivateRoute>
+            <MainLayout><ProjetosRegister /></MainLayout>
+          </PrivateRoute>
+        } />
+        <Route path="/projetos/:projectId" element={
+          <PrivateRoute>
+            <MainLayout><ProjectDetails /></MainLayout>
+          </PrivateRoute>
+        } />
+        <Route path="/projetos/:projectId/editar" element={
+          <PrivateRoute>
+            <MainLayout><ProjectEdit /></MainLayout>
+          </PrivateRoute>
+        } />
+        <Route path="/projetos/:projectId/documentos" element={
+          <PrivateRoute>
+            <MainLayout><ProjectDocuments /></MainLayout>
+          </PrivateRoute>
+        } />
+        <Route path="/projetos/:projectId/avaliacao" element={
+          <PrivateRoute>
+            <MainLayout><ProjectAvaliacoes /></MainLayout>
+          </PrivateRoute>
+        } />
+        {/* <Route path="/projetos/:projectId/alunos" element={
+          <PrivateRoute>
+            <MainLayout><ProjectAlunos /></MainLayout>
+          </PrivateRoute>
+        } /> */}
 
+        <Route path="/edital" element={
+          <PrivateRoute>
+            <MainLayout><Editais /></MainLayout>
+          </PrivateRoute>
+        } />
+        <Route path="/edital/cadastrar" element={
+          <PrivateRoute>
+            <MainLayout><EditalRegister /></MainLayout>
+          </PrivateRoute>
+        } />
+        <Route path="/edital/:editalId" element={
+          <PrivateRoute>
+            <MainLayout><EditalDetails /></MainLayout>
+          </PrivateRoute>
+        } />
+        <Route path="/edital/:editalId/editar" element={
+          <PrivateRoute>
+            <MainLayout><EditalEdit /></MainLayout>
+          </PrivateRoute>
+        } />
 
-            <Route path="/edital" element={<Editais />} />
-            <Route path="/edital/cadastrar" element={<EditalRegister />} />
-            <Route path="/edital/:editalId" element={<EditalDetails />} />
-            <Route path="/edital/:editalId/editar" element={<EditalEdit />} />
-
-
-            <Route path="/orcamento" element={<Orcamento />} />
-            <Route path="/orcamento/gestao" element={<OrcamentoGestao />} />
-
-
-            <Route path="/membros" element={<Membros />} />
-          </Routes>
-       
-        </MainLayout>
-      
+        <Route path="/orcamento" element={
+          <PrivateRoute>
+            <MainLayout><Orcamento /></MainLayout>
+          </PrivateRoute>
+        } />
+      </Routes>
     </BrowserRouter>
   );
 };
