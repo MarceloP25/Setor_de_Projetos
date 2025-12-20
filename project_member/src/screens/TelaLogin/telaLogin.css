@@ -1,4 +1,4 @@
-.basico-background {
+.loginaut-background {
   background-color: #ffffff;
   display: flex;
   flex-direction: column;
@@ -10,29 +10,34 @@
   gap: 2rem;
 }
 
-.basico-titulo {
-  font-size: 4rem;
+.loginaut-titulo {
+  font-size: 3rem;
   color: black;
   font-family: var(--texto-titulo);
   font-weight: bold;
   text-align: center;
 }
 
-.basico-container {
+.loginaut-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
-  max-width: 600px;
-  padding: 4rem;
-  gap: 2rem;
+  max-width: 500px;
+  padding: 1.5rem;
+  gap: 1.5rem;
   background-color: #ffffff;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   border-radius: 16px;
+  height: 600px;
 }
-
-.basico-texto {
+.loginaut-link {
+  color: #00D420;
+  text-decoration: none;
+  font-weight: bold;
+}
+.loginaut-subtitulo {
   font-size: 1.75rem;
   color: black;
   font-family: var(--texto-titulo);
@@ -40,48 +45,54 @@
   text-align: center;
 }
 
-.basico-lembrete {
-  font-size: 1.125rem;
-  color: black;
-  text-align: center;
+.loginaut-container input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
 }
 
-/* 📱 Tablets */
+.loginaut-container input:focus {
+  border-color: #4a90e2;
+  outline: none;
+}
+
+
+.loginaut-container p {
+  font-size: 0.95rem;
+  color: red;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
 @media (max-width: 768px) {
-  .basico-titulo {
-    font-size: 2.5rem;
+  .loginaut-titulo {
+    font-size: 2.25rem;
   }
 
-  .basico-container {
-    padding: 1.5rem;
+  .loginaut-container {
+    padding: 2rem;
     gap: 1rem;
   }
 
-  .basico-texto {
+  .loginaut-subtitulo {
     font-size: 1.25rem;
-  }
-
-  .basico-lembrete {
-    font-size: 0.95rem;
   }
 }
 
-/*Celulares */
+/* 📱 Celulares */
 @media (max-width: 480px) {
-  .basico-titulo {
-    font-size: 2rem;
+  .loginaut-titulo {
+    font-size: 1.75rem;
   }
 
-  .basico-container {
+  .loginaut-container {
     padding: 1rem;
     gap: 0.75rem;
   }
 
-  .basico-texto {
+  .loginaut-subtitulo {
     font-size: 1rem;
-  }
-
-  .basico-lembrete {
-    font-size: 0.85rem;
   }
 }

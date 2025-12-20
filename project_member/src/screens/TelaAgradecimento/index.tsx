@@ -1,7 +1,10 @@
-
+import { useNavigate } from "react-router-dom";
+import Botao from "../../componentes/Botao";
 import "./agradecimento.css";
 
 function TelaAgradecimento() {
+
+  const navigate = useNavigate();
   return (
     <>
       <div className="agradecimento-background">
@@ -13,9 +16,13 @@ function TelaAgradecimento() {
             Obrigado por responder o formulário!
           </p>
           <p className="agradecimento-lembrete">
-            Seus dados foram salvos, pode fechar agora.
+            Seus dados foram salvos, aperte o botao abaixo para retornar à página inicial.
           </p>
-
+          <Botao
+          label="Voltar à página inicial"
+          onClick={() => navigate("/Dashboard")}
+          tipo="secundario"
+           />
         </div>
       </div>
     </>

@@ -137,7 +137,13 @@ const FormularioCursos: React.FC = () => {
 
   localStorage.setItem("nivelEnsino", nivelEnsino);
   localStorage.setItem("cursoSelecionado", cursoFinal);
+  
   salvarDados({ nivelEnsino, cursoSelecionado: cursoFinal });
+
+
+  localStorage.removeItem("nivelEnsino");
+  localStorage.removeItem("cursoSelecionado");
+
   navigate("/SelecionarProjeto");
 };
 

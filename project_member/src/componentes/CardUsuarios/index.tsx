@@ -24,7 +24,7 @@ function CardUsuarios({ aluno }: Props) {
 
       <button
         className="btn-editar"
-        onClick={() => navigate(`/editar/${aluno.id}`)}
+        onClick={() => navigate(`/editarMembro/${aluno.id}`)}
       >
         Editar
       </button>

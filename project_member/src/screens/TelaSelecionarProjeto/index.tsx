@@ -84,6 +84,11 @@ function TelaSelecionarProjeto() {
     localStorage.setItem("valorBolsa", valorFinal);
 
     salvarDados({ projetos, vinculo, valorBolsa: valorFinal });
+
+    localStorage.removeItem("projetos");
+    localStorage.removeItem("vinculo");
+    localStorage.removeItem("valorBolsa");
+    
     navigate("/DadosBancarios");
   };
 
