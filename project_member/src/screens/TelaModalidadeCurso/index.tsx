@@ -141,6 +141,17 @@ const FormularioCursos: React.FC = () => {
   salvarDados({ nivelEnsino, cursoSelecionado: cursoFinal });
 
 
+  let tipoBolsa = "";
+  if (nivelEnsino === "nao_sou_aluno") {
+    tipoBolsa = "colaborador_externo";
+  } else if ( nivelEnsino === "tecnico_integrado"|| nivelEnsino === "tecnico_concomitante_subsequente" || nivelEnsino === "tecnico_subsequente_ead") {
+    tipoBolsa = "bolsista_medio";
+  } else {
+    tipoBolsa = "bolsista_superior";
+  }
+
+  localStorage.setItem("tipoBolsa", tipoBolsa);
+
   localStorage.removeItem("nivelEnsino");
   localStorage.removeItem("cursoSelecionado");
 

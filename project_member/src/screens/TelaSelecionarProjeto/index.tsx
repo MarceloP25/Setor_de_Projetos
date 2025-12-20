@@ -88,9 +88,27 @@ function TelaSelecionarProjeto() {
     localStorage.removeItem("projetos");
     localStorage.removeItem("vinculo");
     localStorage.removeItem("valorBolsa");
-    
+
     navigate("/DadosBancarios");
   };
+  const tipoBolsa = localStorage.getItem("tipoBolsa") || "";
+  let optionsBolsa: { label: string; value: string }[] = [];
+  if (tipoBolsa === "bolsista_medio") {
+    optionsBolsa = [
+      { label: "Bolsista - Nível Médio", value: "bolsista_medio" },
+      { label: "Voluntário", value: "voluntario" },
+    ];
+  } else if (tipoBolsa === "bolsista_superior") {
+    optionsBolsa = [
+      { label: "Bolsista - Nível Superior", value: "bolsista_superior" },
+      { label: "Voluntário", value: "voluntario" },
+    ];
+  } else if (tipoBolsa === "colaborador_externo") {
+    optionsBolsa = [
+      { label: "Colaborador Externo", value: "colaborador_externo" },
+      { label: "Voluntário", value: "voluntario" },
+    ];
+  }
 
   return (
     <div className="projeto-background">
@@ -108,12 +126,7 @@ function TelaSelecionarProjeto() {
 
         <RadioInput
           label="Qual o seu tipo de participação no projeto?"
-          options={[
-            { label: "Bolsista - Nível Médio", value: "bolsista_medio" },
-            { label: "Bolsista - Nível Superior", value: "bolsista_superior" },
-            { label: "Voluntário", value: "voluntario" },
-            { label: "Colaborador Externo", value: "colaborador_externo" },
-          ]}
+          options={optionsBolsa}
           selectedValue={vinculo}
           onChange={(value) => {
             setVinculo(value);
