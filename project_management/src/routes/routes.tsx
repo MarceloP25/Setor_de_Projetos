@@ -110,6 +110,12 @@ const AppRoutes = () => {
             <MainLayout><Orcamento /></MainLayout>
           </PrivateRoute>
         } />
+        
+        <Route path="/orcamento/gestao" element={
+          <PrivateRoute>
+            <MainLayout><OrcamentoGestao /></MainLayout>
+          </PrivateRoute>
+        } />
       </Routes>
     </BrowserRouter>
   );
