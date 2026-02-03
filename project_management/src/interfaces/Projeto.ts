@@ -5,25 +5,24 @@ export interface Projeto {
     nomeDaAcao: string;
     codigoProjeto: string;
 
-
     ano: number;
     periodoInicio: string;
     periodoFim: string;
-    abrangencia: string;
-
-
+    
+    
     nomeCoordenador: string;
     emailCoordenador: string;
     nomeCoCoordenador: string;
     emailCoCoordenador: string;
-
-
+    
+    
     publicoInternoDescricao?: string;
     publicoInternoQuantidade?: number;
     publicoExternoDescricao?: string;
     publicoExternoQuantidade?: number;
-
-
+    
+    
+    abrangencia: string;
     estado?: string;
     municipio?: string;
     bairro?: string;
@@ -32,8 +31,11 @@ export interface Projeto {
 
     valorSolicitado: number;
     valorDisponibilizado: number;
+
     tipoBolsa: string[];
-    valorBolsa: string[];
+    valorUnitarioBolsa: number[],
+    quantidadeIndividualBolsas: number[],
+    valorBolsa: number[];
     quantidade: number;
     valorTotalBolsas: number;
 
@@ -53,9 +55,7 @@ export interface Projeto {
      * A média das notas define a nota final do projeto.
      */
     notasAvaliadores?: number[];
-
-
-    /** Média calculada automaticamente com base nas notas dos avaliadores */
+    comentariosAvaliadores?: string[];
     notaEtapa2?: number;
 
 

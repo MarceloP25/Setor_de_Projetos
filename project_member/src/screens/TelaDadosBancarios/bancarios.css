@@ -1,0 +1,90 @@
+.dadosBancarios-background {
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: sans-serif;
+  min-height: 100vh;
+  padding: 2rem;
+  gap: 2rem;
+}
+
+.dadosBancarios-titulo {
+  font-size: 4rem;
+  color: black;
+  font-family: var(--texto-titulo);
+  font-weight: bold;
+  text-align: center;
+}
+
+.dadosBancarios-container {
+  margin: 0;
+  padding: 4rem;
+  background-color: white;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  font-family: var(--texto);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.dadosBancarios-texto {
+  font-size: 1.75rem;
+  color: black;
+  font-family: var(--texto-titulo);
+  font-weight: bold;
+  text-align: center;
+}
+
+.dadosBancarios-lembrete {
+  font-size: 1.125rem;
+  color: black;
+  text-align: center;
+}
+
+/* 📱 Tablets */
+@media (max-width: 768px) {
+  .dadosBancarios-titulo {
+    font-size: 2.5rem;
+  }
+
+  .dadosBancarios-container {
+    padding: 2rem;
+    gap: 1.5rem;
+  }
+
+  .dadosBancarios-texto {
+    font-size: 1.25rem;
+  }
+
+  .dadosBancarios-lembrete {
+    font-size: 0.95rem;
+  }
+}
+
+/* 📱 Celulares */
+@media (max-width: 480px) {
+  .dadosBancarios-titulo {
+    font-size: 2rem;
+  }
+
+  .dadosBancarios-container {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .dadosBancarios-texto {
+    font-size: 1rem;
+  }
+
+  .dadosBancarios-lembrete {
+    font-size: 0.85rem;
+  }
+}

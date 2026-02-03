@@ -1,73 +1,7 @@
-
-:root {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  background-color: #F5FAF6;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+:root{
+    --verde-escuro: #034001;
+    --verde: #027313;
+    --verde-claro: #00D420;
+    --texto:'Roboto Slab', serif;
+    --texto-titulo: 'Roboto Slab', serif;
 }
-
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 100%;
-  min-height: 100%;
-}
-
-h1 {
-  font-size: 64px;
-  font-style: bold;
-  line-height: 1.1;
-  color: #0D0D0D;
-}
-
-h2 {
-  font-size: 40px;
-  font-style: bold;
-  line-height: 1.1;
-  color: #0D0D0D;
-}
-
-h3 {
-  font-size: 24px;
-  font-style: bold;
-  line-height: 1.1;
-  color: #0D0D0D;
-}
-
-h4 {
-  font-size: 20px;
-  font-style: bold;
-  line-height: 1.1;
-  color: #0D0D0D;
-}
-
-p.bold {
-  font-size: 20px;
-  font-style: bold;
-  line-height: 1.1;
-  color: #0D0D0D;
-}
-
-p.medium {
-  font-size: 20px;
-  font-style: medium;
-  line-height: 1.1;
-  color: #0D0D0D;
-}
-
-p.regular {
-  font-size: 18px;
-  line-height: 1.1;
-  color: #0D0D0D;
-}
-

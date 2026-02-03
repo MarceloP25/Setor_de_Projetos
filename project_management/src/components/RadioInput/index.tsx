@@ -1,58 +1,66 @@
 import React, { useState, useEffect } from 'react';
 import './styles.css';
 
-
+export type RadioOption = {
+  label: string;
+  value: string;
+};
 
 type CustomRadioGroupProps = {
-    options: string[];
-    label: string;
-    defaultValue?: string;
-    onChange?: (value: string | null) => void;
+  options: RadioOption[];
+  label: string;
+  name: string;
+  value?: string;
+  defaultValue?: string | null;
+  onChange?: (value: string | null) => void;
 };
 
 const CustomRadioGroup: React.FC<CustomRadioGroupProps> = ({
-    options,
-    label,
-    defaultValue = 'N/A',
-    onChange
-    }) => {
-    const [selected, setSelected] = useState<string | null>(defaultValue);
+  options,
+  label,
+  name,
+  value,
+  defaultValue = null,
+  onChange
+}) => {
+  const [selected, setSelected] = useState<string | null>(defaultValue);
 
-    useEffect(() => {
-        if (onChange) {
-        onChange(defaultValue);
-        }
-    }, [defaultValue]);
+  // Garante sincronização se o valor externo mudar
+  useEffect(() => {
+    if (value !== undefined && value !== selected) {
+      setSelected(value);
+    }
+  }, [value]);
 
-    const handleClick = (value: string) => {
-        const newValue = selected === value ? null : value;
-        setSelected(newValue);
-        if (onChange) {
-        onChange(newValue);
-        }
-    };
+  const handleChange = (newValue: string) => {
+    const updated = selected === newValue ? null : newValue;
+    setSelected(updated);
+    onChange?.(updated);
+  };
 
-return (
-    <div className="radio-group-container">
-    <div className="radio-options">
+  return (
+    <div className="radio-group">
+      <div className="radio-group-label">{label}</div>
+      <div className="radio-group-options">
         {options.map((option, index) => (
-        <div
+          <label
             key={index}
-            className="radio-option"
-            onClick={() => handleClick(option)}
-        >
-            <div
-            className={`radio-circle ${selected === option ? 'selected' : ''}`}
-            >
-            {selected === option && <div className="radio-dot" />}
-            </div>
-            <span className="radio-label">{option}</span>
-        </div>
+            className={`radio-option ${selected === option.value ? 'checked' : ''}`}
+          >
+            <input
+              type="radio"
+              name={name}
+              value={option.value}
+              checked={selected === option.value}
+              onChange={() => handleChange(option.value)}
+            />
+            <span className="radio-custom" />
+            <span className="radio-text">{option.label}</span>
+          </label>
         ))}
+      </div>
     </div>
-    <span className="radio-description">{label}</span>
-    </div>
-);
+  );
 };
 
 export default CustomRadioGroup;
