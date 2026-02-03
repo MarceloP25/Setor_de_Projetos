@@ -112,11 +112,13 @@ const AppRoutes = () => {
             <MainLayout><Orcamento /></MainLayout>
           </PrivateRoute>
         } />
+
         <Route path="/orcamento/gestao" element={
           <PrivateRoute>
             <MainLayout><OrcamentoGestao /></MainLayout>
           </PrivateRoute>
         } />
+
 
         {/* Membros */}
         <Route path="/membros" element={
@@ -124,6 +126,7 @@ const AppRoutes = () => {
             <MainLayout><Membros /></MainLayout>
           </PrivateRoute>
         } />
+
       </Routes>
     </BrowserRouter>
   );
