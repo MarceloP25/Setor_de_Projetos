@@ -1,10 +1,46 @@
-import { useEffect, useState } from "react";
+
+import { useState, useEffect } from "react";
+
 import { useNavigate } from "react-router-dom";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase";
 
 import InputSelect from "../../componentes/InputSelect";
 import Botao from "../../componentes/Botao";
+
+
+import "./selecaoedital.css";
+
+type OpcaoEdital = {
+  valor: string;
+  label: string;
+};
+
+function TelaSeleçãoEdital() {
+  const [edital, setEdital] = useState("");
+  const [erro, setErro] = useState(false);
+  const [opcoes, setOpcoes] = useState<OpcaoEdital[]>([]);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchEditais = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "editais"));
+        const lista: OpcaoEdital[] = querySnapshot.docs.map((doc) => {
+          const dados = doc.data();
+          return {
+            valor: doc.id,
+            label: dados.nomeEdital,
+          };
+        });
+        setOpcoes(lista);
+      } catch (error) {
+        console.error("Erro ao buscar editais:", error);
+      }
+    };
+
+
 import type { Edital } from "../../interfaces/Edital";
 import "./selecaoedital.css";
 
@@ -54,6 +90,7 @@ function TelaSelecaoEdital() {
   };
 
   useEffect(() => {
+
     fetchEditais();
   }, []);
 
@@ -66,6 +103,11 @@ function TelaSelecaoEdital() {
     localStorage.setItem("edital", edital);
     navigate("/CadastroBasico");
   };
+
+
+  return (
+    <div className="selecaoedital-background">
+      <h1 className="selecaoedital-titulo">Setor de Projetos IFMG - RP</h1>
 
   // Transforma a lista de editais em opções para o select
   const opcoes = editaisList.map((e) => ({
@@ -109,4 +151,4 @@ function TelaSelecaoEdital() {
   );
 }
 
-export default TelaSelecaoEdital;
+export default TelaSeleçãoEdital;
