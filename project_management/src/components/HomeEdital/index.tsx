@@ -1,68 +1,62 @@
 import React, { useState, useEffect } from 'react';
-import { db } from '../../services/config'
-import { collection, getDocs } from 'firebase/firestore';
+import { fetchEditais } from '../../services/views/fetchEditais';
 import { Link } from 'react-router-dom';
 import './styles.css';
 import type { Edital } from '../../interfaces/Edital';
 import SelectInput from '../SelectInput';
+import {Modal} from '../Modal';
+import { useNavigate } from 'react-router-dom';
+import { exportEditais } from '../../utils/excel/exportEditais';
+import Button from '../Button';
 
 
 const EditalList: React.FC = () => {
     const [editais, setEditais] = useState<Edital[]>([]);
     const [selectedAno, setSelectedAno] = useState<string>('');
+    const [showModal, setShowModal] = useState(false);
+    const navigate = useNavigate();
 
+     useEffect(() => {
+    async function loadData() {
+      try {
+        const [ editais] = await Promise.all([
+          fetchEditais()
+        ]);
+        setEditais(editais);
+      } catch (err) {
+        console.error('Erro ao carregar dados:', err);
+      }
+    }
 
-    useEffect(() => {
-        const fetchEditais = async () => {
-            try {
-              const editaisRef = collection(db, "editais");
-              const querySnapshot = await getDocs(editaisRef);
-              const editais = querySnapshot.docs.map(doc => ({
-                id: doc.data().id,
-                nomeEdital: doc.data().nomeEdital,
-                orcamentoEdital: doc.data().orcamentoEdital,
-                valorDisponivel:  doc.data().valorDisponivel,
-                status:  doc.data().status,
-                projetosVinculados:  doc.data().projetosVinculados,
-                anoVigente:  doc.data().anoVigente,
-                dataInicio:  doc.data().dataInicio,
-                dataFim:  doc.data().dataFim,
-                dataInicioSubmissao:  doc.data().dataInicioSubmissao,
-                dataFimSubmissao:  doc.data().dataFimSubmissao,
-                dataInicioDocumentos:  doc.data().dataInicioDocumentos,
-                dataFimDocumentos:  doc.data().dataFimDocumentos,
-                dataInicioRecurso:  doc.data().dataInicioRecurso,
-                dataFimRecurso:  doc.data().dataFimRecurso,
-                dataInicioAvaliacao:  doc.data().dataInicioAvaliacao,
-                dataFimAvaliacao:  doc.data().dataFimAvaliacao,
-                dataInicioEnvioRelatorio:  doc.data().dataFimEnvioRelatorio,
-                dataFimEnvioRelatorio: doc.data().dataFimEnvioRelatorio,
-                dataPagamentoInicio:  doc.data().dataPagamentoInicio,
-                dataPagamentoFim:  doc.data().dataPagamentoFim,
-                linkAcessoEdital: doc.data().linkAcessoEdital,
-                criadoEm:  doc.data().criadoEm,
-                criadoPor:  doc.data().criadoPor,
-                alteradoEm:  doc.data().alteradoEm,
-                alteradoPor:  doc.data().alteradoPor,
-              }));
-              setEditais(editais);
-            } catch (error) {
-              console.error("Erro ao buscar editais:", error);
-            }
-          };
-        fetchEditais();
-    }, []);
+    loadData();
+  }, []);
+
+    const handleExport = () => {
+          const editaisFiltrados =
+            selectedAno === ''
+            ? editais
+            : editais.filter(e => e.anoVigente === selectedAno);
+
+        if (!editaisFiltrados.length) {
+            setShowModal(true);
+            return;
+        }
+
+        exportEditais(editaisFiltrados);
+      };
 
     return (
         <div className="home-edital-list-container">
             <h2>Editais de Extensão</h2>
             <div className="buttons-container">
-                <Link to="/edital/cadastrar" className="btn primary">
-                    Novo Edital
-                </Link>
-                <Link to="/edital/dados" className="btn primary">
-                    Extrair Dados
-                </Link>
+                <Button 
+                    to="/edital/cadastrar"
+                    text='Novo edital'
+                />
+                <Button 
+                    text='Extrair dados'
+                    onClick={handleExport}
+                />
             </div>
             <div className="filter-container">
                 <SelectInput
@@ -73,6 +67,10 @@ const EditalList: React.FC = () => {
                     options={[...editais.map(edital => edital.anoVigente)]}
                 />
             </div>
+                <p className='bold'>Para extrair uma planilha com os editais, 
+                    selecione o ano e clique no botão, caso não seja selecionado um ano, 
+                    será extraido os dados de todos os editais.
+                </p>
 
             <div className="projects-list">
                 {editais.filter(
@@ -90,6 +88,13 @@ const EditalList: React.FC = () => {
                     ))
                 }
             </div>
+            <Modal
+                isOpen={showModal}
+                title="Nenhum edital encontrado!"
+                message="Cadastrar um novo edital."
+                onClose={() => setShowModal(false)}
+                onAfterClose={() => navigate("/edital/cadastrar")}
+            />
         </div>
     );
 };

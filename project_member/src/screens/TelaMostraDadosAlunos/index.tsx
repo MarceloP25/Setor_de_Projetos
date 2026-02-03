@@ -16,7 +16,11 @@ export default function ListaDeAlunos() {
 
   useEffect(() => {
     const carregar = async () => {
+
       const snapshot = await getDocs(collection(db, "membros"));
+
+      const snapshot = await getDocs(collection(db, "usuarios"));
+
       const lista: Aluno[] = snapshot.docs.map((doc) => {
         const data = doc.data();
         return {

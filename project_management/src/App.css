@@ -41,15 +41,22 @@ h4 {
   color: #0D0D0D;
 }
 
+h5 {
+  font-size: 18px;
+  font-style: bold;
+  line-height: 1.1;
+  color: #0D0D0D;
+}
+
 p.bold {
-  font-size: 20px;
+  font-size: 18px;
   font-style: bold;
   line-height: 1.1;
   color: #0D0D0D;
 }
 
 p.medium {
-  font-size: 20px;
+  font-size: 18px;
   font-style: medium;
   line-height: 1.1;
   color: #0D0D0D;

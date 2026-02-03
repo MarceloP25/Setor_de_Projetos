@@ -13,7 +13,7 @@ interface InputTextProps {
 const InputText: React.FC<InputTextProps> = ({ type, value, name, onChange, placeholder, label }) => {
   return (
     <div className="input-container">
-      {label && <h3>{label}</h3>}
+      {label && <h5>{label}</h5>}
       <input
         type={type}
         value={value}

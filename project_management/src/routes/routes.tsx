@@ -1,5 +1,9 @@
-import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import { Routes, Route, BrowserRouter, Navigate } from 'react-router-dom';
 //import Sidebar from '../components/SideBar';
+
+// Autenticação
+import Login from '../screens/Login';
+import PrivateRoute from '../components/PrivateRoute';
 
 // Visão Geral
 import VisaoGeral from '../screens/VisaoGeral';
@@ -8,7 +12,7 @@ import VisaoGeral from '../screens/VisaoGeral';
 import Project from '../screens/Project';
 import ProjetosRegister from '../screens/ProjectRegistration';
 import ProjectDetails from '../screens/ProjectDetails';
-import ProjectEdit from '../screens/ProjectEdit'
+import ProjectEdit from '../screens/ProjectEdit';
 import ProjectDocuments from '../screens/ProjectDocuments';
 import ProjectAvaliacoes from '../screens/ProjectAvaliacoes';
 // import ProjectAlunos from '../screens/ProjectAlunos';
@@ -21,38 +25,109 @@ import EditalEdit from '../screens/EditalEdit';
 
 // Orçamentos
 import Orcamento from '../screens/Orcamento';
+import OrcamentoGestao from '../screens/OrcamentoGestao';
 import MainLayout from '../layout/MainLayout';
 
+// Membros
+import Membros from '../screens/Membros';
 
 const AppRoutes = () => {
   return (
     <BrowserRouter>
-      
-        <MainLayout >
+      <Routes>
+        {/* Rota pública de login */}
+        <Route path="/login" element={<Login />} />
         
-          <Routes>
-            <Route path="/visao_geral" element={<VisaoGeral />} /> {/* Tem Sidebar */}
+        {/* Rotas protegidas */}
+        <Route path="/" element={<Navigate to="/visao_geral" replace />} />
+        
+        <Route path="/visao_geral" element={
+          <PrivateRoute>
+            <MainLayout><VisaoGeral /></MainLayout>
+          </PrivateRoute>
+        } />
 
-            <Route path="/projetos" element={<Project />} /> {/* Tem Sidebar */}
-            <Route path="/projetos/cadastrar" element={<ProjetosRegister />} />
-            <Route path="/projetos/:projectId" element={<ProjectDetails />} />
-            <Route path="/projetos/:projectId/editar" element={<ProjectEdit />} /> 
-            <Route path="/projetos/:projectId/documentos" element={<ProjectDocuments />} /> 
-            <Route path="/projetos/:projectId/avaliacao" element={<ProjectAvaliacoes />} /> 
-            {/* <Route path="/projetos/:projectId/alunos" element={<ProjectAlunos />} /> */}
+        {/* Projetos */}
+        <Route path="/projetos" element={
+          <PrivateRoute>
+            <MainLayout><Project /></MainLayout>
+          </PrivateRoute>
+        } />
+        <Route path="/projetos/cadastrar" element={
+          <PrivateRoute>
+            <MainLayout><ProjetosRegister /></MainLayout>
+          </PrivateRoute>
+        } />
+        <Route path="/projetos/:projectId" element={
+          <PrivateRoute>
+            <MainLayout><ProjectDetails /></MainLayout>
+          </PrivateRoute>
+        } />
+        <Route path="/projetos/:projectId/editar" element={
+          <PrivateRoute>
+            <MainLayout><ProjectEdit /></MainLayout>
+          </PrivateRoute>
+        } />
+        <Route path="/projetos/:projectId/documentos" element={
+          <PrivateRoute>
+            <MainLayout><ProjectDocuments /></MainLayout>
+          </PrivateRoute>
+        } />
+        <Route path="/projetos/:projectId/avaliacao" element={
+          <PrivateRoute>
+            <MainLayout><ProjectAvaliacoes /></MainLayout>
+          </PrivateRoute>
+        } />
+        {/* <Route path="/projetos/:projectId/alunos" element={
+          <PrivateRoute>
+            <MainLayout><ProjectAlunos /></MainLayout>
+          </PrivateRoute>
+        } /> */}
+
+        {/* Editais */}
+        <Route path="/edital" element={
+          <PrivateRoute>
+            <MainLayout><Editais /></MainLayout>
+          </PrivateRoute>
+        } />
+        <Route path="/edital/cadastrar" element={
+          <PrivateRoute>
+            <MainLayout><EditalRegister /></MainLayout>
+          </PrivateRoute>
+        } />
+        <Route path="/edital/:editalId" element={
+          <PrivateRoute>
+            <MainLayout><EditalDetails /></MainLayout>
+          </PrivateRoute>
+        } />
+        <Route path="/edital/:editalId/editar" element={
+          <PrivateRoute>
+            <MainLayout><EditalEdit /></MainLayout>
+          </PrivateRoute>
+        } />
+
+        {/* Orçamentos */}
+        <Route path="/orcamento" element={
+          <PrivateRoute>
+            <MainLayout><Orcamento /></MainLayout>
+          </PrivateRoute>
+        } />
+
+        <Route path="/orcamento/gestao" element={
+          <PrivateRoute>
+            <MainLayout><OrcamentoGestao /></MainLayout>
+          </PrivateRoute>
+        } />
 
 
-            <Route path="/edital" element={<Editais />} /> {/* Tem Sidebar */}
-            <Route path="/edital/cadastrar" element={<EditalRegister />} />
-            <Route path="/edital/:editalId" element={<EditalDetails />} />
-            <Route path="/edital/:editalId/editar" element={<EditalEdit />} />
+        {/* Membros */}
+        <Route path="/membros" element={
+          <PrivateRoute>
+            <MainLayout><Membros /></MainLayout>
+          </PrivateRoute>
+        } />
 
-
-            <Route path="/orcamento" element={<Orcamento />} /> {/* Tem Sidebar */}
-          </Routes>
-       
-        </MainLayout>
-      
+      </Routes>
     </BrowserRouter>
   );
 };

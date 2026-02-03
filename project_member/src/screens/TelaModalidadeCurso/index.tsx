@@ -127,6 +127,7 @@ const FormularioCursos: React.FC = () => {
     return;
   }
 
+
   const cursoFinal =
     nivelEnsino === "nao_sou_aluno" ? "externo" : cursoSelecionado;
 

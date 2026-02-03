@@ -1,4 +1,8 @@
 
+import Botao from "../../componentes/Botao";
+import { useNavigate } from "react-router-dom";
+
+
 import "./agradecimento.css";
 
 function TelaAgradecimento() {

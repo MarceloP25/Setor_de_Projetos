@@ -2,7 +2,7 @@ import React from 'react';
 import './styles.css';
 
 interface SelectInputProps {
-  options: string[];
+  options: string[] | { label: string; value: string }[]  | number[];
   value: string;
   name: string;
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
@@ -21,8 +21,11 @@ const SelectInput: React.FC<SelectInputProps> = ({ name, options, value, onChang
       >
         <option value="">Selecione</option>
         {options.map((opt, idx) => (
-          <option key={idx} value={opt}>{opt}</option>
+          <option key={idx} value={typeof opt === 'string' || typeof opt === 'number' ? opt : opt.value}>
+            {typeof opt === 'string' || typeof opt === 'number' ? opt : opt.label}
+          </option>
         ))}
+
       </select>
     </div>
   );

@@ -50,11 +50,11 @@
     margin-right: 50px;
 }
 
-.info{
-  text-align: center;
+.info h3 {
+  text-align: left;
 }
 
-.info h4 {
+.list{
   text-align: left;
 }
 

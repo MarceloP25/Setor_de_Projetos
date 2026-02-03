@@ -31,8 +31,11 @@ export interface Projeto {
 
     valorSolicitado: number;
     valorDisponibilizado: number;
+
     tipoBolsa: string[];
-    valorBolsa: string[];
+    valorUnitarioBolsa: number[],
+    quantidadeIndividualBolsas: number[],
+    valorBolsa: number[];
     quantidade: number;
     valorTotalBolsas: number;
 

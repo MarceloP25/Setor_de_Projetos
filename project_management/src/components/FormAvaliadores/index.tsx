@@ -6,55 +6,71 @@ import ActionButton from '../Button';
 import type { Projeto } from '../../interfaces/Projeto';
 import './styles.css';
 import TextAreaInput from '../TextAreaInput';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Modal } from '../Modal';
 
 const initialProjectState: Projeto = {
-    id: '',
-    edital: '',
-    nomeProjeto: '',
-    nomeDaAcao: '',
-    codigoProjeto: '',
-    ano: 0,
-    periodoInicio: '',
-    periodoFim: '',
-    abrangencia: '',
-    nomeCoordenador: '',
-    emailCoordenador: '',
-    nomeCoCoordenador: '',
-    emailCoCoordenador: '',
-    publicoInternoDescricao: '',
-    publicoInternoQuantidade: 0,
-    publicoExternoDescricao: '',
-    publicoExternoQuantidade: 0,
-    estado: '',
-    municipio: '',
-    bairro: '',
-    espaco: '',
-    valorSolicitado: 0,
-    valorDisponibilizado: 0,
-    tipoBolsa: [] as string[],
-    valorBolsa: [] as string[],
-    quantidade: 0,
-    valorTotalBolsas: 0,
-    areaTematica: '',
-    linhaExtensao: '',
-    detalhesAcao: '',
-    documentosAnexados: [] as string[],
-    classificacaoDetalhe: '',
-    statusEtapa1: '',
-    notasAvaliadores: [0] as number[],
-    comentariosAvaliadores: [''] as string[],
-    notaEtapa2: 0,
-    alunosParticipantes: [] as string[],
-    relatorioProjeto: [] as object[],
-    criadoEm: '',
-    criadoPor: '',
-    alteradoEm: '',
-    alteradoPor: ''
+  id: '',
+  edital: '',
+  nomeProjeto: '',
+  nomeDaAcao: '',
+  codigoProjeto: '',
+
+  ano: 0,
+  periodoInicio: '',
+  periodoFim: '',
+  abrangencia: '',
+
+  nomeCoordenador: '',
+  emailCoordenador: '',
+  nomeCoCoordenador: '',
+  emailCoCoordenador: '',
+
+  publicoInternoDescricao: '',
+  publicoInternoQuantidade: 0,
+  publicoExternoDescricao: '',
+  publicoExternoQuantidade: 0,
+
+  estado: '',
+  municipio: '',
+  bairro: '',
+  espaco: '',
+
+  valorSolicitado: 0,
+  valorDisponibilizado: 0,
+
+  tipoBolsa: [],
+  quantidadeIndividualBolsas: [],
+  valorUnitarioBolsa: [],
+  valorBolsa: [],
+  quantidade: 0,
+  valorTotalBolsas: 0,
+
+  areaTematica: '',
+  linhaExtensao: '',
+
+  detalhesAcao: '',
+  documentosAnexados: [],
+  classificacaoDetalhe: '',
+
+  statusEtapa1: '',
+  notasAvaliadores: [0],
+  comentariosAvaliadores: [''],
+  notaEtapa2: 0,
+
+  alunosParticipantes: [],
+  relatorioProjeto: [],
+
+  criadoEm: '',
+  criadoPor: '',
+  alteradoEm: '',
+  alteradoPor: ''
 };
 
 function FormAvaliadores({ projectId }: { projectId: string | undefined }) {
   const { projectId: id = projectId } = useParams<{ projectId: string }>();
+  const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
   
   if (!id) {
     return <div>Informação não encontrada!</div>;
@@ -116,7 +132,7 @@ function FormAvaliadores({ projectId }: { projectId: string | undefined }) {
         notaEtapa2: formData.notaEtapa2,
         alteradoEm: new Date().toISOString(),
       });
-      alert('Avaliações salvas com sucesso!');
+      setShowModal(true);
     } catch (error) {
       console.error('Erro ao salvar avaliações:', error);
       alert('Erro ao salvar as avaliações.');
@@ -158,6 +174,15 @@ function FormAvaliadores({ projectId }: { projectId: string | undefined }) {
         </div>
 
       </form>
+
+      {/* Modal de sucesso */}
+      <Modal
+          isOpen={showModal}
+          title="🎉 Classificação da etapa 2 realizada com sucesso!"
+          message="Os dados foram salvos no banco de dados."
+          onClose={() => setShowModal(false)}
+          onAfterClose={() => navigate("/projetos")}
+        />
     </div>
   );
 }

@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import TelaInicial from "./screens/TelaInicial"
@@ -8,7 +9,9 @@ import TelaDadosBancarios from "./screens/TelaDadosBancarios";
 import TelaSelecaoEdital from "./screens/TelaSeleçãoEdital";
 import TelaAgradecimento from "./screens/TelaAgradecimento"
 import TelaDados from "./screens/TelaMostraDadosAlunos"
+
 import EditarMembro from "./screens/TelaEditarMembro";
+
 
 
 const AppRoutes: React.FC = () => {
@@ -22,7 +25,9 @@ const AppRoutes: React.FC = () => {
       <Route path="/DadosBancarios" element={<TelaDadosBancarios />} />
       <Route path="/Agradecimento" element={<TelaAgradecimento />} />
       <Route path="/TelaDados" element={<TelaDados/>} />
+
       <Route path="/editarMembro/:id" element={<EditarMembro />} />
+
     </Routes>
   );
 };
