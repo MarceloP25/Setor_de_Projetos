@@ -8,46 +8,56 @@ export interface Projeto {
     ano: number;
     periodoInicio: string;
     periodoFim: string;
-    abrangencia: string;
-
+    
+    
     nomeCoordenador: string;
     emailCoordenador: string;
-    nomeCoCoordenador?: string;
-    emailCoCoordenador?: string;
-
+    nomeCoCoordenador: string;
+    emailCoCoordenador: string;
+    
+    
     publicoInternoDescricao?: string;
     publicoInternoQuantidade?: number;
     publicoExternoDescricao?: string;
     publicoExternoQuantidade?: number;
-
+    
+    
+    abrangencia: string;
     estado?: string;
     municipio?: string;
     bairro?: string;
     espaco?: string;
 
-    valorSolicitado: string;
-    valorDisponibilizado: string;
+
+    valorSolicitado: number;
+    valorDisponibilizado: number;
+
     tipoBolsa: string[];
-    valorBolsa: string[];
+    valorUnitarioBolsa: number[],
+    quantidadeIndividualBolsas: number[],
+    valorBolsa: number[];
     quantidade: number;
     valorTotalBolsas: number;
 
-    areaTematica: string[];
-    linhaExtensao: string[];
+
+    areaTematica: string;
+    linhaExtensao: string;
     detalhesAcao?: string;
+
 
     documentosAnexados?: string[];
     statusEtapa1?: string;
     classificacaoDetalhe?: string;
+
 
     /**
      * Notas atribuídas por até 3 avaliadores (0 a 10).
      * A média das notas define a nota final do projeto.
      */
     notasAvaliadores?: number[];
-
-    /** Média calculada automaticamente com base nas notas dos avaliadores */
+    comentariosAvaliadores?: string[];
     notaEtapa2?: number;
+
 
     /**
      * Lista de alunos vinculados ao projeto.
@@ -55,7 +65,9 @@ export interface Projeto {
      */
     alunosParticipantes?: string[];
 
+
     relatorioProjeto?: object[];
+
 
     criadoEm: string;
     criadoPor?: string;
