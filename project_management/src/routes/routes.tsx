@@ -12,7 +12,7 @@ import VisaoGeral from '../screens/VisaoGeral';
 import Project from '../screens/Project';
 import ProjetosRegister from '../screens/ProjectRegistration';
 import ProjectDetails from '../screens/ProjectDetails';
-import ProjectEdit from '../screens/ProjectEdit'
+import ProjectEdit from '../screens/ProjectEdit';
 import ProjectDocuments from '../screens/ProjectDocuments';
 import ProjectAvaliacoes from '../screens/ProjectAvaliacoes';
 // import ProjectAlunos from '../screens/ProjectAlunos';
@@ -25,12 +25,11 @@ import EditalEdit from '../screens/EditalEdit';
 
 // Orçamentos
 import Orcamento from '../screens/Orcamento';
-import MainLayout from '../layout/MainLayout';
 import OrcamentoGestao from '../screens/OrcamentoGestao';
+import MainLayout from '../layout/MainLayout';
 
 // Membros
 import Membros from '../screens/Membros';
-
 
 const AppRoutes = () => {
   return (
@@ -48,6 +47,7 @@ const AppRoutes = () => {
           </PrivateRoute>
         } />
 
+        {/* Projetos */}
         <Route path="/projetos" element={
           <PrivateRoute>
             <MainLayout><Project /></MainLayout>
@@ -84,6 +84,7 @@ const AppRoutes = () => {
           </PrivateRoute>
         } /> */}
 
+        {/* Editais */}
         <Route path="/edital" element={
           <PrivateRoute>
             <MainLayout><Editais /></MainLayout>
@@ -105,17 +106,27 @@ const AppRoutes = () => {
           </PrivateRoute>
         } />
 
+        {/* Orçamentos */}
         <Route path="/orcamento" element={
           <PrivateRoute>
             <MainLayout><Orcamento /></MainLayout>
           </PrivateRoute>
         } />
-        
+
         <Route path="/orcamento/gestao" element={
           <PrivateRoute>
             <MainLayout><OrcamentoGestao /></MainLayout>
           </PrivateRoute>
         } />
+
+
+        {/* Membros */}
+        <Route path="/membros" element={
+          <PrivateRoute>
+            <MainLayout><Membros /></MainLayout>
+          </PrivateRoute>
+        } />
+
       </Routes>
     </BrowserRouter>
   );
