@@ -3,6 +3,7 @@ import { Routes, Route, BrowserRouter, Navigate } from 'react-router-dom';
 
 // Autenticação
 import Login from '../screens/Login';
+import Cadastro from '../screens/Cadastro';
 import PrivateRoute from '../components/PrivateRoute';
 
 // Visão Geral
@@ -37,6 +38,7 @@ const AppRoutes = () => {
       <Routes>
         {/* Rota pública de login */}
         <Route path="/login" element={<Login />} />
+        <Route path="/cadastro" element={<Cadastro />} />
         
         {/* Rotas protegidas */}
         <Route path="/" element={<Navigate to="/visao_geral" replace />} />
