@@ -1,0 +1,13 @@
+{
+  "projects": {
+    "default": "reserva-setor-projetos",
+    "reserva": "reserva-setor-projetos"
+  },
+  "targets": {
+    "reserva-setor-projetos": {
+      "hosting": {
+        "aluno": ["aluno-setor-de-projetos"]
+      }
+    }
+  }
+}
