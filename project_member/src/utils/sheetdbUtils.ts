@@ -11,7 +11,6 @@ export const enviarDadosParaSheetDB = async () => {
     projetos: localStorage.getItem("projetos") || "",
     vinculo: localStorage.getItem("vinculo") || "",
     valorBolsa: localStorage.getItem("valorBolsa") || "",
-    valorOutro: localStorage.getItem("valorOutro") || "",
     banco: localStorage.getItem("banco") || "",
     agencia: localStorage.getItem("agencia") || "",
     conta: localStorage.getItem("conta") || "",

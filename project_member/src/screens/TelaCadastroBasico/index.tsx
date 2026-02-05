@@ -3,13 +3,12 @@ import InputTexto from "../../componentes/InputText";
 import InputSelect from "../../componentes/InputSelect";
 import { useNavigate } from "react-router-dom";
 import { salvarDados } from "../../utils/firebaseUtils";
-
+import {auth} from "../../firebase"
 import React from "react";
 import "./basico.css";
 
 function TelaCadastroBasico() {
   const [nome, setNome] = React.useState("");
-  const [email, setEmail] = React.useState("");
   const [telefone, setTelefone] = React.useState("");
   const [cpf, setCpf] = React.useState("");
   const [sexo, setSexo] = React.useState("");
@@ -42,19 +41,41 @@ function TelaCadastroBasico() {
   const edital = localStorage.getItem("edital");
 
   const handleSalvar = () => {
-    if (!nome || !email || !telefone || !cpf || !sexo) {
-      setErro(true);
-      return;
-    }
+  if (!nome || !telefone || !cpf || !sexo) {
+    setErro(true);
+    return;
+  }
 
-    localStorage.setItem("nome", nome);
-    localStorage.setItem("email", email);
-    localStorage.setItem("telefone", telefone);
-    localStorage.setItem("sexo", sexo);
-    localStorage.setItem("cpf", cpf);
-    salvarDados({ nome, email, telefone, cpf, sexo, edital });
-    navigate("/ModalidadeCurso");
-  };
+  const uid = auth.currentUser?.uid;
+  const emailAuth = auth.currentUser?.email;
+
+  if (!uid || !emailAuth) {
+    alert("Usuário não autenticado. Faça login novamente.");
+    return;
+  }
+
+  localStorage.setItem("nome", nome);
+  localStorage.setItem("telefone", telefone);
+  localStorage.setItem("sexo", sexo);
+  localStorage.setItem("cpf", cpf);
+
+  salvarDados({
+    uid,
+    email: emailAuth,
+    nome,
+    telefone,
+    cpf,
+    sexo,
+    edital,
+  });
+
+  localStorage.removeItem("nome");
+  localStorage.removeItem("telefone");
+  localStorage.removeItem("sexo");
+  localStorage.removeItem("edital");
+  
+  navigate("/ModalidadeCurso");
+};
 
   return (
     <div className="basico-background">
@@ -73,34 +94,26 @@ function TelaCadastroBasico() {
           }}
           placeholder="Digite seu nome"
         />
+
         <InputTexto
-          label="E-mail"
-          value={email}
+          label="CPF | 000.000.000-00"
+          value={cpf}
           onChange={(valor) => {
-            setEmail(valor);
+            setCpf(formatarCPF(valor));
             setErro(false);
           }}
-          placeholder="Digite seu e-mail"
+          placeholder="Digite seu CPF"
         />
-        <InputTexto
-  label="CPF | 000.000.000-00"
-  value={cpf}
-  onChange={(valor) => {
-    setCpf(formatarCPF(valor));
-    setErro(false);
-  }}
-  placeholder="Digite seu CPF"
-/>
 
-<InputTexto
-  label="Telefone | (DDD) 00000-0000"
-  value={telefone}
-  onChange={(valor) => {
-    setTelefone(formatarTelefone(valor));
-    setErro(false);
-  }}
-  placeholder="Digite seu telefone"
-/>
+        <InputTexto
+          label="Telefone | (DDD) 00000-0000"
+          value={telefone}
+          onChange={(valor) => {
+            setTelefone(formatarTelefone(valor));
+            setErro(false);
+          }}
+          placeholder="Digite seu telefone"
+        />
 
         <InputSelect
           label="Selecione seu sexo:"

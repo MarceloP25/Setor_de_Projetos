@@ -27,7 +27,12 @@ function TelaDadosBancarios() {
     localStorage.setItem("banco", banco);
     localStorage.setItem("agencia", agencia);
     localStorage.setItem("conta", conta);
+
     salvarDados({ banco, agencia, conta, dataCadastro });
+
+    localStorage.removeItem("banco");
+    localStorage.removeItem("agencia");
+    localStorage.removeItem("conta");
 
 
   try {
@@ -37,7 +42,7 @@ function TelaDadosBancarios() {
     alert("❌ Erro ao enviar os dados. Tente novamente.");
     console.error(erro);
   }
-
+  localStorage.clear();
     navigate("/Agradecimento");
 
   };
