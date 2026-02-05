@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { getFirestore, doc, getDoc, updateDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
+import InputText from "../../componentes/InputText";
 import './editarMembro.css';
 const db = getFirestore();
 
@@ -30,17 +31,17 @@ export default function EditarMembro() {
   if (!membro) return <p>Carregando...</p>;
 
   return (
-    <div>
+    <div className="editar-container">
       <h1>Editar Membro</h1>
-      <input
-        type="text"
+      <InputText
+        label="Nome"
         value={membro.nome}
-        onChange={(e) => setMembro({ ...membro, nome: e.target.value })}
+        onChange={(valor) => setMembro({ ...membro, nome: valor })}
       />
-      <input
-        type="text"
+      <InputText
+        label="Email"
         value={membro.email}
-        onChange={(e) => setMembro({ ...membro, email: e.target.value })}
+        onChange={(valor) => setMembro({ ...membro, email: valor })}
       />
       {/* demais campos... */}
 
