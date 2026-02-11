@@ -12,7 +12,7 @@ import EditarMembro from "./screens/TelaEditarMembro";
 import Cadastro from "./screens/TelaCadastroAut";
 import Login from "./screens/TelaLogin";
 import Dashboard from "./screens/TelaDashboardAluno";
-
+import TelaExportTabela from "./screens/TelaExportTabela";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -33,6 +33,10 @@ const AppRoutes: React.FC = () => {
       <Route path="/CadastroAut" element={<Cadastro />} />
       <Route path="/" element={<Login />} />
       <Route path="/Dashboard" element={<Dashboard />} />
+
+
+      {/*TelaExportTabela Routes */}
+      <Route path="/TelaExportTabela" element={<TelaExportTabela />} />
     </Routes>
   );
 };

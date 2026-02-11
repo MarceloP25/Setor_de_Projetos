@@ -85,6 +85,7 @@ function TelaSelecionarProjeto() {
 
     salvarDados({ projetos, vinculo, valorBolsa: valorFinal });
 
+    localStorage.removeItem("nome");
     localStorage.removeItem("projetos");
     localStorage.removeItem("vinculo");
     localStorage.removeItem("valorBolsa");
@@ -136,14 +137,10 @@ function TelaSelecionarProjeto() {
           }}
         />
 
-        {/* Renderização condicional dos valores de bolsa */}
         {vinculo === "bolsista_medio" && (
           <RadioInput
             label="Selecione o valor da bolsa:"
-            options={[
-              { label: "R$ 350", value: "350" },
-              { label: "R$ 700", value: "700" },
-            ]}
+            options={[{ label: "R$ 375", value: "375" }]}
             selectedValue={valorBolsa}
             onChange={(value) => setValorBolsa(value)}
           />
@@ -153,7 +150,7 @@ function TelaSelecionarProjeto() {
           <RadioInput
             label="Selecione o valor da bolsa:"
             options={[
-              { label: "R$ 350", value: "350" },
+              { label: "R$ 375", value: "375" },
               { label: "R$ 700", value: "700" },
             ]}
             selectedValue={valorBolsa}
@@ -172,15 +169,14 @@ function TelaSelecionarProjeto() {
               selectedValue={valorBolsa || (valorOutro ? "outro" : "")}
               onChange={(value) => {
                 if (value === "outro") {
-                  setValorBolsa(""); // limpa valorBolsa
+                  setValorBolsa("");
                 } else {
                   setValorBolsa(value);
-                  setValorOutro(""); // limpa campo de outro
+                  setValorOutro("");
                 }
               }}
             />
 
-            {/* Se o usuário escolher "Outro", renderiza o InputText */}
             {valorBolsa === "" && (
               <InputText
                 label="Digite o valor da bolsa:"

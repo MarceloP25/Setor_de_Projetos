@@ -10,15 +10,20 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "exceljs": "^4.4.0",
+    "file-saver": "^2.0.5",
     "firebase": "^12.3.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-firebase-hooks": "^5.1.1",
     "react-input-mask": "^2.0.4",
-    "react-router-dom": "^7.9.3"
+    "react-router-dom": "^7.9.3",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.32.0",
+    "@types/exceljs": "^0.5.3",
+    "@types/file-saver": "^2.0.7",
     "@types/react": "^19.1.9",
     "@types/react-dom": "^19.1.7",
     "@types/react-input-mask": "^3.0.6",

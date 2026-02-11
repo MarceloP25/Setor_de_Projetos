@@ -69,7 +69,6 @@ function TelaCadastroBasico() {
     edital,
   });
 
-  localStorage.removeItem("nome");
   localStorage.removeItem("telefone");
   localStorage.removeItem("sexo");
   localStorage.removeItem("edital");

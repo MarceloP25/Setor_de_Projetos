@@ -1,0 +1,56 @@
+.export-container {
+  padding: 20px;
+  background-color: #f9f9f9;
+  font-family: var(--texto);
+}
+
+.export-title {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: var(--verde-escuro);
+  font-family: var(--texto-titulo);
+}
+
+.export-table {
+  border-collapse: collapse;
+  margin: 0 auto 20px auto;
+  width: 90%;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.export-table th,
+.export-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+  font-family: var(--texto);
+}
+
+.export-table th {
+  background-color: var(--verde);
+  color: #fff;
+}
+
+.export-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.export-button {
+  display: block;
+  margin: 0 auto;
+  padding: 12px 24px;
+  background-color: var(--verde);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--texto);
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.export-button:hover {
+  background-color: var(--verde-claro);
+}
