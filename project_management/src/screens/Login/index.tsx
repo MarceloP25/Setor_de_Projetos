@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './styles.css';
 
 const Login = () => {
@@ -83,6 +83,11 @@ const Login = () => {
           >
             {loading ? 'Entrando...' : 'Entrar'}
           </button>
+
+          <div className="login-footer">
+            <span>Não tem conta?</span>
+            <Link to="/cadastro">Cadastre-se</Link>
+          </div>
         </form>
       </div>
     </div>
