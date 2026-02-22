@@ -183,13 +183,11 @@ function FormOrcamentoGestao() {
         )}
 
         <div className="projects-list">
-          {projects
-              .filter(
+          {projects.filter(
                 p =>
                   p.edital === selectedEdital &&
                   (p.notaEtapa2 ?? 0) >= 6
-              )
-              .map(project => (
+              ).map(project => (
               <div key={project.id} className="project-item">
                 <div className="info-card">
                   <h5>{project.nomeProjeto}</h5>

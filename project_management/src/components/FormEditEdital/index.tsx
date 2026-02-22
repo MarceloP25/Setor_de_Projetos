@@ -138,18 +138,12 @@ function FormEditEdital({ editalId }: { editalId: string | undefined }) {
         }
 
         try {
-            const editalIdToUse = formData.id || crypto.randomUUID();
-            const editalRef = doc(db, 'editais', editalIdToUse);
-            const agora = new Date().toISOString();
 
-            const updateData = {
+            await updateDoc(doc(db, 'editais', formData.id),{
                 ...formData,
-                id: editalIdToUse,
-                alteradoEm: agora,
-                criadoEm: formData.criadoEm || agora,
-            };
+                alteradoEm: new Date().toISOString()
+            });
 
-            await updateDoc(editalRef, updateData);
             
             setShowModal(true);
             

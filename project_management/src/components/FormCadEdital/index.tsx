@@ -102,16 +102,14 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   }
 
   try {
-    const editalId = formData.id || crypto.randomUUID();
-    const editalRef = doc(collection(db, 'editais'), editalId);
-    const agora = new Date().toISOString();
+    const editalId = crypto.randomUUID();
 
-    await setDoc(editalRef, {
+    await setDoc(doc(collection(db, 'editais'), editalId), {
       ...formData,
       nomeEdital: formData.nomeEdital.trim(), // remove espaços extras
       id: editalId,
-      criadoEm: formData.criadoEm || agora,
-      alteradoEm: agora,
+      criadoEm: new Date().toISOString(),
+      alteradoEm: new Date().toISOString()
     });
 
     setShowModal(true);

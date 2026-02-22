@@ -76,6 +76,7 @@ function DetalhesEdital({ editalId }: { editalId: string | undefined }) {
                 {/* Bloco 1 - Identificação */}
                 <div className="infoBloco">
                     <div className="info"><h4>Nome do Edital</h4><p className='bold'>{edital.nomeEdital}</p></div>
+                    <div className="info"><h4>Número do Processo do Edital</h4><p className='bold'>{edital.numeroProcessoEdital}</p></div>
                     <div className="info"><h4>Status</h4><p className='bold'>{edital.status ? 'Ativo' : 'Inativo'}</p></div>
                     <div className="info">
                         <h4>Link</h4>

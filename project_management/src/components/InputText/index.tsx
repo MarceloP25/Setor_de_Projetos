@@ -8,9 +8,10 @@ interface InputTextProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   label?: string;
+  dft?: string;
 }
 
-const InputText: React.FC<InputTextProps> = ({ type, value, name, onChange, placeholder, label }) => {
+const InputText: React.FC<InputTextProps> = ({ type, value, name, onChange, placeholder, label, dft }) => {
   return (
     <div className="input-container">
       {label && <h5>{label}</h5>}
@@ -20,7 +21,8 @@ const InputText: React.FC<InputTextProps> = ({ type, value, name, onChange, plac
         name={name}
         onChange={onChange} 
         placeholder={placeholder}
-        className="input-text"
+        className="input-text"  
+        defaultValue={dft}
       />
     </div>
   );

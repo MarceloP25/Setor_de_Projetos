@@ -118,10 +118,9 @@ function FormEditProjeto({ projectId }: { projectId: string | undefined }) {
   const bolsasList = [
     { tipo: 'SUP I (20h)', valorUnitario: 700 },
     { tipo: 'SUP II (10h)', valorUnitario: 350 },
-    { tipo: 'BEXMED (10h)', valorUnitario: 350 },
-    { tipo: 'BEXCOL (até 15h)', valorUnitario: 900 }
+    { tipo: 'BEXMED (10h)', valorUnitario: 375 },
+    { tipo: 'BEXCOL (até 16h)', valorUnitario: 900 }
   ]; // constants
-
 
   const addBolsa = () => {
     if (!bolsaSelecionada || quantidadeBolsa <= 0) return;
@@ -266,10 +265,9 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   if (!validateForm()) return;
 
   try {
-    const { id: _, ...dataToSave } = formData;
 
-    await updateDoc(doc(db, 'projetos', id!), {
-      ...dataToSave,
+    await updateDoc(doc(db, 'projetos', formData.id), {
+      ...formData,
       alteradoEm: new Date().toISOString()
     });
 

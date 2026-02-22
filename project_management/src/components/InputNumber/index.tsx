@@ -12,9 +12,10 @@ interface InputNumberProps {
   max?: number;
   step?: number;
   disabled?: boolean;
+  dft?: number;
 }
 
-const InputNumber: React.FC<InputNumberProps> = ({ type, value, name, onChange, placeholder, label, min, max, step }) => {
+const InputNumber: React.FC<InputNumberProps> = ({ type, value, name, onChange, placeholder, label, min, max, step, dft }) => {
   return (
     <div className="input-container">
       {label && <h5>{label}</h5>}
@@ -28,6 +29,7 @@ const InputNumber: React.FC<InputNumberProps> = ({ type, value, name, onChange, 
         max={max}
         step={step}
         className="input-text"
+        defaultValue={dft}
       />
     </div>
   );

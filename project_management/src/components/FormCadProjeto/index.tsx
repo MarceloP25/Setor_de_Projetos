@@ -116,8 +116,8 @@ function FormCadProjeto()  {
   const bolsasList = [
     { tipo: 'SUP I (20h)', valorUnitario: 700 },
     { tipo: 'SUP II (10h)', valorUnitario: 350 },
-    { tipo: 'BEXMED (10h)', valorUnitario: 350 },
-    { tipo: 'BEXCOL (até 15h)', valorUnitario: 900 }
+    { tipo: 'BEXMED (10h)', valorUnitario: 375 },
+    { tipo: 'BEXCOL (até 16h)', valorUnitario: 900 }
   ]; // constants
 
 
@@ -264,8 +264,10 @@ const handleChange = (
 
       await setDoc(doc(db, 'projetos', projetoId), {
         ...formData,
+        nomeProjeto: formData.nomeProjeto.trim(),
         id: projetoId,
-        criadoEm: new Date().toISOString()
+        criadoEm: new Date().toISOString(),
+        alteradoEm: new Date().toISOString()
       });
 
       await updateDoc(doc(db, 'editais', formData.edital), {
@@ -287,6 +289,7 @@ const handleChange = (
             <div className="form-row">
               <div className="form-col">
               <h3>Selecione o Edital</h3>
+              <p>{formData.edital}</p>
               <SelectInput
                 name="edital"
                 value={formData.edital}
@@ -351,6 +354,7 @@ const handleChange = (
                   value={formData.ano}
                   onChange={handleChange} 
                   placeholder="Ano"
+
                 />
               </div>
             </div>
@@ -433,7 +437,11 @@ const handleChange = (
 
             <div className="form-row">
               <div className="form-col">
-                <label className="form-label">Adicionar bolsa</label>
+                <h3>Bolsas do Projeto</h3>
+                <label className="form-label">Adicione o tipo de bolsa e depois informe a quantidade de bolsas que serão necessárias. 
+                  Lembre-se, a quantidade de bolsas é contabilizada como uma unidade por mês, logo uma bolsa de 6 meses corresponde a 6 unidades. 
+                  O valor total de cada tipo de bolsa é calculado automaticamente com base na quantidade e no valor unitário.
+                </label>
 
                 <div className="flex gap-4 items-end">
                   <select
@@ -471,9 +479,9 @@ const handleChange = (
                   <ul className="list-disc ml-6">
                     {formData.tipoBolsa.map((tipo, index) => (
                       <li key={index} className="mb-2">
-                        <strong>{tipo}</strong> — Qtd: {formData.quantidadeIndividualBolsas[index]} — 
+                        <strong>{tipo}</strong>: Quantidade: {formData.quantidadeIndividualBolsas[index]} — 
                         Valor unitário: R$ {formData.valorUnitarioBolsa[index]} — 
-                        Total: R$ {formData.valorBolsa[index]}
+                        Valor Total: R$ {formData.valorBolsa[index]}
 
                         <button
                           type="button"
