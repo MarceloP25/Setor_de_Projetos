@@ -3,10 +3,10 @@ export interface Servidor {
     nome: string;
     matricula: string;
     cpf: string;
-    telefone: string;
+    telefone?: string;
 
-    departamento: string;
-    curso: string;
+    departamento?: string;
+    curso?: string;
     emailInstitucional: string;
     emailPessoal?: string;
     

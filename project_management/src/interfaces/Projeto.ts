@@ -8,7 +8,7 @@ export interface Projeto {
     ano: number;
     periodoInicio: string;
     periodoFim: string;
-    
+    //status: boolean;
     
     nomeCoordenador: string;
     emailCoordenador: string;

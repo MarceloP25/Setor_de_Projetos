@@ -289,7 +289,6 @@ const handleChange = (
             <div className="form-row">
               <div className="form-col">
               <h3>Selecione o Edital</h3>
-              <p>{formData.edital}</p>
               <SelectInput
                 name="edital"
                 value={formData.edital}

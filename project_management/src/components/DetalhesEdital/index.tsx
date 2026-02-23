@@ -7,6 +7,7 @@ import ActionButton from '../Button';
 import { useParams } from 'react-router-dom';
 import { formatDateBR } from '../../utils/formattersDate';
 import { exportEditalIndividual } from '../../utils/excel/exportEditalIndividual';
+import type { Projeto } from '../../interfaces/Projeto';
 
 
 
@@ -15,6 +16,7 @@ function DetalhesEdital({ editalId }: { editalId: string | undefined }) {
     const [edital, setEdital] = useState<Edital | null>(null);
     const [loading, setLoading] = useState(true);
     const [erro, setErro] = useState<string | null>(null);
+    const [projetosDetalhados, setProjetosDetalhados] = useState<Projeto[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
@@ -50,6 +52,27 @@ function DetalhesEdital({ editalId }: { editalId: string | undefined }) {
         exportEditalIndividual(edital);
         };
 
+    const buscarProjetos = async () => {
+        if (!edital?.projetosVinculados?.length) return;
+
+        try {
+        const projetosBuscados: Projeto[] = [];
+
+        for (const projetoId of edital.projetosVinculados) {
+            const snap = await getDoc(doc(db, 'projetos', projetoId));
+            if (snap.exists()) {
+            projetosBuscados.push({
+                ...(snap.data() as Projeto),
+                id: snap.id
+            });
+            }
+        }
+
+        setProjetosDetalhados(projetosBuscados);
+        } catch (error) {
+        console.error('Erro ao buscar projetos vinculados:', error);
+        }
+    };
 
     if (loading) {
         return (
@@ -67,6 +90,10 @@ function DetalhesEdital({ editalId }: { editalId: string | undefined }) {
             <p className="erro">{erro ?? 'Dados não disponíveis.'}</p>
         </div>
         );
+    }
+
+    if (isModalOpen){
+        buscarProjetos();
     }
 
     return (
@@ -182,17 +209,18 @@ function DetalhesEdital({ editalId }: { editalId: string | undefined }) {
                     <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
                         <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                             <h2>Projetos Vinculados</h2>
-                            {edital.projetosVinculados && edital.projetosVinculados.length > 0 ? (
+                            {projetosDetalhados.length > 0 ? (
                                 <ul>
-                                    {edital.projetosVinculados.map((proj, index) => (
-                                    <li key={index}>
-                                        <h3>{proj}</h3>
+                                    {projetosDetalhados.map((proj) => (
+                                    <li key={proj.id}>
+                                        <h3>{proj.nomeProjeto}</h3>
+                                        <p><strong>Coordenador:</strong> {proj.nomeCoordenador}</p>
                                     </li>
                                     ))}
                                 </ul>
                                 ) : (
                                 <p className='bold'>Nenhum projeto vinculado a este edital.</p>
-                            )}
+                                )}
                             <ActionButton text="FECHAR" variant="medium" onClick={() => setIsModalOpen(false)} />
                         </div>
                     </div>
