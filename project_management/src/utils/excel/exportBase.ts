@@ -1,5 +1,7 @@
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { logAction } from '../LogAction';
+import { useAuth } from '../../contexts/AuthContext';
 
 export function exportToExcel(
   sheets: { sheetName: string; rows: any[] }[],
@@ -23,4 +25,13 @@ export function exportToExcel(
   });
 
   saveAs(blob, `${fileName}.xlsx`);
+
+  const { user } = useAuth();
+  if (!user) return;
+  logAction({
+    user,
+    action: 'Exportação de Excel',
+    objectType: 'Excel',
+    objectId: fileName + '-' + user.nome
+  });
 }

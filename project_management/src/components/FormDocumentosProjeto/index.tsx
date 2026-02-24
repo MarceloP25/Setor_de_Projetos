@@ -8,6 +8,8 @@ import { db } from '../../services/config';
 import { doc, updateDoc } from 'firebase/firestore';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Modal } from '../Modal';
+import { logAction } from '../../utils/LogAction';
+import { useAuth } from '../../contexts/AuthContext';
 
 const initialProjectState: Projeto = {
   id: '',
@@ -71,6 +73,8 @@ function FormDocumentosProjeto({ projectId }: { projectId: string | undefined })
   const { projectId: id = projectId } = useParams<{ projectId: string }>();
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
+  const { user } = useAuth();
+  if (!user) return;
 
   if (!id) {
     return <div>ID do projeto não fornecido.</div>;
@@ -139,7 +143,16 @@ function FormDocumentosProjeto({ projectId }: { projectId: string | undefined })
         statusEtapa1: formData.statusEtapa1,
         classificacaoDetalhe: formData.classificacaoDetalhe,
         alteradoEm: new Date().toISOString(),
+        alteradoPor: user.nome
       });
+
+      await logAction({
+        user,
+        action: 'Cadastro de Documentos de Projeto',
+        objectType: 'Projeto',
+        objectId: formData.id + ' - ' + formData.nomeProjeto
+      });
+
       setShowModal(true);
     } catch (error) {
       console.error('Erro ao salvar checklist:', error);

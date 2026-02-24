@@ -8,10 +8,16 @@ import './styles.css';
 import { Modal } from '../Modal';
 import { useNavigate } from 'react-router-dom';
 import InputNumber from '../InputNumber';
+import { logAction } from '../../utils/LogAction';
+import { useAuth } from '../../contexts/AuthContext';
 
 function FormCadEdital()  {
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
+  const { user } = useAuth();
+
+  if (!user) return;
+
   const [formData, setFormData] = useState<Edital>({
     id: '',
     nomeEdital: '',
@@ -109,7 +115,15 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       nomeEdital: formData.nomeEdital.trim(), // remove espaços extras
       id: editalId,
       criadoEm: new Date().toISOString(),
+      criadoPor: user.nome,
       alteradoEm: new Date().toISOString()
+    });
+
+    await logAction({
+      user,
+      action: 'Criação de Edital',
+      objectType: 'Edital',
+      objectId: editalId + ' - ' + formData.nomeEdital
     });
 
     setShowModal(true);

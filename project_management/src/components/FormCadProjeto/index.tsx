@@ -14,6 +14,8 @@ import type { Projeto } from '../../interfaces/Projeto';
 import { fetchEditais } from '../../services/views/fetchEditais';
 
 import './styles.css';
+import { useAuth } from '../../contexts/AuthContext';
+import { logAction } from '../../utils/LogAction';
 
 const initialProjectState: Projeto = {
   id: '',
@@ -83,6 +85,10 @@ function FormCadProjeto()  {
 
   const [bolsaSelecionada, setBolsaSelecionada] = useState('');
   const [quantidadeBolsa, setQuantidadeBolsa] = useState<number>(0);
+
+  const { user } = useAuth();
+
+  if (!user) return;
 
   const areaTematicaList = [
     'Comunicação', "Cultura", "Direitos Humanos e Justiça", 
@@ -267,11 +273,19 @@ const handleChange = (
         nomeProjeto: formData.nomeProjeto.trim(),
         id: projetoId,
         criadoEm: new Date().toISOString(),
+        criadoPor: user.nome,
         alteradoEm: new Date().toISOString()
       });
 
       await updateDoc(doc(db, 'editais', formData.edital), {
         projetosVinculados: arrayUnion(projetoId)
+      });
+
+      await logAction({
+        user,
+        action: 'Criação de Projeto',
+        objectType: 'Projeto',
+        objectId: projetoId + ' - ' + formData.nomeProjeto
       });
 
       setShowModal(true);

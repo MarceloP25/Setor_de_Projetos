@@ -8,6 +8,8 @@ import './styles.css';
 import RadioInput from '../RadioInput';
 import { Modal } from '../Modal';
 import InputNumber from '../InputNumber';
+import { logAction } from '../../utils/LogAction';
+import { useAuth } from '../../contexts/AuthContext';
 
 const initialEditalState: Edital = {
     id: '',
@@ -61,6 +63,9 @@ function FormEditEdital({ editalId }: { editalId: string | undefined }) {
     const id = editalId || idFromParams;
     const [showModal, setShowModal] = useState(false);
     const navigate = useNavigate();
+    const { user } = useAuth();
+
+    if (!user) return;
 
     if (!id) {
         return <div>Edital não encontrado!</div>;
@@ -141,9 +146,16 @@ function FormEditEdital({ editalId }: { editalId: string | undefined }) {
 
             await updateDoc(doc(db, 'editais', formData.id),{
                 ...formData,
-                alteradoEm: new Date().toISOString()
+                alteradoEm: new Date().toISOString(),
+                alteradoPor: user.nome
             });
 
+            await logAction({
+                user,
+                action: 'Edição de Edital',
+                objectType: 'Edital',
+                objectId: formData.id + ' - ' + formData.nomeEdital
+            });
             
             setShowModal(true);
             

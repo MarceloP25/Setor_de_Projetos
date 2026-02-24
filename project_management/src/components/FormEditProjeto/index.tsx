@@ -14,6 +14,8 @@ import { fetchEditais } from '../../services/views/fetchEditais';
 import './styles.css';
 import TextAreaInput from '../TextAreaInput';
 import { Modal } from '../Modal';
+import { logAction } from '../../utils/LogAction';
+import { useAuth } from '../../contexts/AuthContext';
 
 const initialProjectState: Projeto = {
   id: '',
@@ -84,6 +86,9 @@ function FormEditProjeto({ projectId }: { projectId: string | undefined }) {
 
   const [bolsaSelecionada, setBolsaSelecionada] = useState('');
   const [quantidadeBolsa, setQuantidadeBolsa] = useState<number>(0);
+
+  const { user } = useAuth();
+  if (!user) return;
 
 
   const areaTematicaList = [
@@ -268,7 +273,15 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 
     await updateDoc(doc(db, 'projetos', formData.id), {
       ...formData,
-      alteradoEm: new Date().toISOString()
+      alteradoEm: new Date().toISOString(),
+      alteradoPor: user.nome
+    });
+
+    await logAction({
+      user,
+      action: 'Edição de Projeto',
+      objectType: 'Projeto',
+      objectId: formData.id + ' - ' + formData.nomeProjeto
     });
 
     setShowModal(true);

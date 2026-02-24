@@ -8,6 +8,8 @@ import './styles.css';
 import TextAreaInput from '../TextAreaInput';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Modal } from '../Modal';
+import { logAction } from '../../utils/LogAction';
+import { useAuth } from '../../contexts/AuthContext';
 
 const initialProjectState: Projeto = {
   id: '',
@@ -71,6 +73,8 @@ function FormAvaliadores({ projectId }: { projectId: string | undefined }) {
   const { projectId: id = projectId } = useParams<{ projectId: string }>();
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
+  const { user } = useAuth();
+  if (!user) return;
   
   if (!id) {
     return <div>Informação não encontrada!</div>;
@@ -131,6 +135,14 @@ function FormAvaliadores({ projectId }: { projectId: string | undefined }) {
         comentariosAvaliadores: formData.comentariosAvaliadores,
         notaEtapa2: formData.notaEtapa2,
         alteradoEm: new Date().toISOString(),
+        alteradoPor: user.nome
+      });
+
+      await logAction({
+        user,
+        action: 'Cadastro de Avaliação de Projeto',
+        objectType: 'Projeto',
+        objectId: formData.id + ' - ' + formData.nomeProjeto
       });
       setShowModal(true);
     } catch (error) {
@@ -152,7 +164,6 @@ function FormAvaliadores({ projectId }: { projectId: string | undefined }) {
                 type="number"
                 min={0}
                 max={10}
-                step={0.01}
                 value={(formData.notasAvaliadores ?? [])[index] ?? 0}
                 onChange={(e) => handleChange(e, index, 'nota')}
               />

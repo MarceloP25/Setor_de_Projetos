@@ -1,4 +1,6 @@
+import { useAuth } from '../../contexts/AuthContext';
 import type { Projeto } from '../../interfaces/Projeto';
+import { logAction } from '../LogAction';
 import { exportToExcel } from './exportBase';
 import { normalizeProjetoOrcamento } from './normalizers';
 
@@ -27,4 +29,13 @@ export function exportOrcamento(
     ],
     `orcamento_${nomeEdital}`
   );
+
+    const { user } = useAuth();
+    if (!user) return;
+    logAction({
+      user,
+      action: 'Exportação de Excel',
+      objectType: 'Excel',
+      objectId: `orcamento_${nomeEdital}-${user.nome}`
+    });
 }

@@ -30,7 +30,8 @@ const Sidebar = () => {
       
       {user && (
         <div className="sidebar-user-info">
-          <p className="sidebar-user-email">{user.email}</p>
+          <p className="sidebar-user-email">{user.nome}</p>
+          <p className="sidebar-user-role">{user.emailInstitucional}</p>
         </div>
       )}
       

@@ -2,6 +2,8 @@ import type { Projeto } from '../../interfaces/Projeto';
 import type { Edital } from '../../interfaces/Edital';
 import { exportToExcel } from './exportBase';
 import { normalizeProjetoAvaliacao } from './normalizers';
+import { useAuth } from '../../contexts/AuthContext';
+import { logAction } from '../LogAction';
 
 export function exportClassificacaoProjetos(
   edital: Edital,
@@ -32,4 +34,13 @@ export function exportClassificacaoProjetos(
     ],
     `avaliacao_projetos_${edital.nomeEdital}`
   );
+
+    const { user } = useAuth();
+    if (!user) return;
+    logAction({
+      user,
+      action: 'Exportação de Excel',
+      objectType: 'Excel',
+      objectId: `avaliacao_projetos_${edital.nomeEdital}-${user.nome}`
+    });
 }

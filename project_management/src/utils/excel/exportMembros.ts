@@ -1,4 +1,6 @@
+import { useAuth } from '../../contexts/AuthContext';
 import type { Membro } from '../../interfaces/Membro';
+import { logAction } from '../LogAction';
 import { exportToExcel } from './exportBase';
 import { normalizeMembro } from './normalizers';
 
@@ -15,4 +17,13 @@ export function exportMembros(
     ],
     nomeArquivo
   );
+
+    const { user } = useAuth();
+    if (!user) return;
+    logAction({
+      user,
+      action: 'Exportação de Excel',
+      objectType: 'Excel',
+      objectId: `${nomeArquivo}-${user.nome}`
+    });
 }

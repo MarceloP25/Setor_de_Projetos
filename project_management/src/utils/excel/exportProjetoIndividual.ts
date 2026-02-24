@@ -1,4 +1,6 @@
+import { useAuth } from '../../contexts/AuthContext';
 import type { Projeto } from '../../interfaces/Projeto';
+import { logAction } from '../LogAction';
 import { exportToExcel } from './exportBase';
 import {
   normalizeProjeto,
@@ -27,5 +29,14 @@ export function exportProjetoIndividual(
     sheets,
     `projeto_${projeto.nomeProjeto}`
   );
+
+    const { user } = useAuth();
+    if (!user) return;
+    logAction({
+      user,
+      action: 'Exportação de Excel',
+      objectType: 'Excel',
+      objectId: `projeto_${projeto.nomeProjeto}-${user.nome}`
+    });
 }
 

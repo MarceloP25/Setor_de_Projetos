@@ -16,6 +16,8 @@ import type { Edital } from '../../interfaces/Edital';
 import type { Projeto } from '../../interfaces/Projeto';
 
 import './styles.css';
+import { useAuth } from '../../contexts/AuthContext';
+import { logAction } from '../../utils/LogAction';
 
 type ProjetoDistribuicao = Projeto & {
   valorDistribuir: number; // variável intermediária (UX)
@@ -31,6 +33,9 @@ function FormOrcamentoGestao() {
   const [saldoDistribuicao, setSaldoDistribuicao] = useState(0);
 
   const [showModal, setShowModal] = useState(false);
+  const { user } = useAuth();
+
+  if (!user) return;
 
 
   /* =========================
@@ -129,7 +134,15 @@ function FormOrcamentoGestao() {
       for (const projeto of projetosDoEdital) {
         await updateDoc(doc(db, 'projetos', projeto.id), {
           valorDisponibilizado: projeto.valorDistribuir,
-          alteradoEm: new Date().toISOString()
+          alteradoEm: new Date().toISOString(),
+          alteradoPor: user.nome
+        });
+
+        await logAction({
+          user,
+          action: 'Distribuição de Orçamento',
+          objectType: 'Projeto',
+          objectId: projeto.id + ' - ' + projeto.nomeProjeto
         });
       }
 

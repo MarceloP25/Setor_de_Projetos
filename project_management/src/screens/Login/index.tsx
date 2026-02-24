@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import './styles.css';
+import { logAction } from '../../utils/LogAction';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -10,6 +11,8 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
+  const { user } = useAuth();
+  if (!user) return;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,6 +21,14 @@ const Login = () => {
 
     try {
       await login(email, password);
+      
+      await logAction({
+        user,
+        action: 'Login',
+        objectType: 'Login',
+        objectId: `login-${user.nome}`
+      });
+
       navigate('/visao_geral');
     } catch (error: any) {
       console.error('Erro no login:', error);

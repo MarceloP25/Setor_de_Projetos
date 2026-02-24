@@ -8,6 +8,8 @@ import {
   normalizeProjeto,
   normalizeMembro
 } from './normalizers';
+import { useAuth } from '../../contexts/AuthContext';
+import { logAction } from '../LogAction';
 
 export function exportConsolidadoEdital(
   edital: Edital,
@@ -41,4 +43,13 @@ export function exportConsolidadoEdital(
     ],
     `consolidado_${edital.nomeEdital}`
   );
+
+    const { user } = useAuth();
+    if (!user) return;
+    logAction({
+      user,
+      action: 'Exportação de Excel',
+      objectType: 'Excel',
+      objectId: `consolidado_${edital.nomeEdital}-${user.nome}`
+    });
 }
