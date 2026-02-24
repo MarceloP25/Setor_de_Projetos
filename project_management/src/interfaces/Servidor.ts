@@ -9,6 +9,8 @@ export interface Servidor {
     curso?: string;
     emailInstitucional: string;
     emailPessoal?: string;
+
+    projetosVinculados?: string[];
     
     criadoEm: string;
     criadoPor?: string;
