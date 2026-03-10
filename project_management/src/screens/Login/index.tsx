@@ -1,18 +1,22 @@
 import { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, Navigate } from 'react-router-dom';
 import './styles.css';
-import { logAction } from '../../utils/LogAction';
+
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
-  const { user } = useAuth();
-  if (!user) return;
+
+  // Aguarda o Firebase resolver o estado de autenticação
+  if (authLoading) return null;
+
+  // Se já está logado, redireciona direto
+  if (user) return <Navigate to="/visao_geral" replace />;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,14 +25,9 @@ const Login = () => {
 
     try {
       await login(email, password);
-      
-      await logAction({
-        user,
-        action: 'Login',
-        objectType: 'Login',
-        objectId: `login-${user.nome}`
-      });
-
+      // O logAction é feito após o redirecionamento, pois o user do contexto
+      // só é preenchido pelo onSnapshot do Firestore de forma assíncrona.
+      // O redirecionamento ocorre quando o AuthContext atualizar o user.
       navigate('/visao_geral');
     } catch (error: any) {
       console.error('Erro no login:', error);
